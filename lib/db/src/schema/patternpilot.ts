@@ -1,5 +1,8 @@
 import {
   boolean,
+  check,
+  index,
+  uniqueIndex,
   integer,
   jsonb,
   pgTable,
@@ -8,6 +11,7 @@ import {
   timestamp,
   uuid,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
@@ -20,6 +24,9 @@ export const usersTable = pgTable("users", {
 });
 
 export const questionsTable = pgTable("questions", {
+  publicId: text("public_id").notNull().unique(),
+  estimatedMinutes: integer("estimated_minutes").notNull().default(7),
+  displayOrder: integer("display_order").notNull(),
   id: uuid("id").defaultRandom().primaryKey(),
   questionType: text("question_type").notNull().default("complete_the_words"),
   title: text("title").notNull(),
@@ -33,9 +40,15 @@ export const questionsTable = pgTable("questions", {
   published: boolean("published").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
-});
+}, (table) => [
+  check("questions_estimated_minutes_positive", sql`${table.estimatedMinutes} > 0`),
+  check("questions_display_order_positive", sql`${table.displayOrder} > 0`),
+  check("questions_public_id_nonempty", sql`length(${table.publicId}) > 0`),
+  index("questions_published_order_idx").on(table.published, table.displayOrder, table.publicId),
+]);
 
 export const questionBlanksTable = pgTable("question_blanks", {
+  publicId: text("public_id").notNull().unique(),
   id: uuid("id").defaultRandom().primaryKey(),
   questionId: uuid("question_id").notNull().references(() => questionsTable.id),
   position: integer("position").notNull(),
@@ -51,7 +64,15 @@ export const questionBlanksTable = pgTable("question_blanks", {
   suffix: text("suffix"),
   errorCategory: text("error_category"),
   tags: jsonb("tags").$type<string[]>().notNull().default([]),
-});
+}, (table) => [
+  uniqueIndex("question_blanks_question_position_unique").on(table.questionId, table.position),
+  check("question_blanks_position_positive", sql`${table.position} > 0`),
+  check("question_blanks_length_positive", sql`${table.missingLength} > 0`),
+  check("question_blanks_answer_length", sql`char_length(${table.correctAnswer}) = ${table.missingLength}`),
+  check("question_blanks_full_word", sql`${table.fullWord} = ${table.prefix} || ${table.correctAnswer}`),
+  check("question_blanks_tags_array", sql`jsonb_typeof(${table.tags}) = 'array'`),
+  check("question_blanks_public_id_nonempty", sql`length(${table.publicId}) > 0`),
+]);
 
 export const practiceSessionsTable = pgTable("practice_sessions", {
   id: uuid("id").defaultRandom().primaryKey(),

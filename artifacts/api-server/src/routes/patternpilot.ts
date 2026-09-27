@@ -1,3 +1,5 @@
+import { createQuestions, listPublicQuestions, readQuestions } from "../services/question-repository";
+import { prepareImportRow, prepareQuestion, parseImportRows, QuestionValidationError } from "../services/question-validation";
 import { Router, type IRouter } from "express";
 import {
   CreateAdminQuestionBody,
@@ -19,12 +21,8 @@ import {
   SubmitTrainingDrillResponse,
 } from "@workspace/api-zod";
 import {
-  bindBlanksToSet,
-  findSet,
   newId,
-  practiceSets,
   sessions,
-  type Blank,
   type PracticeSet,
 } from "../data/patternpilot";
 import { diagnoseAttempts, getLearningContent, toTrainingSet } from "../services/diagnosis";
@@ -44,12 +42,17 @@ const toPublicSet = (set: PracticeSet) => ({
   blanks: set.blanks.map(({ id, order, prefix, missingLength }) => ({ id, order, prefix, missingLength })),
 });
 
-router.get("/practice/sets", (_req, res) => {
-  res.json(ListPracticeSetsResponse.parse(practiceSets.filter((set) => set.published).map(toPublicSet)));
+router.get("/practice/sets", async (_req, res) => {
+  res.json(ListPracticeSetsResponse.parse(await listPublicQuestions()));
 });
 
-router.post("/practice/sessions", (req, res) => {
+router.post("/practice/sessions", async (req, res) => {
   const body = StartPracticeSessionBody.parse(req.body);
+  if (new Set(body.setIds).size !== body.setIds.length) throw new QuestionValidationError("Duplicate question IDs");
+  const sets = await readQuestions({ ids: body.setIds, published: true });
+  if (sets.length !== body.setIds.length) {
+    res.status(400).json({ error: "Question unavailable; reload practice" }); return;
+  }
   const session = { id: newId(), setIds: body.setIds, startedAt: new Date().toISOString() };
   sessions.set(session.id, session);
   res.status(201).json(StartPracticeSessionResponse.parse(session));
@@ -64,7 +67,12 @@ router.post("/practice/sessions/:sessionId/submit", async (req, res) => {
     return;
   }
 
-  const blanks = session.setIds.flatMap((setId) => findSet(setId)?.blanks ?? []);
+  const sets = await readQuestions({ ids: session.setIds });
+  const byId = new Map(sets.map(set => [set.id, set]));
+  if (session.setIds.some(id => !byId.has(id))) {
+    res.status(409).json({ error: "Session question unavailable; restart practice" }); return;
+  }
+  const blanks = session.setIds.flatMap(id => byId.get(id)!.blanks);
   const items = scorePracticeAnswers(blanks, body.answers);
   const diagnosedWeaknesses = diagnoseAttempts(items.map((item, index) => ({
     blank: blanks[index],
@@ -169,96 +177,34 @@ router.get("/dashboard", (_req, res) => {
   );
 });
 
-router.get("/admin/questions", (req, res) => {
-  const query = ListAdminQuestionsQueryParams.parse(req.query);
-  const results = practiceSets.filter((set) => {
-    const matchesSearch =
-      !query.search ||
-      `${set.title} ${set.topic}`.toLowerCase().includes(query.search.toLowerCase());
-    const matchesPublished =
-      query.published === undefined || set.published === query.published;
-    return matchesSearch && matchesPublished;
-  });
-  res.json(ListAdminQuestionsResponse.parse(results.map((set) => ({ ...toPublicSet(set), blanks: set.blanks, published: set.published, sourceLabel: set.sourceLabel, updatedAt: set.updatedAt }))));
+router.get("/admin/questions", async (req, res) => {
+  // Avoid z.coerce.boolean() treating the string "false" as true.
+  if (req.query.published !== undefined && req.query.published !== "true" && req.query.published !== "false") throw new QuestionValidationError("Invalid published filter");
+  const query = ListAdminQuestionsQueryParams.parse({ ...req.query, published: req.query.published === undefined ? undefined : req.query.published === "true" });
+  const results = await readQuestions(query);
+  res.json(ListAdminQuestionsResponse.parse(results.map(set => ({ ...toPublicSet(set), blanks: set.blanks, published: set.published, sourceLabel: set.sourceLabel, updatedAt: set.updatedAt }))));
 });
 
-router.post("/admin/questions", (req, res) => {
+router.post("/admin/questions", async (req, res) => {
   const body = CreateAdminQuestionBody.parse(req.body);
-  const id = newId();
-  const bound = bindBlanksToSet(id, body.passage, body.blanks as Blank[]);
-  const newQuestion: PracticeSet = {
-    id,
-    title: body.title,
-    topic: body.topic,
-    difficulty: body.difficulty,
-    estimatedMinutes: 7,
-    blankCount: bound.blanks.length,
-    passage: bound.passage,
-    blanks: bound.blanks,
-    published: body.published ?? false,
-    sourceLabel: body.sourceLabel ?? "Admin import",
-    updatedAt: new Date().toISOString().slice(0, 10),
-  };
-  practiceSets.push(newQuestion);
-  res.status(201).json({
-    ...toPublicSet(newQuestion),
-    blanks: newQuestion.blanks,
-    published: newQuestion.published,
-    sourceLabel: newQuestion.sourceLabel,
-    updatedAt: newQuestion.updatedAt,
-  });
+  const question = prepareQuestion(body);
+  await createQuestions([question]);
+  res.status(201).json({ ...toPublicSet(question), blanks: question.blanks, published: question.published, sourceLabel: question.sourceLabel, updatedAt: question.updatedAt });
 });
 
-router.post("/admin/questions/import", (req, res) => {
+router.post("/admin/questions/import", async (req, res) => {
   const body = ImportAdminQuestionsBody.parse(req.body);
-  let imported = 0;
+  const rows = parseImportRows(body.format, body.raw);
+  const valid: PracticeSet[] = [];
   let skipped = 0;
-  try {
-    const rows =
-      body.format === "json"
-        ? (JSON.parse(body.raw) as unknown[])
-        : body.raw.split(/\r?\n/).slice(1).filter(Boolean).map((line) => {
-            const [title, topic, difficulty, passage] = line.split(",").map((value) => value.trim());
-            return { title, topic, difficulty, passage, blanks: [] };
-          });
-    for (const row of rows) {
-      if (!row || typeof row !== "object" || !("title" in row) || !("passage" in row)) {
-        skipped++;
-        continue;
-      }
-      const candidate = row as Partial<PracticeSet>;
-      if (typeof candidate.title !== "string" || typeof candidate.passage !== "string") {
-        skipped++;
-        continue;
-      }
-      const id = newId();
-      const blanks = Array.isArray(candidate.blanks) ? (candidate.blanks as Blank[]) : [];
-      const bound = bindBlanksToSet(id, candidate.passage, blanks);
-      practiceSets.push({
-        id,
-        title: candidate.title,
-        topic: candidate.topic ?? "Uncategorized",
-        difficulty: candidate.difficulty ?? "Core",
-        estimatedMinutes: 7,
-        blankCount: bound.blanks.length,
-        passage: bound.passage,
-        blanks: bound.blanks,
-        published: false,
-        sourceLabel: "Imported",
-        updatedAt: new Date().toISOString().slice(0, 10),
-      });
-      imported++;
-    }
-  } catch {
-    skipped++;
+  for (const row of rows) {
+    try { valid.push(prepareImportRow(row)); }
+    catch (error) { if (error instanceof QuestionValidationError) skipped++; else throw error; }
   }
-  res.json(
-    ImportAdminQuestionsResponse.parse({
-      imported,
-      skipped,
-      message: imported ? `Imported ${imported} question${imported === 1 ? "" : "s"}.` : "No valid questions were imported.",
-    }),
-  );
+  await createQuestions(valid);
+  const imported = valid.length;
+  res.json(ImportAdminQuestionsResponse.parse({ imported, skipped,
+    message: imported ? `Imported ${imported} question${imported === 1 ? "" : "s"}.` : "No valid questions were imported." }));
 });
 
 export default router;

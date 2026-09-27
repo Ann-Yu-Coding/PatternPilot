@@ -23,6 +23,7 @@ import type {
   AdminQuestion,
   AdminQuestionInput,
   DashboardSummary,
+  ErrorResponse,
   HealthStatus,
   ListAdminQuestionsParams,
   PracticeResult,
@@ -175,7 +176,7 @@ export const getListPracticeSetsQueryKey = () => {
     }
 
 
-export const getListPracticeSetsQueryOptions = <TData = Awaited<ReturnType<typeof listPracticeSets>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listPracticeSets>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+export const getListPracticeSetsQueryOptions = <TData = Awaited<ReturnType<typeof listPracticeSets>>, TError = ErrorType<ErrorResponse>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listPracticeSets>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -194,14 +195,14 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type ListPracticeSetsQueryResult = NonNullable<Awaited<ReturnType<typeof listPracticeSets>>>
-export type ListPracticeSetsQueryError = ErrorType<unknown>
+export type ListPracticeSetsQueryError = ErrorType<ErrorResponse>
 
 
 /**
  * @summary List available Complete the Words passages
  */
 
-export function useListPracticeSets<TData = Awaited<ReturnType<typeof listPracticeSets>>, TError = ErrorType<unknown>>(
+export function useListPracticeSets<TData = Awaited<ReturnType<typeof listPracticeSets>>, TError = ErrorType<ErrorResponse>>(
   options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listPracticeSets>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
 
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
@@ -261,7 +262,7 @@ return customFetch<PracticeSession>(getStartPracticeSessionUrl(),
 
 export const getStartPracticeSessionMutationKey = () => ['startPracticeSession'] as const;
 
-export const getStartPracticeSessionMutationOptions = <TError = ErrorType<unknown>,
+export const getStartPracticeSessionMutationOptions = <TError = ErrorType<ErrorResponse>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startPracticeSession>>, TError,StartPracticeSessionMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof startPracticeSession>>, TError,StartPracticeSessionMutationVariables, TContext> => {
 
@@ -290,13 +291,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type StartPracticeSessionMutationResult = NonNullable<Awaited<ReturnType<typeof startPracticeSession>>>
     export type StartPracticeSessionMutationBody = BodyType<PracticeSessionInput>
-    export type StartPracticeSessionMutationError = ErrorType<unknown>
+    export type StartPracticeSessionMutationError = ErrorType<ErrorResponse>
     export type StartPracticeSessionMutationVariables = {data: BodyType<PracticeSessionInput>}
 
     /**
  * @summary Start a practice session
  */
-export const useStartPracticeSession = <TError = ErrorType<unknown>,
+export const useStartPracticeSession = <TError = ErrorType<ErrorResponse>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startPracticeSession>>, TError,StartPracticeSessionMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
  ): UseMutationResult<
         Awaited<ReturnType<typeof startPracticeSession>>,
@@ -350,7 +351,7 @@ return customFetch<PracticeResult>(getSubmitPracticeSessionUrl(sessionId),
 
 export const getSubmitPracticeSessionMutationKey = () => ['submitPracticeSession'] as const;
 
-export const getSubmitPracticeSessionMutationOptions = <TError = ErrorType<unknown>,
+export const getSubmitPracticeSessionMutationOptions = <TError = ErrorType<ErrorResponse>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitPracticeSession>>, TError,SubmitPracticeSessionMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof submitPracticeSession>>, TError,SubmitPracticeSessionMutationVariables, TContext> => {
 
@@ -379,13 +380,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type SubmitPracticeSessionMutationResult = NonNullable<Awaited<ReturnType<typeof submitPracticeSession>>>
     export type SubmitPracticeSessionMutationBody = BodyType<PracticeSubmission>
-    export type SubmitPracticeSessionMutationError = ErrorType<unknown>
+    export type SubmitPracticeSessionMutationError = ErrorType<ErrorResponse>
     export type SubmitPracticeSessionMutationVariables = {sessionId: string;data: BodyType<PracticeSubmission>}
 
     /**
  * @summary Submit answers and receive deterministic diagnosis
  */
-export const useSubmitPracticeSession = <TError = ErrorType<unknown>,
+export const useSubmitPracticeSession = <TError = ErrorType<ErrorResponse>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitPracticeSession>>, TError,SubmitPracticeSessionMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
  ): UseMutationResult<
         Awaited<ReturnType<typeof submitPracticeSession>>,
@@ -679,7 +680,7 @@ export const getListAdminQuestionsQueryKey = (params?: ListAdminQuestionsParams,
     }
 
 
-export const getListAdminQuestionsQueryOptions = <TData = Awaited<ReturnType<typeof listAdminQuestions>>, TError = ErrorType<unknown>>(params?: ListAdminQuestionsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listAdminQuestions>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+export const getListAdminQuestionsQueryOptions = <TData = Awaited<ReturnType<typeof listAdminQuestions>>, TError = ErrorType<ErrorResponse>>(params?: ListAdminQuestionsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listAdminQuestions>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -698,14 +699,14 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type ListAdminQuestionsQueryResult = NonNullable<Awaited<ReturnType<typeof listAdminQuestions>>>
-export type ListAdminQuestionsQueryError = ErrorType<unknown>
+export type ListAdminQuestionsQueryError = ErrorType<ErrorResponse>
 
 
 /**
  * @summary List questions in the question bank
  */
 
-export function useListAdminQuestions<TData = Awaited<ReturnType<typeof listAdminQuestions>>, TError = ErrorType<unknown>>(
+export function useListAdminQuestions<TData = Awaited<ReturnType<typeof listAdminQuestions>>, TError = ErrorType<ErrorResponse>>(
  params?: ListAdminQuestionsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listAdminQuestions>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
 
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
@@ -765,7 +766,7 @@ return customFetch<AdminQuestion>(getCreateAdminQuestionUrl(),
 
 export const getCreateAdminQuestionMutationKey = () => ['createAdminQuestion'] as const;
 
-export const getCreateAdminQuestionMutationOptions = <TError = ErrorType<unknown>,
+export const getCreateAdminQuestionMutationOptions = <TError = ErrorType<ErrorResponse>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAdminQuestion>>, TError,CreateAdminQuestionMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof createAdminQuestion>>, TError,CreateAdminQuestionMutationVariables, TContext> => {
 
@@ -794,13 +795,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type CreateAdminQuestionMutationResult = NonNullable<Awaited<ReturnType<typeof createAdminQuestion>>>
     export type CreateAdminQuestionMutationBody = BodyType<AdminQuestionInput>
-    export type CreateAdminQuestionMutationError = ErrorType<unknown>
+    export type CreateAdminQuestionMutationError = ErrorType<ErrorResponse>
     export type CreateAdminQuestionMutationVariables = {data: BodyType<AdminQuestionInput>}
 
     /**
  * @summary Create a question bank entry
  */
-export const useCreateAdminQuestion = <TError = ErrorType<unknown>,
+export const useCreateAdminQuestion = <TError = ErrorType<ErrorResponse>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAdminQuestion>>, TError,CreateAdminQuestionMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
  ): UseMutationResult<
         Awaited<ReturnType<typeof createAdminQuestion>>,
@@ -853,7 +854,7 @@ return customFetch<QuestionImportResult>(getImportAdminQuestionsUrl(),
 
 export const getImportAdminQuestionsMutationKey = () => ['importAdminQuestions'] as const;
 
-export const getImportAdminQuestionsMutationOptions = <TError = ErrorType<unknown>,
+export const getImportAdminQuestionsMutationOptions = <TError = ErrorType<ErrorResponse>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importAdminQuestions>>, TError,ImportAdminQuestionsMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof importAdminQuestions>>, TError,ImportAdminQuestionsMutationVariables, TContext> => {
 
@@ -882,13 +883,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type ImportAdminQuestionsMutationResult = NonNullable<Awaited<ReturnType<typeof importAdminQuestions>>>
     export type ImportAdminQuestionsMutationBody = BodyType<QuestionImportInput>
-    export type ImportAdminQuestionsMutationError = ErrorType<unknown>
+    export type ImportAdminQuestionsMutationError = ErrorType<ErrorResponse>
     export type ImportAdminQuestionsMutationVariables = {data: BodyType<QuestionImportInput>}
 
     /**
  * @summary Import question bank entries from JSON or CSV-shaped rows
  */
-export const useImportAdminQuestions = <TError = ErrorType<unknown>,
+export const useImportAdminQuestions = <TError = ErrorType<ErrorResponse>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importAdminQuestions>>, TError,ImportAdminQuestionsMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
  ): UseMutationResult<
         Awaited<ReturnType<typeof importAdminQuestions>>,

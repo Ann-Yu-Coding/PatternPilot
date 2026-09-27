@@ -13,6 +13,7 @@ export * from './answer';
 export * from './blank';
 export * from './dashboardSummary';
 export * from './dashboardSummaryRecentAccuracyItem';
+export * from './errorResponse';
 export * from './healthStatus';
 export * from './listAdminQuestionsParams';
 export * from './practiceResult';

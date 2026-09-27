@@ -1,12 +1,12 @@
+import { seedPracticeSets as practiceSets } from "./practice-question-seed";
+const findSet = (id: string) => practiceSets.find(set => set.id === id);
+const allBlankIds = () => practiceSets.flatMap(set => set.blanks.map(blank => blank.id));
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
-  allBlankIds,
   bindBlanksToSet,
   blankToken,
-  findSet,
   makeBlankId,
-  practiceSets,
 } from "./patternpilot";
 import { scorePracticeAnswers } from "../services/practice-scoring";
 import { getLearningContent, toTrainingSet } from "../services/diagnosis";
@@ -123,5 +123,20 @@ describe("TrainingSet response mapping", () => {
   it("rejects the raw LearningContent shape that previously broke GET training", () => {
     const content = getLearningContent("spelling");
     assert.throws(() => GetTargetedTrainingResponse.parse(content));
+  });
+});
+
+describe("qualified token remapping", () => {
+  it("remaps exported qualified tokens", () => {
+    const source = practiceSets[0];
+    const bound = bindBlanksToSet("copy", source.passage, source.blanks);
+    assert.ok(bound.passage.includes("{{copy__b1}}"));
+    assert.ok(!bound.passage.includes("set-ecology__"));
+  });
+  it("rejects duplicate normalized IDs and dangling tokens", () => {
+    const blank = practiceSets[0].blanks[0];
+    assert.throws(() => bindBlanksToSet("copy", "{{b1}}", [blank, { ...blank, id: "other__b1" }]));
+    assert.throws(() => bindBlanksToSet("copy", "{{missing}}", [blank]));
+    assert.throws(() => bindBlanksToSet("copy", "{{b1}} {{b1}}", [blank]));
   });
 });

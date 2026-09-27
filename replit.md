@@ -1,6 +1,8 @@
-# [Project name]
+# PatternPilot
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+TOEFL practice with server-side grading and a Postgres question bank.
+
+See [Step 3 database operations](docs/step-3-postgres.md) for local setup, migrations, seeding, tests, and deployment.
 
 ## Run & Operate
 

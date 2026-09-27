@@ -1,4 +1,6 @@
-import express, { type Express } from "express";
+import { QuestionDatabaseError } from "./services/question-repository";
+import { QuestionValidationError } from "./services/question-validation";
+import express, { type Express, type ErrorRequestHandler } from "express";
 import cors from "cors";
 import pinoHttp from "pino-http";
 import router from "./routes";
@@ -31,4 +33,14 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", router);
 
+const errorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
+  if (error instanceof QuestionDatabaseError) {
+    res.status(503).json({ error: "Question database unavailable" }); return;
+  }
+  if (error instanceof QuestionValidationError || error?.name === "ZodError" || error?.type === "entity.parse.failed") {
+    res.status(400).json({ error: "Invalid request" }); return;
+  }
+  res.status(500).json({ error: "Internal server error" });
+};
+app.use(errorHandler);
 export default app;

@@ -36,6 +36,18 @@ paths:
       tags: [practice]
       summary: List available Complete the Words passages
       responses:
+        "400":
+          description: Invalid request or question content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Question database unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "200":
           description: Available practice sets
           content:
@@ -56,6 +68,18 @@ paths:
             schema:
               $ref: "#/components/schemas/PracticeSessionInput"
       responses:
+        "400":
+          description: Invalid request or question content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Question database unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "201":
           description: Started session
           content:
@@ -76,6 +100,30 @@ paths:
             schema:
               $ref: "#/components/schemas/PracticeSubmission"
       responses:
+        "400":
+          description: Invalid request or question content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Question database unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Session question no longer available
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "200":
           description: Practice results
           content:
@@ -142,6 +190,18 @@ paths:
           schema:
             type: boolean
       responses:
+        "400":
+          description: Invalid request or question content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Question database unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "200":
           description: Question bank entries
           content:
@@ -161,6 +221,18 @@ paths:
             schema:
               $ref: "#/components/schemas/AdminQuestionInput"
       responses:
+        "400":
+          description: Invalid request or question content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Question database unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "201":
           description: Created question
           content:
@@ -179,6 +251,18 @@ paths:
             schema:
               $ref: "#/components/schemas/QuestionImportInput"
       responses:
+        "400":
+          description: Invalid request or question content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Question database unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "200":
           description: Import summary
           content:
@@ -194,6 +278,11 @@ components:
       schema:
         type: string
   schemas:
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error: { type: string }
     HealthStatus:
       type: object
       properties:
