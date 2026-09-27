@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "PatternPilot TOEFL"
+description = "An English-first TOEFL practice app that helps learners complete realistic Complete the Words passages, understand their recurring mistakes, and train the patterns that cost them points."
+version = "1.0.0"
+id = "artifacts/patternpilot"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25361
+
+[services.development]
+run = "pnpm --filter @workspace/patternpilot run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/patternpilot", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/patternpilot/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25361"
+BASE_PATH = "/"

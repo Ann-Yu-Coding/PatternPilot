@@ -10,6 +10,12 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: practice
+    description: Practice and review operations
+  - name: dashboard
+    description: Learner overview operations
+  - name: admin
+    description: Question bank management operations
 paths:
   /healthz:
     get:
@@ -24,7 +30,169 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /practice/sets:
+    get:
+      operationId: listPracticeSets
+      tags: [practice]
+      summary: List available Complete the Words passages
+      responses:
+        "200":
+          description: Available practice sets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PracticeSet"
+  /practice/sessions:
+    post:
+      operationId: startPracticeSession
+      tags: [practice]
+      summary: Start a practice session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PracticeSessionInput"
+      responses:
+        "201":
+          description: Started session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PracticeSession"
+  /practice/sessions/{sessionId}/submit:
+    post:
+      operationId: submitPracticeSession
+      tags: [practice]
+      summary: Submit answers and receive deterministic diagnosis
+      parameters:
+        - $ref: "#/components/parameters/SessionId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PracticeSubmission"
+      responses:
+        "200":
+          description: Practice results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PracticeResult"
+  /practice/sessions/{sessionId}/training:
+    get:
+      operationId: getTargetedTraining
+      tags: [practice]
+      summary: Get the drill mapped to the session's strongest weakness
+      parameters:
+        - $ref: "#/components/parameters/SessionId"
+      responses:
+        "200":
+          description: Targeted learning content and drill
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrainingSet"
+    post:
+      operationId: submitTrainingDrill
+      tags: [practice]
+      summary: Submit the targeted mini training drill
+      parameters:
+        - $ref: "#/components/parameters/SessionId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrainingSubmission"
+      responses:
+        "200":
+          description: Training result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrainingResult"
+  /dashboard:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get the learner dashboard summary
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+  /admin/questions:
+    get:
+      operationId: listAdminQuestions
+      tags: [admin]
+      summary: List questions in the question bank
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: published
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Question bank entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AdminQuestion"
+    post:
+      operationId: createAdminQuestion
+      tags: [admin]
+      summary: Create a question bank entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminQuestionInput"
+      responses:
+        "201":
+          description: Created question
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminQuestion"
+  /admin/questions/import:
+    post:
+      operationId: importAdminQuestions
+      tags: [admin]
+      summary: Import question bank entries from JSON or CSV-shaped rows
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuestionImportInput"
+      responses:
+        "200":
+          description: Import summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionImportResult"
 components:
+  parameters:
+    SessionId:
+      in: path
+      name: sessionId
+      required: true
+      schema:
+        type: string
   schemas:
     HealthStatus:
       type: object
@@ -33,4 +201,216 @@ components:
           type: string
       required:
         - status
+    Blank:
+      type: object
+      required: [id, order, prefix, missingLength, fullWord, answer, errorCategory, tags]
+      properties:
+        id: { type: string }
+        order: { type: integer }
+        prefix: { type: string }
+        missingLength: { type: integer }
+        fullWord: { type: string }
+        answer: { type: string }
+        lemma: { type: string }
+        partOfSpeech: { type: string }
+        wordFamily: { type: string }
+        root: { type: string }
+        suffix: { type: string }
+        errorCategory: { type: string }
+        tags:
+          type: array
+          items: { type: string }
+    PracticeSet:
+      type: object
+      required: [id, title, topic, difficulty, estimatedMinutes, blankCount, passage, blanks]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        topic: { type: string }
+        difficulty: { type: string }
+        estimatedMinutes: { type: integer }
+        blankCount: { type: integer }
+        passage: { type: string }
+        blanks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Blank"
+    PracticeSessionInput:
+      type: object
+      required: [setIds]
+      properties:
+        setIds:
+          type: array
+          items: { type: string }
+          minItems: 1
+    PracticeSession:
+      type: object
+      required: [id, setIds, startedAt]
+      properties:
+        id: { type: string }
+        setIds:
+          type: array
+          items: { type: string }
+        startedAt: { type: string }
+    Answer:
+      type: object
+      required: [blankId, value]
+      properties:
+        blankId: { type: string }
+        value: { type: string }
+    PracticeSubmission:
+      type: object
+      required: [answers]
+      properties:
+        answers:
+          type: array
+          items:
+            $ref: "#/components/schemas/Answer"
+    ResultItem:
+      type: object
+      required: [blankId, submitted, fullWord, isCorrect, errorCategory, suffix, wordFamily]
+      properties:
+        blankId: { type: string }
+        submitted: { type: string }
+        fullWord: { type: string }
+        isCorrect: { type: boolean }
+        errorCategory: { type: string }
+        suffix: { type: string }
+        wordFamily: { type: string }
+        explanation: { type: string }
+    Weakness:
+      type: object
+      required: [key, label, count, score, detail, evidence, learningTitle, learningDescription, drillCount]
+      properties:
+        key: { type: string }
+        label: { type: string }
+        count: { type: integer }
+        score: { type: integer }
+        detail: { type: string }
+        evidence:
+          type: array
+          items: { type: string }
+        learningTitle: { type: string }
+        learningDescription: { type: string }
+        drillCount: { type: integer }
+    PracticeResult:
+      type: object
+      required: [sessionId, score, total, accuracy, items, topWeakness, weaknesses, reviewCopy]
+      properties:
+        sessionId: { type: string }
+        score: { type: integer }
+        total: { type: integer }
+        accuracy: { type: number }
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/ResultItem"
+        topWeakness:
+          $ref: "#/components/schemas/Weakness"
+        weaknesses:
+          type: array
+          items:
+            $ref: "#/components/schemas/Weakness"
+        reviewCopy: { type: string }
+    TrainingPrompt:
+      type: object
+      required: [id, prompt, prefix, answer, hint]
+      properties:
+        id: { type: string }
+        prompt: { type: string }
+        prefix: { type: string }
+        answer: { type: string }
+        hint: { type: string }
+    TrainingSet:
+      type: object
+      required: [categoryKey, title, description, objective, prompts]
+      properties:
+        categoryKey: { type: string }
+        title: { type: string }
+        description: { type: string }
+        objective: { type: string }
+        prompts:
+          type: array
+          items:
+            $ref: "#/components/schemas/TrainingPrompt"
+    TrainingSubmission:
+      type: object
+      required: [answers]
+      properties:
+        answers:
+          type: array
+          items:
+            $ref: "#/components/schemas/Answer"
+    TrainingResult:
+      type: object
+      required: [score, total, accuracy, items, lockedInsights]
+      properties:
+        score: { type: integer }
+        total: { type: integer }
+        accuracy: { type: number }
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/ResultItem"
+        lockedInsights:
+          type: array
+          items: { type: string }
+    DashboardSummary:
+      type: object
+      required: [questionsCompleted, accuracy, reviewCount, streak, topWeaknesses, recentAccuracy]
+      properties:
+        questionsCompleted: { type: integer }
+        accuracy: { type: number }
+        reviewCount: { type: integer }
+        streak: { type: integer }
+        topWeaknesses:
+          type: array
+          items:
+            $ref: "#/components/schemas/Weakness"
+        recentAccuracy:
+          type: array
+          items:
+            type: object
+            required: [label, value]
+            properties:
+              label: { type: string }
+              value: { type: number }
+    AdminQuestion:
+      allOf:
+        - $ref: "#/components/schemas/PracticeSet"
+        - type: object
+          required: [published, sourceLabel, updatedAt]
+          properties:
+            published: { type: boolean }
+            sourceLabel: { type: string }
+            updatedAt: { type: string }
+    AdminQuestionInput:
+      type: object
+      required: [title, topic, difficulty, passage, blanks]
+      properties:
+        title: { type: string }
+        topic: { type: string }
+        difficulty: { type: string }
+        passage: { type: string }
+        blanks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Blank"
+        published: { type: boolean }
+        sourceLabel: { type: string }
+    QuestionImportInput:
+      type: object
+      required: [format, raw]
+      properties:
+        format:
+          type: string
+          enum: [json, csv]
+        raw: { type: string }
+    QuestionImportResult:
+      type: object
+      required: [imported, skipped, message]
+      properties:
+        imported: { type: integer }
+        skipped: { type: integer }
+        message: { type: string }
 
