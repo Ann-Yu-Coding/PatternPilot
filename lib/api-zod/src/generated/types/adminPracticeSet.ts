@@ -5,9 +5,9 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import type { PublicBlank } from './publicBlank';
+import type { Blank } from './blank';
 
-export interface PracticeSet {
+export interface AdminPracticeSet {
   id: string;
   title: string;
   topic: string;
@@ -15,5 +15,5 @@ export interface PracticeSet {
   estimatedMinutes: number;
   blankCount: number;
   passage: string;
-  blanks: PublicBlank[];
+  blanks: Blank[];
 }

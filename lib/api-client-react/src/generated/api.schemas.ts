@@ -25,6 +25,16 @@ export interface Blank {
   tags: string[];
 }
 
+/**
+ * Display-only blank; answer keys and diagnostic metadata stay on the server.
+ */
+export interface PublicBlank {
+  id: string;
+  order: number;
+  prefix: string;
+  missingLength: number;
+}
+
 export interface PracticeSet {
   id: string;
   title: string;
@@ -33,7 +43,7 @@ export interface PracticeSet {
   estimatedMinutes: number;
   blankCount: number;
   passage: string;
-  blanks: Blank[];
+  blanks: PublicBlank[];
 }
 
 export interface PracticeSessionInput {
@@ -94,8 +104,7 @@ export interface TrainingPrompt {
   id: string;
   prompt: string;
   prefix: string;
-  answer: string;
-  hint: string;
+  missingLength: number;
 }
 
 export interface TrainingSet {
@@ -132,7 +141,18 @@ export interface DashboardSummary {
   recentAccuracy: DashboardSummaryRecentAccuracyItem[];
 }
 
-export type AdminQuestion = PracticeSet & {
+export interface AdminPracticeSet {
+  id: string;
+  title: string;
+  topic: string;
+  difficulty: string;
+  estimatedMinutes: number;
+  blankCount: number;
+  passage: string;
+  blanks: Blank[];
+}
+
+export type AdminQuestion = AdminPracticeSet & {
   published: boolean;
   sourceLabel: string;
   updatedAt: string;

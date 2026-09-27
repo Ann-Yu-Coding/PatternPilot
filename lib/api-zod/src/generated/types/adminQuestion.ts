@@ -5,9 +5,9 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import type { PracticeSet } from './practiceSet';
+import type { AdminPracticeSet } from './adminPracticeSet';
 
-export type AdminQuestion = PracticeSet & {
+export type AdminQuestion = AdminPracticeSet & {
   published: boolean;
   sourceLabel: string;
   updatedAt: string;

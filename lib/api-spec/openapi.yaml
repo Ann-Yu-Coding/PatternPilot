@@ -220,6 +220,15 @@ components:
         tags:
           type: array
           items: { type: string }
+    PublicBlank:
+      type: object
+      description: Display-only blank; answer keys and diagnostic metadata stay on the server.
+      required: [id, order, prefix, missingLength]
+      properties:
+        id: { type: string }
+        order: { type: integer }
+        prefix: { type: string }
+        missingLength: { type: integer }
     PracticeSet:
       type: object
       required: [id, title, topic, difficulty, estimatedMinutes, blankCount, passage, blanks]
@@ -234,7 +243,7 @@ components:
         blanks:
           type: array
           items:
-            $ref: "#/components/schemas/Blank"
+            $ref: "#/components/schemas/PublicBlank"
     PracticeSessionInput:
       type: object
       required: [setIds]
@@ -314,13 +323,12 @@ components:
         reviewCopy: { type: string }
     TrainingPrompt:
       type: object
-      required: [id, prompt, prefix, answer, hint]
+      required: [id, prompt, prefix, missingLength]
       properties:
         id: { type: string }
         prompt: { type: string }
         prefix: { type: string }
-        answer: { type: string }
-        hint: { type: string }
+        missingLength: { type: integer }
     TrainingSet:
       type: object
       required: [categoryKey, title, description, objective, prompts]
@@ -375,9 +383,24 @@ components:
             properties:
               label: { type: string }
               value: { type: number }
+    AdminPracticeSet:
+      type: object
+      required: [id, title, topic, difficulty, estimatedMinutes, blankCount, passage, blanks]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        topic: { type: string }
+        difficulty: { type: string }
+        estimatedMinutes: { type: integer }
+        blankCount: { type: integer }
+        passage: { type: string }
+        blanks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Blank"
     AdminQuestion:
       allOf:
-        - $ref: "#/components/schemas/PracticeSet"
+        - $ref: "#/components/schemas/AdminPracticeSet"
         - type: object
           required: [published, sourceLabel, updatedAt]
           properties:

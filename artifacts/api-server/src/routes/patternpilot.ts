@@ -41,7 +41,7 @@ const toPublicSet = (set: PracticeSet) => ({
   estimatedMinutes: set.estimatedMinutes,
   blankCount: set.blankCount,
   passage: set.passage,
-  blanks: set.blanks,
+  blanks: set.blanks.map(({ id, order, prefix, missingLength }) => ({ id, order, prefix, missingLength })),
 });
 
 router.get("/practice/sets", (_req, res) => {
@@ -103,14 +103,14 @@ router.post("/practice/sessions/:sessionId/submit", async (req, res) => {
 
 router.post("/practice/sessions/:sessionId/training", async (req, res) => {
   const { sessionId } = SubmitTrainingDrillParams.parse(req.params);
-  SubmitTrainingDrillBody.parse(req.body);
+  const body = SubmitTrainingDrillBody.parse(req.body);
   const session = sessions.get(sessionId);
   if (!session) {
     res.status(404).json({ error: "Session not found" });
     return;
   }
   const drill = await getStoredLearningContent(session.weaknessKey);
-  const answers = req.body.answers as Array<{ blankId: string; value: string }>;
+  const answers = body.answers;
   const items = drill.prompts.map((prompt) => {
     const submitted = answers.find((answer) => answer.blankId === prompt.id)?.value ?? "";
     const isCorrect = submitted.trim().toLowerCase() === prompt.answer.toLowerCase();
@@ -179,7 +179,7 @@ router.get("/admin/questions", (req, res) => {
       query.published === undefined || set.published === query.published;
     return matchesSearch && matchesPublished;
   });
-  res.json(ListAdminQuestionsResponse.parse(results.map((set) => ({ ...toPublicSet(set), published: set.published, sourceLabel: set.sourceLabel, updatedAt: set.updatedAt }))));
+  res.json(ListAdminQuestionsResponse.parse(results.map((set) => ({ ...toPublicSet(set), blanks: set.blanks, published: set.published, sourceLabel: set.sourceLabel, updatedAt: set.updatedAt }))));
 });
 
 router.post("/admin/questions", (req, res) => {
@@ -202,6 +202,7 @@ router.post("/admin/questions", (req, res) => {
   practiceSets.push(newQuestion);
   res.status(201).json({
     ...toPublicSet(newQuestion),
+    blanks: newQuestion.blanks,
     published: newQuestion.published,
     sourceLabel: newQuestion.sourceLabel,
     updatedAt: newQuestion.updatedAt,

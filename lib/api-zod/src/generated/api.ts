@@ -32,17 +32,8 @@ export const ListPracticeSetsResponseItem = zod.object({
   "id": zod.string(),
   "order": zod.number().int(),
   "prefix": zod.string(),
-  "missingLength": zod.number().int(),
-  "fullWord": zod.string(),
-  "answer": zod.string(),
-  "lemma": zod.string().optional(),
-  "partOfSpeech": zod.string().optional(),
-  "wordFamily": zod.string().optional(),
-  "root": zod.string().optional(),
-  "suffix": zod.string().optional(),
-  "errorCategory": zod.string(),
-  "tags": zod.array(zod.string())
-}))
+  "missingLength": zod.number().int()
+}).describe('Display-only blank; answer keys and diagnostic metadata stay on the server.'))
 })
 export const ListPracticeSetsResponse = zod.array(ListPracticeSetsResponseItem)
 
@@ -135,8 +126,7 @@ export const GetTargetedTrainingResponse = zod.object({
   "id": zod.string(),
   "prompt": zod.string(),
   "prefix": zod.string(),
-  "answer": zod.string(),
-  "hint": zod.string()
+  "missingLength": zod.number().int()
 }))
 })
 

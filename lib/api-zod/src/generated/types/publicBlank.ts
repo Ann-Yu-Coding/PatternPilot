@@ -6,9 +6,12 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface TrainingPrompt {
+/**
+ * Display-only blank; answer keys and diagnostic metadata stay on the server.
+ */
+export interface PublicBlank {
   id: string;
-  prompt: string;
+  order: number;
   prefix: string;
   missingLength: number;
 }

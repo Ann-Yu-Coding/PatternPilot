@@ -243,6 +243,14 @@ export function toTrainingSet(content: LearningContent) {
     title: content.learningTitle,
     description: content.learningDescription,
     objective: content.objective,
-    prompts: content.prompts,
+    prompts: content.prompts.map(({ id, prompt, prefix, answer }) => ({
+      id,
+      // Spelling drills previously repeated the completed word before the arrow.
+      prompt: prompt.split(" → ")[0].trim().toLowerCase() === (prefix + answer).toLowerCase()
+        ? prompt.split(" → ").slice(1).join(" → ")
+        : prompt,
+      prefix,
+      missingLength: answer.length,
+    })),
   };
 }

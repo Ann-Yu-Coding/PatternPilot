@@ -6,6 +6,7 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from './adminPracticeSet';
 export * from './adminQuestion';
 export * from './adminQuestionInput';
 export * from './answer';
@@ -19,6 +20,7 @@ export * from './practiceSession';
 export * from './practiceSessionInput';
 export * from './practiceSet';
 export * from './practiceSubmission';
+export * from './publicBlank';
 export * from './questionImportInput';
 export * from './questionImportInputFormat';
 export * from './questionImportResult';
