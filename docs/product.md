@@ -218,7 +218,7 @@ Check the rules in the order shown. The first match wins.
 ### Learner UI implementation notes (2026-09-28)
 
 - The 3:00 timer is advisory: at zero, learners can still finish and submit. Results show actual elapsed time, which can exceed three minutes.
-- A session with fewer than two related misses shows no repeated pattern; an all-correct session shows a positive review state.
+- Target behavior follows §5: repeated patterns use misses across the last 5 passages; a passage with mistakes but no repeated category shows a possible pattern and offers a checking drill. An all-correct passage shows a positive line and the next passage. Cross-passage history, possible-pattern cards and the next-passage flow are pending implementation; the saved UI still uses the earlier single-session threshold.
 - The first two screens reuse the current scoring response. All 24 original blanks now have server-side editorial explanations, shown under Why this answer for correct and incorrect responses alike. Type displays the blank’s errorCategory. Scoring and pattern detection remain unchanged and do not yet implement all of §5. The UI uses real drill counts; no answer metadata is added to public passage responses.
 - The practice picker remembers the last accuracy in the current browser tab. Switching passages starts a fresh attempt; cross-device history is outside this change.
 
