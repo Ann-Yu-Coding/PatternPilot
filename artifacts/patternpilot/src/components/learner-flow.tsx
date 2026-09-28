@@ -12,27 +12,19 @@ import type {
   ResultItem,
 } from "@workspace/api-client-react";
 import { PracticePicker } from "./practice-picker";
+import { PatternCard } from "./pattern-card";
+import { readHistory, saveHistory } from "../lib/history-storage";
+import {
+  recordAttempt,
+  findPattern,
+  latestPassages,
+  missCategory,
+  drillForCategory,
+} from "../lib/practice-history";
 import { InlineBlank } from "./inline-blank";
 import { categoryLabel, timeLabel, wordChange } from "../lib/learner-review";
 import "../practice.css";
 
-const SCORES_KEY = "pp-practice-scores";
-function storedScores(): Record<string, number> {
-  try {
-    const value = JSON.parse(sessionStorage.getItem(SCORES_KEY) || "{}");
-    return Object.fromEntries(
-      Object.entries(value).filter(
-        (entry): entry is [string, number] =>
-          typeof entry[1] === "number" &&
-          Number.isFinite(entry[1]) &&
-          entry[1] >= 0 &&
-          entry[1] <= 100,
-      ),
-    );
-  } catch {
-    return {};
-  }
-}
 const REVIEW_KEY = "pp-learner-review";
 type Review = { set: PracticeSet; result: PracticeResult; elapsed: number };
 function storedReview(): Review | null {
@@ -217,7 +209,13 @@ export function LearnerFlow() {
   const [selectedId, setSelectedId] = useState<string | null>(
     () => review?.set.id || null,
   );
-  const [scores, setScores] = useState(storedScores);
+  const [history, setHistory] = useState(readHistory);
+  const scores = Object.fromEntries(
+    latestPassages(history).map((a) => [
+      a.passageId,
+      Math.round((a.score / Math.max(1, a.total)) * 100),
+    ]),
+  );
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [elapsed, setElapsed] = useState(0);
   const [attempt, setAttempt] = useState(0);
@@ -240,8 +238,21 @@ export function LearnerFlow() {
   const busy = start.isPending || submit.isPending;
   const remaining = Math.max(0, 180 - elapsed);
   const mistakes = result?.items.filter((item) => !item.isCorrect).length || 0;
-  const primary = result?.topWeakness;
-  const hasPattern = !!primary && primary.count >= 2 && mistakes >= 2;
+  const pattern = result ? findPattern(history, result.sessionId) : null;
+  const primary = pattern
+    ? result?.weaknesses.find(
+        (w) => w.key === drillForCategory[pattern.category],
+      )
+    : undefined;
+  useEffect(() => {
+    const sync = () => setHistory(readHistory());
+    window.addEventListener("storage", sync);
+    window.addEventListener("pp-history-change", sync);
+    return () => {
+      window.removeEventListener("storage", sync);
+      window.removeEventListener("pp-history-change", sync);
+    };
+  }, []);
 
   useEffect(() => {
     if (!current || review) return;
@@ -325,18 +336,26 @@ export function LearnerFlow() {
             } catch {
               /* Keep review visible even when storage is unavailable. */
             }
-            const nextScores = {
-              ...scores,
-              [current.id]: Math.round(
-                (nextResult.score / Math.max(1, nextResult.total)) * 100,
-              ),
-            };
-            setScores(nextScores);
-            try {
-              sessionStorage.setItem(SCORES_KEY, JSON.stringify(nextScores));
-            } catch {
-              /* Keep in-memory history. */
-            }
+            const timestamp = Date.now();
+            const nextHistory = recordAttempt(readHistory(), {
+              id: nextResult.sessionId,
+              passageId: current.id,
+              title: current.title,
+              timestamp,
+              score: nextResult.score,
+              total: nextResult.total,
+              elapsed: seconds,
+              misses: nextResult.items
+                .filter((item) => !item.isCorrect)
+                .map((item) => ({
+                  blankId: item.blankId,
+                  errorCategory: missCategory(item),
+                  passageId: current.id,
+                  timestamp,
+                })),
+            });
+            saveHistory(nextHistory);
+            setHistory(nextHistory);
             setReview(nextReview);
           },
           onSettled: () => {
@@ -404,7 +423,6 @@ export function LearnerFlow() {
         />
       );
     });
-  const patternWords = primary?.label.split(" ") || [];
   return (
     <div className="learner-page">
       <header className="learner-nav">
@@ -540,55 +558,23 @@ export function LearnerFlow() {
                   </h2>
                   <span>correct · {timeLabel(review.elapsed)}</span>
                 </div>
-                {hasPattern && primary ? (
-                  <section
-                    className="learner-pattern"
-                    aria-labelledby="pattern-title"
-                  >
-                    <div className="learner-pattern-copy">
-                      <span className="learner-pattern-badge">
-                        Pattern found
-                      </span>
-                      <h2 id="pattern-title">
-                        {patternWords.slice(0, -1).join(" ")}{" "}
-                        <mark>{patternWords.at(-1)}</mark>
-                      </h2>
-                      <p>{primary.detail}</p>
-                      <div className="learner-pattern-action">
-                        <Link
-                          href="/training"
-                          className="learner-button"
-                          data-testid="link-result-training"
-                        >
-                          Practice {primary.label.toLowerCase()}{" "}
-                          <ArrowRight size={18} />
-                        </Link>
-                        <span>
-                          {primary.drillCount} quick sentences · 2 min
-                        </span>
-                      </div>
-                    </div>
-                    <Ring
-                      fraction={primary.count / mistakes}
-                      label={`${primary.count} of ${mistakes} mistakes share this pattern`}
-                    >
-                      <strong>
-                        {primary.count}/{mistakes}
-                      </strong>
-                      <small>mistakes</small>
-                    </Ring>
-                  </section>
+                {pattern ? (
+                  <PatternCard
+                    pattern={pattern}
+                    sessionId={result.sessionId}
+                    drillCount={primary?.drillCount}
+                  />
                 ) : (
                   <section className="learner-no-pattern">
                     <h2>
                       {mistakes === 0
                         ? "Every word in place."
-                        : "No repeated pattern this time."}
+                        : "Pattern checked."}
                     </h2>
                     <p>
                       {mistakes === 0
-                        ? "Read the explanations below to reinforce what worked."
-                        : "Review each answer below before your next passage."}
+                        ? "You’re ready for the next passage."
+                        : "Review the answers below, then try another passage."}
                     </p>
                   </section>
                 )}

@@ -24,6 +24,7 @@ import type {
   AdminQuestionInput,
   DashboardSummary,
   ErrorResponse,
+  GetTargetedTrainingParams,
   HealthStatus,
   ListAdminQuestionsParams,
   PracticeResult,
@@ -33,6 +34,7 @@ import type {
   PracticeSubmission,
   QuestionImportInput,
   QuestionImportResult,
+  SubmitTrainingDrillParams,
   TrainingResult,
   TrainingSet,
   TrainingSubmission
@@ -397,20 +399,29 @@ export const useSubmitPracticeSession = <TError = ErrorType<ErrorResponse>,
       return useMutation(getSubmitPracticeSessionMutationOptions(options));
     }
 
-export const getGetTargetedTrainingUrl = (sessionId: string,) => {
+export const getGetTargetedTrainingUrl = (sessionId: string,
+    params?: GetTargetedTrainingParams,) => {
+  const normalizedParams = new URLSearchParams();
 
+  Object.entries(params || {}).forEach(([key, value]) => {
 
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
 
+  const stringifiedParams = normalizedParams.toString();
 
-  return `/api/practice/sessions/${sessionId}/training`
+  return stringifiedParams.length > 0 ? `/api/practice/sessions/${sessionId}/training?${stringifiedParams}` : `/api/practice/sessions/${sessionId}/training`
 }
 
 /**
  * @summary Get the drill mapped to the session's strongest weakness
  */
-export const getTargetedTraining = async (sessionId: string, options?: Parameters<typeof customFetch>[1]): Promise<TrainingSet> => {
+export const getTargetedTraining = async (sessionId: string,
+    params?: GetTargetedTrainingParams, options?: Parameters<typeof customFetch>[1]): Promise<TrainingSet> => {
 
-  return customFetch<TrainingSet>(getGetTargetedTrainingUrl(sessionId),
+  return customFetch<TrainingSet>(getGetTargetedTrainingUrl(sessionId,params),
   {
     ...options,
     method: 'GET'
@@ -423,23 +434,25 @@ export const getTargetedTraining = async (sessionId: string, options?: Parameter
 
 
 
-export const getGetTargetedTrainingQueryKey = (sessionId: string,) => {
+export const getGetTargetedTrainingQueryKey = (sessionId: string,
+    params?: GetTargetedTrainingParams,) => {
     return [
-    `/api/practice/sessions/${sessionId}/training`
+    `/api/practice/sessions/${sessionId}/training`, ...(params ? [params] : [])
     ] as const;
     }
 
 
-export const getGetTargetedTrainingQueryOptions = <TData = Awaited<ReturnType<typeof getTargetedTraining>>, TError = ErrorType<unknown>>(sessionId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTargetedTraining>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+export const getGetTargetedTrainingQueryOptions = <TData = Awaited<ReturnType<typeof getTargetedTraining>>, TError = ErrorType<unknown>>(sessionId: string,
+    params?: GetTargetedTrainingParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTargetedTraining>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTargetedTrainingQueryKey(sessionId);
+  const queryKey =  queryOptions?.queryKey ?? getGetTargetedTrainingQueryKey(sessionId,params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTargetedTraining>>> = ({ signal }) => getTargetedTraining(sessionId, { signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTargetedTraining>>> = ({ signal }) => getTargetedTraining(sessionId,params, { signal, ...requestOptions });
 
 
 
@@ -457,11 +470,12 @@ export type GetTargetedTrainingQueryError = ErrorType<unknown>
  */
 
 export function useGetTargetedTraining<TData = Awaited<ReturnType<typeof getTargetedTraining>>, TError = ErrorType<unknown>>(
- sessionId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTargetedTraining>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+ sessionId: string,
+    params?: GetTargetedTrainingParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTargetedTraining>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
 
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const queryOptions = getGetTargetedTrainingQueryOptions(sessionId,options)
+  const queryOptions = getGetTargetedTrainingQueryOptions(sessionId,params,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -474,19 +488,28 @@ export function useGetTargetedTraining<TData = Awaited<ReturnType<typeof getTarg
 
 
 
-export const getSubmitTrainingDrillUrl = (sessionId: string,) => {
+export const getSubmitTrainingDrillUrl = (sessionId: string,
+    params?: SubmitTrainingDrillParams,) => {
+  const normalizedParams = new URLSearchParams();
 
+  Object.entries(params || {}).forEach(([key, value]) => {
 
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
 
+  const stringifiedParams = normalizedParams.toString();
 
-  return `/api/practice/sessions/${sessionId}/training`
+  return stringifiedParams.length > 0 ? `/api/practice/sessions/${sessionId}/training?${stringifiedParams}` : `/api/practice/sessions/${sessionId}/training`
 }
 
 /**
  * @summary Submit the targeted mini training drill
  */
 export const submitTrainingDrill = async (sessionId: string,
-    trainingSubmission: TrainingSubmission, options?: Parameters<typeof customFetch>[1]): Promise<TrainingResult> => {
+    trainingSubmission: TrainingSubmission,
+    params?: SubmitTrainingDrillParams, options?: Parameters<typeof customFetch>[1]): Promise<TrainingResult> => {
 
     const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
     if (!h) return {};
@@ -502,7 +525,7 @@ export const submitTrainingDrill = async (sessionId: string,
     }
     return headers;
   };
-return customFetch<TrainingResult>(getSubmitTrainingDrillUrl(sessionId),
+return customFetch<TrainingResult>(getSubmitTrainingDrillUrl(sessionId,params),
   {
     ...options,
     method: 'POST',
@@ -532,9 +555,9 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof submitTrainingDrill>>, SubmitTrainingDrillMutationVariables> = (props) => {
-          const {sessionId,data} = props ?? {};
+          const {sessionId,data,params} = props ?? {};
 
-          return  submitTrainingDrill(sessionId,data,requestOptions)
+          return  submitTrainingDrill(sessionId,data,params,requestOptions)
         }
 
 
@@ -547,7 +570,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type SubmitTrainingDrillMutationResult = NonNullable<Awaited<ReturnType<typeof submitTrainingDrill>>>
     export type SubmitTrainingDrillMutationBody = BodyType<TrainingSubmission>
     export type SubmitTrainingDrillMutationError = ErrorType<unknown>
-    export type SubmitTrainingDrillMutationVariables = {sessionId: string;data: BodyType<TrainingSubmission>}
+    export type SubmitTrainingDrillMutationVariables = {sessionId: string;data: BodyType<TrainingSubmission>;params?: SubmitTrainingDrillParams}
 
     /**
  * @summary Submit the targeted mini training drill

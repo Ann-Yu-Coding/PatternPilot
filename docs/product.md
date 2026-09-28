@@ -91,6 +91,7 @@ Check the rules in the order shown. The first match wins.
 
 **Pattern detection:**
 - Patterns are found **across passages, not just within one passage**. Keep a history of every miss (category, passage, date). For v0.2 there are no accounts, so store it in the browser (`localStorage`); move it to the server when accounts arrive.
+- Only the **latest attempt for each distinct passage** contributes evidence. Retries replace that passage’s previous evidence; all attempts remain in Progress history. Use the five most recently attempted distinct passages. Rank by miss count, then recency weights 5–1, then latest occurrence. Show one primary card.
 - A **pattern** is a category with **2 or more misses across the learner's last 5 passages**, recent passages weighted higher. The card shows the evidence, e.g. *"3 of your last 5 mistakes · across 2 passages"*.
 - **Possible pattern:** if no category reaches 2 misses but this passage has at least one mistake, show the category of that mistake as a *possible* pattern (if several, the one seen most often in history, then the most recent). It still offers the targeted drill, framed as a check: *"Check with 6 sentences · if you get them all, we drop it."* Getting the whole drill right clears it from the history.
 - **No mistakes:** no pattern card. Show a short positive line and the next passage.
@@ -221,9 +222,15 @@ Check the rules in the order shown. The first match wins.
 - Admin access requires the API-only ADMIN_SECRET through a Bearer header. The editor prompts before loading data, keeps the secret only in memory and clears its isolated query cache on lock or navigation.
 
 - The 3:00 timer is advisory: at zero, learners can still finish and submit. Results show actual elapsed time, which can exceed three minutes.
-- Target behavior follows §5: repeated patterns use misses across the last 5 passages; a passage with mistakes but no repeated category shows a possible pattern and offers a checking drill. An all-correct passage shows a positive line and the next passage. Cross-passage history, possible-pattern cards and the next-passage flow are pending implementation; the saved UI still uses the earlier single-session threshold.
+- Pattern evidence now uses the latest attempt from each of the last five distinct passages. Both repeated and possible patterns offer a category-specific drill; a perfect drill clears prior active evidence. All attempts remain visible in Progress. Next-passage flow is implemented in Step 3.
 - The first two screens reuse the current scoring response. All 24 original blanks now have server-side editorial explanations, shown under Why this answer for correct and incorrect responses alike. Type displays the blank’s errorCategory. Scoring and pattern detection remain unchanged and do not yet implement all of §5. The UI uses real drill counts; no answer metadata is added to public passage responses.
 - The practice picker remembers the last accuracy in the current browser tab. Switching passages starts a fresh attempt; cross-device history is outside this change.
+
+### Decisions confirmed during implementation
+
+- Retries replace pattern evidence for that passage; attempt history is retained for Progress. A perfect drill clears earlier active evidence for its category without deleting historical scores.
+- Initial offer: **US$5/month**; annual pricing is undecided. v0.2 collects interest only, without charging.
+- Waitlist emails are stored in a small table in the existing Postgres database.
 
 ## 11. Open questions
 

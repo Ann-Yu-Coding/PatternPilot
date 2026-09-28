@@ -137,6 +137,12 @@ paths:
       summary: Get the drill mapped to the session's strongest weakness
       parameters:
         - $ref: "#/components/parameters/SessionId"
+        - name: categoryKey
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [noun-formation, suffix-recognition, word-family, spelling, function-words, verb-inflection, part-of-speech, academic-vocabulary, contextual-prediction]
       responses:
         "200":
           description: Targeted learning content and drill
@@ -150,6 +156,12 @@ paths:
       summary: Submit the targeted mini training drill
       parameters:
         - $ref: "#/components/parameters/SessionId"
+        - name: categoryKey
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [noun-formation, suffix-recognition, word-family, spelling, function-words, verb-inflection, part-of-speech, academic-vocabulary, contextual-prediction]
       requestBody:
         required: true
         content:

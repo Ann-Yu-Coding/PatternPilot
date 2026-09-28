@@ -117,6 +117,10 @@ export const GetTargetedTrainingParams = zod.object({
   "sessionId": zod.coerce.string()
 })
 
+export const GetTargetedTrainingQueryParams = zod.object({
+  "categoryKey": zod.enum(['noun-formation', 'suffix-recognition', 'word-family', 'spelling', 'function-words', 'verb-inflection', 'part-of-speech', 'academic-vocabulary', 'contextual-prediction']).optional()
+})
+
 export const GetTargetedTrainingResponse = zod.object({
   "categoryKey": zod.string(),
   "title": zod.string(),
@@ -136,6 +140,10 @@ export const GetTargetedTrainingResponse = zod.object({
  */
 export const SubmitTrainingDrillParams = zod.object({
   "sessionId": zod.coerce.string()
+})
+
+export const SubmitTrainingDrillQueryParams = zod.object({
+  "categoryKey": zod.enum(['noun-formation', 'suffix-recognition', 'word-family', 'spelling', 'function-words', 'verb-inflection', 'part-of-speech', 'academic-vocabulary', 'contextual-prediction']).optional()
 })
 
 export const SubmitTrainingDrillBody = zod.object({

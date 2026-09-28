@@ -5,6 +5,8 @@ import {
   CreateAdminQuestionBody,
   GetDashboardSummaryResponse,
   GetTargetedTrainingParams,
+  GetTargetedTrainingQueryParams,
+  SubmitTrainingDrillQueryParams,
   GetTargetedTrainingResponse,
   ImportAdminQuestionsBody,
   ImportAdminQuestionsResponse,
@@ -117,7 +119,8 @@ router.post("/practice/sessions/:sessionId/training", async (req, res) => {
     res.status(404).json({ error: "Session not found" });
     return;
   }
-  const drill = await getStoredLearningContent(session.weaknessKey);
+  const { categoryKey } = SubmitTrainingDrillQueryParams.parse(req.query);
+  const drill = await getStoredLearningContent(categoryKey || session.weaknessKey);
   const answers = body.answers;
   const items = drill.prompts.map((prompt) => {
     const submitted = answers.find((answer) => answer.blankId === prompt.id)?.value ?? "";
@@ -152,7 +155,8 @@ router.get("/practice/sessions/:sessionId/training", async (req, res) => {
     res.status(404).json({ error: "Session not found" });
     return;
   }
-  const training = toTrainingSet(await getStoredLearningContent(session.weaknessKey));
+  const { categoryKey } = GetTargetedTrainingQueryParams.parse(req.query);
+  const training = toTrainingSet(await getStoredLearningContent(categoryKey || session.weaknessKey));
   res.json(GetTargetedTrainingResponse.parse(training));
 });
 

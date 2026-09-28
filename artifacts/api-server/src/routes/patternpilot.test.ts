@@ -250,3 +250,17 @@ describe("admin authentication", () => {
     assertNoAnswerFields(await request("/practice/sets"));
   });
 });
+
+
+it("selects and grades the requested historical pattern without exposing drill answers", async () => {
+  const id = `history-${randomUUID()}`;
+  sessions.set(id, { id, setIds: [], startedAt: new Date().toISOString(), weaknessKey: "noun-formation" });
+  try {
+    const content=learningContentByWeakness["verb-inflection"];
+    const training=await request(`/practice/sessions/${id}/training?categoryKey=verb-inflection`) as TrainingSet;
+    assert.equal(training.categoryKey,"verb-inflection"); assertNoAnswerFields(training);
+    const result=await request(`/practice/sessions/${id}/training?categoryKey=verb-inflection`, { answers:content.prompts.map(p=>({blankId:p.id,value:p.answer})) }) as TrainingResult;
+    assert.equal(result.score,result.total);
+    assert.equal((await rawRequest(`/practice/sessions/${id}/training?categoryKey=invalid`)).status,400);
+  } finally { sessions.delete(id); }
+});

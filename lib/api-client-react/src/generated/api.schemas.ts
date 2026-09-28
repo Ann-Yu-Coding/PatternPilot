@@ -191,6 +191,44 @@ export interface QuestionImportResult {
   message: string;
 }
 
+export type GetTargetedTrainingParams = {
+categoryKey?: GetTargetedTrainingCategoryKey;
+};
+
+export type GetTargetedTrainingCategoryKey = typeof GetTargetedTrainingCategoryKey[keyof typeof GetTargetedTrainingCategoryKey];
+
+
+export const GetTargetedTrainingCategoryKey = {
+  'noun-formation': 'noun-formation',
+  'suffix-recognition': 'suffix-recognition',
+  'word-family': 'word-family',
+  spelling: 'spelling',
+  'function-words': 'function-words',
+  'verb-inflection': 'verb-inflection',
+  'part-of-speech': 'part-of-speech',
+  'academic-vocabulary': 'academic-vocabulary',
+  'contextual-prediction': 'contextual-prediction',
+} as const;
+
+export type SubmitTrainingDrillParams = {
+categoryKey?: SubmitTrainingDrillCategoryKey;
+};
+
+export type SubmitTrainingDrillCategoryKey = typeof SubmitTrainingDrillCategoryKey[keyof typeof SubmitTrainingDrillCategoryKey];
+
+
+export const SubmitTrainingDrillCategoryKey = {
+  'noun-formation': 'noun-formation',
+  'suffix-recognition': 'suffix-recognition',
+  'word-family': 'word-family',
+  spelling: 'spelling',
+  'function-words': 'function-words',
+  'verb-inflection': 'verb-inflection',
+  'part-of-speech': 'part-of-speech',
+  'academic-vocabulary': 'academic-vocabulary',
+  'contextual-prediction': 'contextual-prediction',
+} as const;
+
 export type ListAdminQuestionsParams = {
 search?: string;
 published?: boolean;
