@@ -140,8 +140,9 @@ Correct answers get only a **Why** line.
 - **Fonts:** Geist for the interface. Source Serif 4 for anything the learner reads (passages, drill sentences, answer words).
 - **Radius:** buttons 10px · tags 4px · highlights 6px · pattern card 22px · timer fully rounded.
 - **Depth:** a 3px darker bottom border (4px on the pattern card). The pattern card may add one soft green shadow.
-- **Spacing:** 8px grid. Content column 1100px wide on desktop (about 75 characters per line; don't go wider). Keep vertical gaps between blocks at 16–28px.
-- **Fit:** on a 1440×800 laptop window at 100% zoom, the whole practice screen (passage and **Check answers**) must fit without scrolling. The reference design ends at about 760px.
+- **Type scale (desktop):** wordmark 20 · nav tabs 14 · page heading 34 (line-height 1.3) · passage title 24 · **passage 22 serif, line-height 1.8** · subheading 16 · meta 13 · timer 18 · buttons 15 · small hints 12. Nothing below 12px.
+- **Spacing:** 8px grid. Content column **825px** wide on desktop (about 75 characters per line). Vertical gaps between blocks 12–24px; heading block (label → heading → subheading) has a little more air (12px / 10px).
+- **Fit:** on a 1440×800 laptop window at 100% zoom, the whole practice screen (passage and **Check answers**) must fit without scrolling. The reference design ends at about 600px.
 
 ### Components
 - **Top nav:** lowercase `patternpilot` wordmark · *Practice* / *Progress* tabs (active tab has a 3px green underline) · account avatar.
