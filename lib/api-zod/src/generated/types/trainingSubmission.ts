@@ -8,5 +8,7 @@
 import type { Answer } from './answer';
 
 export interface TrainingSubmission {
+  /** Check only this drill item; omit to grade the complete drill. */
+  itemId?: string;
   answers: Answer[];
 }

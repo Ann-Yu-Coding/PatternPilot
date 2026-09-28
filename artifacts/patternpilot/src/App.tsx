@@ -1,3 +1,4 @@
+import { TrainingFlow } from "@/components/training-flow";
 import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query";
 import { Link, Route, Switch, useLocation, Router as WouterRouter } from "wouter";
@@ -58,27 +59,7 @@ function Practice() { return <LearnerFlow />; }
 
 function Results() { return <LearnerFlow />; }
 
-function Training() {
-  const trainingParams = new URLSearchParams(window.location.search);
-  const requestedCategory = trainingParams.get("category");
-  const categoryKey = Object.values(GetTargetedTrainingCategoryKey).find(key => key === requestedCategory);
-  const patternCategory = trainingParams.get("pattern");
-
-  const submit = useSubmitTrainingDrill();
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [trainingResult, setTrainingResult] = useState<{ score: number; total: number; accuracy: number; lockedInsights: string[] } | null>(null);
-  const sessionId = typeof window === "undefined" ? "demo-session" : trainingParams.get("session") || sessionStorage.getItem("pp-session") || "demo-session";
-  const training = useGetTargetedTraining(sessionId, { categoryKey }, { query: { queryKey: getGetTargetedTrainingQueryKey(sessionId, { categoryKey }), enabled: sessionId !== "demo-session", retry: false } });
-  const prompts = training.data?.prompts ?? [];
-  const run = () => {
-    submit.mutate({ sessionId, params: { categoryKey }, data: { answers: prompts.map((p) => ({ blankId: p.id, value: answers[p.id] || "" })) } }, { onSuccess: (result) => { setTrainingResult(result); if (patternCategory && result.total > 0 && result.score === result.total) saveHistory(finishDrill(readHistory(),patternCategory,result.score,result.total)); sessionStorage.setItem("pp-training-result", JSON.stringify(result)); } });
-  };
-  if (sessionId === "demo-session") return <AppShell><p className="p-10">Complete a <Link href="/practice">practice session</Link> to start training.</p></AppShell>;
-  if (training.isLoading) return <AppShell><LoadingBlock label="Loading training" /></AppShell>;
-  if (training.isError) return <AppShell><ErrorBlock retry={training.refetch} /></AppShell>;
-  if (submit.isError) return <AppShell><ErrorBlock retry={run} /></AppShell>;
-  return <AppShell><div className="mx-auto max-w-4xl px-5 py-10 lg:px-10 lg:py-14"><SectionKicker>Targeted training / {training.data?.title || "your strongest pattern"}</SectionKicker><div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><h1 className="font-serif text-5xl tracking-[-.03em]">Make the ending automatic.</h1><p className="mt-3 max-w-lg text-sm leading-6 text-[#676577]">{training.data?.description || "Four tiny prompts built from your last read. Focus on what changes when the sentence changes."}</p></div><span className="rounded-full bg-[#f7c948]/40 px-3 py-1.5 text-xs font-semibold">{prompts.length} prompts · 3 min</span></div>{trainingResult ? <div className="mt-10 space-y-5"><div className="rounded-lg bg-[#252a40] p-8 text-[#fffaf0]"><div className="flex flex-wrap items-end justify-between gap-5"><div><div className="grid h-10 w-10 place-items-center rounded-full bg-[#f7c948] text-[#252a40]"><Check size={20} /></div><h2 className="mt-6 font-serif text-4xl">The pattern is getting louder.</h2></div><div className="text-right"><div className="font-mono text-4xl text-[#f7c948]">{trainingResult.accuracy}%</div><div className="text-xs text-[#c7c6ce]">{trainingResult.score} / {trainingResult.total} correct</div></div></div><p className="mt-3 max-w-lg text-sm leading-7 text-[#c7c6ce]">Review the sentence first, then the word. That order keeps the right ending available when you need it.</p></div><div className="rounded-lg border border-[#ddd6c9] bg-[#fffaf0] p-6"><SectionKicker>More patterns detected</SectionKicker><div className="space-y-3">{trainingResult.lockedInsights.map((insight) => <div key={insight} className="flex items-center gap-3 text-sm text-[#676577]"><LockKeyhole size={15} className="text-[#ad762c]" />{insight}</div>)}</div><AppButton href="/unlock" kind="yellow" className="mt-6" testId="link-training-unlock">Unlock your full study plan <ArrowRight size={15} /></AppButton></div><div className="flex gap-3"><AppButton href="/practice" kind="outline" testId="link-training-practice">Try another passage <ArrowRight size={15} /></AppButton><AppButton href="/dashboard" kind="ghost" testId="link-training-dashboard">Back to overview</AppButton></div></div> : <div className="mt-10 rounded-lg border border-[#ddd6c9] bg-[#fffaf0] p-6 sm:p-9"><p className="mb-8 text-sm text-[#676577]">Objective: {training.data?.objective || "Use the sentence to identify the form before you complete the word."}</p><div className="space-y-7">{prompts.map((p, i) => <div key={p.id} className="grid gap-3 sm:grid-cols-[28px_1fr]"><span className="font-mono text-xs text-[#ad762c]">0{i + 1}</span><div><p className="text-lg leading-8"><span>{p.prompt.split(/_{2,}/)[0]}</span><input aria-label={`Training prompt ${i + 1}`} data-testid={`input-training-${p.id}`} value={answers[p.id] || ""} onChange={(e) => setAnswers((prev) => ({ ...prev, [p.id]: e.target.value.slice(0, p.missingLength) }))} className="mx-1 w-24 border-b-2 border-[#252a40]/30 bg-transparent px-1 text-center font-semibold outline-none focus:border-[#ad762c]" /><span>{p.prompt.split(/_{2,}/).slice(1).join(" ")}</span></p></div></div>)}</div><div className="mt-9 flex justify-end border-t border-[#e2dbcf] pt-5"><AppButton onClick={run} kind="yellow" disabled={submit.isPending || training.isLoading} testId="button-submit-training">{submit.isPending ? "Checking…" : "Check the pattern"} <ArrowRight size={15} /></AppButton></div></div>}</div></AppShell>;
-}
+function Training() { return <TrainingFlow />; }
 
 function Dashboard() { return <ProgressPage />; }
 

@@ -999,3 +999,28 @@
 .paywall-panel label { display:block; margin:24px 0; font-size:14px; }
 .paywall-panel input { display:block; width:100%; border:1px solid var(--learner-line); border-radius:8px; padding:12px; margin-top:8px; background:white; }
 @media(max-width:640px) { .paywall-panel { padding:24px; } .paywall-panel h1 { font-size:28px; } .next-actions { width:100%; } .next-actions button { flex:1; } }
+
+/* One sentence at a time, using the same reading surface as the passage. */
+.drill-header { height: 65px; border-bottom: 1px solid var(--learner-line); display:flex; align-items:center; justify-content:space-between; gap:24px; padding:0 24px; color:var(--learner-secondary); }
+.drill-header > a { color:var(--learner-ink); display:flex; }
+.drill-segments { display:flex; gap:5px; width:155px; }
+.drill-segments span { height:4px; flex:1; border-radius:3px; background:var(--learner-line); }
+.drill-segments .active { background:var(--learner-green); }
+.drill-main { max-width:650px; margin:auto; padding:44px 24px 28px; min-height:calc(100dvh - 65px); display:flex; flex-direction:column; align-items:stretch; }
+.drill-sentence { font-family:"Source Serif 4", Georgia, serif; font-size:30px; line-height:1.8; margin:24px 0 32px; }
+.drill-feedback { border-top:1px solid var(--learner-line); padding-top:20px; }
+.drill-feedback h2 { display:flex; align-items:center; gap:8px; color:var(--learner-green); font-size:17px; font-weight:600; margin:0 0 8px; }
+.drill-feedback p, .drill-complete p { font-family:"Source Sans 3",sans-serif; color:var(--learner-secondary); font-size:17px; line-height:1.6; }
+.drill-correct { text-decoration:underline; text-decoration-color:var(--learner-green); text-underline-offset:6px; }
+.drill-correction del { color:var(--learner-mistake); }
+.drill-correction > span { text-decoration:underline; text-underline-offset:6px; }
+.drill-action { margin-top:auto; width:100%; min-height:52px; }
+.drill-feedback + .drill-action { margin-top:auto; }
+.drill-main > [role=alert] { margin:20px 0; }
+.drill-complete h1 { font-size:34px; margin:20px 0; }
+.drill-complete > a { display:flex; margin-top:24px; }
+@media(max-width:480px) { .drill-sentence { font-size:27px; } .drill-main { padding:40px 24px 24px; } .drill-action { margin-top:auto; } }
+
+.drill-correction, .drill-correct { white-space:nowrap; }
+.drill-action { flex-shrink:0; margin-bottom:0; }
+.drill-feedback { margin-bottom:32px; }

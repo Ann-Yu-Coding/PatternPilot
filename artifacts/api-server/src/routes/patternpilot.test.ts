@@ -278,3 +278,20 @@ it("stores normalized waitlist emails once and rejects invalid addresses", async
    assert.equal((await rawRequest("/waitlist",{email:123})).status,400);
  } finally { await pool.query("DELETE FROM waitlist WHERE email=$1",[email]); }
 });
+
+it("five-item drills reveal only the checked item before the final submission", async () => {
+  const id = "test-single-drill-item";
+  sessions.set(id, { id, setIds: [], startedAt: new Date().toISOString(), weaknessKey: "noun-formation" });
+  try {
+    const drill = learningContentByWeakness["noun-formation"];
+    for (const content of Object.values(learningContentByWeakness)) assert.equal(content.prompts.length, 5);
+    const first = drill.prompts[0];
+    const r = await request(`/practice/sessions/${id}/training`, { itemId: first.id, answers: [{ blankId: first.id, value: first.answer }] }) as TrainingResult;
+    assert.equal(r.items.length, 1);
+    assert.equal(r.score, 1);
+    assert.equal(r.items[0].explanation, first.hint);
+    assert.deepEqual(r.lockedInsights, []);
+    const invalid = await rawRequest(`/practice/sessions/${id}/training`, { itemId: "not-a-drill-item", answers: [] });
+    assert.equal(invalid.status, 400);
+  } finally { sessions.delete(id); }
+});

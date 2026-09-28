@@ -122,7 +122,9 @@ router.post("/practice/sessions/:sessionId/training", async (req, res) => {
   const { categoryKey } = SubmitTrainingDrillQueryParams.parse(req.query);
   const drill = await getStoredLearningContent(categoryKey || session.weaknessKey);
   const answers = body.answers;
-  const items = drill.prompts.map((prompt) => {
+  const selected = body.itemId ? drill.prompts.filter(p => p.id === body.itemId) : drill.prompts;
+  if (!selected.length) { res.status(400).json({ error: "Unknown drill item" }); return; }
+  const items = selected.map((prompt) => {
     const submitted = answers.find((answer) => answer.blankId === prompt.id)?.value ?? "";
     const isCorrect = submitted.trim().toLowerCase() === prompt.answer.toLowerCase();
     return {
@@ -133,7 +135,7 @@ router.post("/practice/sessions/:sessionId/training", async (req, res) => {
       errorCategory: "word formation",
       suffix: prompt.answer,
       wordFamily: prompt.prompt.split(" → ")[0],
-      explanation: isCorrect ? "Correct pattern." : prompt.hint,
+      explanation: prompt.hint,
     };
   });
   const score = items.filter((item) => item.isCorrect).length;
@@ -143,7 +145,7 @@ router.post("/practice/sessions/:sessionId/training", async (req, res) => {
       total: items.length,
       accuracy: Math.round((score / items.length) * 100),
       items,
-      lockedInsights: ["Academic vocabulary — 5 issues detected", "Function words — 3 issues detected", "Spelling patterns — 4 issues detected"],
+      lockedInsights: [],
     }),
   );
 });

@@ -147,6 +147,7 @@ export const SubmitTrainingDrillQueryParams = zod.object({
 })
 
 export const SubmitTrainingDrillBody = zod.object({
+  "itemId": zod.string().optional().describe('Check only this drill item; omit to grade the complete drill.'),
   "answers": zod.array(zod.object({
   "blankId": zod.string(),
   "value": zod.string()

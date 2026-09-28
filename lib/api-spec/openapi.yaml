@@ -446,6 +446,7 @@ components:
       type: object
       required: [answers]
       properties:
+        itemId: { type: string, description: "Check only this drill item; omit to grade the complete drill." }
         answers:
           type: array
           items:

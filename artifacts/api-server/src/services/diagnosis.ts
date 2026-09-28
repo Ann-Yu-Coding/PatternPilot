@@ -44,10 +44,11 @@ export const learningContentByWeakness: Record<WeaknessKey, LearningContent> = {
     learningDescription: "Academic passages often turn a familiar verb or adjective into a noun with -tion, -ment, -ity, -ance, or -ence.",
     objective: "Use the words around the blank to identify a noun-forming ending.",
     prompts: [
-      { id: "t1", prompt: "adapt → adapta____", prefix: "adapta", answer: "tion", hint: "A process or result often ends in -tion." },
-      { id: "t2", prompt: "develop → develop____", prefix: "develop", answer: "ment", hint: "A result or state can use -ment." },
-      { id: "t3", prompt: "signify → signific____", prefix: "signific", answer: "ance", hint: "The quality or meaning of something can end in -ance." },
-      { id: "t4", prompt: "resilient → resili____", prefix: "resili", answer: "ence", hint: "The noun form of resilient ends in -ence." },
+      { id: "t1", prompt: "Seasonal adapta____ helps animals survive the winter.", prefix: "adapta", answer: "tion", hint: "“Seasonal adaptation” names the change that helps the animals survive." },
+      { id: "t2", prompt: "The develop____ of new roots takes several weeks.", prefix: "develop", answer: "ment", hint: "“The development of” names a process, so develop becomes development." },
+      { id: "t3", prompt: "The discovery has lasting signific____ for the region.", prefix: "signific", answer: "ance", hint: "“Has lasting significance” describes the importance of the discovery." },
+      { id: "t4", prompt: "A mix of species improves the resili____ of a forest.", prefix: "resili", answer: "ence", hint: "“The resilience of a forest” means its ability to recover." },
+      { id: "t5", prompt: "The team measured the move____ of the glacier.", prefix: "move", answer: "ment", hint: "“The movement of the glacier” names what the team measured." },
     ],
   }),
   "suffix-recognition": content({
@@ -58,9 +59,11 @@ export const learningContentByWeakness: Record<WeaknessKey, LearningContent> = {
     learningDescription: "Suffixes can reveal whether a word is acting as a noun, adjective, adverb, or verb before you finish reading the line.",
     objective: "Use the sentence role to choose the smallest correct ending.",
     prompts: [
-      { id: "s1", prompt: "active → activ____", prefix: "activ", answer: "ity", hint: "The state or quality of being active uses -ity." },
-      { id: "s2", prompt: "different → differ____", prefix: "differ", answer: "ence", hint: "The noun form of different ends in -ence." },
-      { id: "s3", prompt: "maintain → mainten____", prefix: "mainten", answer: "ance", hint: "The noun for keeping something in good condition ends in -ance." },
+      { id: "s1", prompt: "Volcanic activ____ increased before the eruption.", prefix: "activ", answer: "ity", hint: "“Volcanic activity” names what increased before the eruption." },
+      { id: "s2", prompt: "The differ____ between the samples was small.", prefix: "differ", answer: "ence", hint: "“The difference between” names the contrast being measured." },
+      { id: "s3", prompt: "Regular mainten____ keeps the instruments accurate.", prefix: "mainten", answer: "ance", hint: "“Regular maintenance” means the work needed to keep the instruments in good condition." },
+      { id: "s4", prompt: "The soil has a high capac____ to hold water.", prefix: "capac", answer: "ity", hint: "“A high capacity” names the amount the soil can hold." },
+      { id: "s5", prompt: "The team questioned the accur____ of the estimate.", prefix: "accur", answer: "acy", hint: "“The accuracy of the estimate” means how close it is to the true value." },
     ],
   }),
   "word-family": content({
@@ -71,10 +74,11 @@ export const learningContentByWeakness: Record<WeaknessKey, LearningContent> = {
     learningDescription: "TOEFL blanks often keep the root visible while changing its job in the sentence.",
     objective: "Check the part of speech before choosing a word-family ending.",
     prompts: [
-      { id: "f1", prompt: "support → suppo____", prefix: "suppo", answer: "rtive", hint: "An adjective describing help ends in -rtive." },
-      { id: "f2", prompt: "memory → memo____", prefix: "memo", answer: "rize", hint: "The verb form ends in -rize." },
-      { id: "f3", prompt: "relate → rela____", prefix: "rela", answer: "tionship", hint: "A connection between people is a relationship." },
-      { id: "f4", prompt: "increase → incre____", prefix: "incre", answer: "asingly", hint: "The adverb form ends in -asingly." },
+      { id: "f1", prompt: "The tutor created a suppo____ environment for discussion.", prefix: "suppo", answer: "rtive", hint: "“A supportive environment” describes a place where learners receive help." },
+      { id: "f2", prompt: "The participants had to memo____ a short list.", prefix: "memo", answer: "rize", hint: "After “had to,” memorize names the action the participants performed." },
+      { id: "f3", prompt: "The study explored the rela____ between sleep and memory.", prefix: "rela", answer: "tionship", hint: "“The relationship between” names the connection being studied." },
+      { id: "f4", prompt: "The coast has become incre____ vulnerable to storms.", prefix: "incre", answer: "asingly", hint: "“Increasingly vulnerable” means more vulnerable over time." },
+      { id: "f5", prompt: "The new material is remark____ light.", prefix: "remark", answer: "ably", hint: "“Remarkably light” tells us how unusual the material’s lightness is." },
     ],
   }),
   spelling: content({
@@ -85,10 +89,11 @@ export const learningContentByWeakness: Record<WeaknessKey, LearningContent> = {
     learningDescription: "When you know the word but miss the letters, use the visible prefix and sound pattern to check doubles, vowels, and common endings.",
     objective: "Build a reliable letter-by-letter check before you submit.",
     prompts: [
-      { id: "p1", prompt: "occur → o____", prefix: "o", answer: "ccur", hint: "This word doubles its first consonant." },
-      { id: "p2", prompt: "receive → rece____", prefix: "rece", answer: "ive", hint: "Think i-before-e except after c." },
-      { id: "p3", prompt: "separate → sepa____", prefix: "sepa", answer: "rate", hint: "The middle vowel is an a." },
-      { id: "p4", prompt: "environment → enviro____", prefix: "enviro", answer: "nment", hint: "The ending is -nment." },
+      { id: "p1", prompt: "Small earthquakes o____ near the fault each week.", prefix: "o", answer: "ccur", hint: "“Earthquakes occur” means they happen; occur has two c’s and one r." },
+      { id: "p2", prompt: "The plants rece____ less light in winter.", prefix: "rece", answer: "ive", hint: "“Receive less light” describes what reaches the plants. Receive is spelled with ei after c." },
+      { id: "p3", prompt: "Researchers kept the two samples sepa____.", prefix: "sepa", answer: "rate", hint: "“Kept the samples separate” means they were not mixed. Separate has an a after the p." },
+      { id: "p4", prompt: "The enviro____ changes as the lake dries.", prefix: "enviro", answer: "nment", hint: "“The environment” refers to the surrounding conditions; keep the n before ment." },
+      { id: "p5", prompt: "The equipment is neces____ for the experiment.", prefix: "neces", answer: "sary", hint: "“Necessary for the experiment” means it is needed. Necessary has one c and two s’s." },
     ],
   }),
   "function-words": content({
@@ -99,9 +104,11 @@ export const learningContentByWeakness: Record<WeaknessKey, LearningContent> = {
     learningDescription: "Articles, prepositions, conjunctions, and pronouns are short, but they carry the sentence structure that makes academic writing precise.",
     objective: "Read the grammar around a short blank before reaching for vocabulary.",
     prompts: [
-      { id: "w1", prompt: "The result depends __ context.", prefix: "", answer: "on", hint: "This verb takes the preposition on." },
-      { id: "w2", prompt: "The sample was divided __ two groups.", prefix: "", answer: "into", hint: "Use into for movement or separation." },
-      { id: "w3", prompt: "The theory is useful __ it explains the pattern.", prefix: "", answer: "because", hint: "The second clause gives a reason." },
+      { id: "w1", prompt: "The result depends __ context.", prefix: "", answer: "on", hint: "“Depends on” connects the result to the conditions that affect it." },
+      { id: "w2", prompt: "The sample was divided __ two groups.", prefix: "", answer: "into", hint: "“Divided into two groups” tells us how the sample was separated." },
+      { id: "w3", prompt: "The theory is useful __ it explains the pattern.", prefix: "", answer: "because", hint: "“Because it explains the pattern” gives the reason the theory is useful." },
+      { id: "w4", prompt: "The two samples differ __ size.", prefix: "", answer: "in", hint: "“Differ in size” identifies the feature being compared." },
+      { id: "w5", prompt: "Each seed was placed __ a separate container.", prefix: "", answer: "in", hint: "“In a separate container” tells us where each seed was placed." },
     ],
   }),
   "verb-inflection": content({
@@ -112,9 +119,11 @@ export const learningContentByWeakness: Record<WeaknessKey, LearningContent> = {
     learningDescription: "Auxiliary verbs, time markers, and singular subjects tell you which ending or participle belongs in the blank.",
     objective: "Use the subject and helper verb to lock the verb form.",
     prompts: [
-      { id: "v1", prompt: "The evidence suggest____ a shift.", prefix: "suggest", answer: "s", hint: "A singular subject takes the third-person ending." },
-      { id: "v2", prompt: "Researchers have observ____ the pattern.", prefix: "observ", answer: "ed", hint: "Use the past participle after have." },
-      { id: "v3", prompt: "Scientists are study____ the sample.", prefix: "study", answer: "ing", hint: "Use -ing after are." },
+      { id: "v1", prompt: "The evidence suggest____ a shift.", prefix: "suggest", answer: "s", hint: "“The evidence suggests” takes -s: evidence is treated as one body of information." },
+      { id: "v2", prompt: "Researchers have observ____ the pattern.", prefix: "observ", answer: "ed", hint: "“Have observed” describes observations made before now; have is followed by observed." },
+      { id: "v3", prompt: "Scientists are study____ the sample.", prefix: "study", answer: "ing", hint: "“Are studying” describes an action in progress." },
+      { id: "v4", prompt: "Each plant grow____ toward the light.", prefix: "grow", answer: "s", hint: "“Each plant grows” describes what one plant does, so grow takes -s." },
+      { id: "v5", prompt: "The samples were collect____ yesterday.", prefix: "collect", answer: "ed", hint: "“Were collected yesterday” describes a completed action done to the samples." },
     ],
   }),
   "part-of-speech": content({
@@ -125,9 +134,11 @@ export const learningContentByWeakness: Record<WeaknessKey, LearningContent> = {
     learningDescription: "Look at what the blank modifies or follows: nouns name, verbs act, adjectives describe, and adverbs qualify.",
     objective: "Identify the blank's grammatical role before completing the word.",
     prompts: [
-      { id: "o1", prompt: "The result was highly effect____.", prefix: "effect", answer: "ive", hint: "The blank describes the result, so use an adjective." },
-      { id: "o2", prompt: "The study offers a clear explan____.", prefix: "explan", answer: "ation", hint: "The article a signals a noun." },
-      { id: "o3", prompt: "The samples were care____ selected.", prefix: "care", answer: "fully", hint: "The blank describes how the action happened." },
+      { id: "o1", prompt: "The result was highly effect____.", prefix: "effect", answer: "ive", hint: "“Highly effective” describes how well the result worked." },
+      { id: "o2", prompt: "The study offers a clear explan____.", prefix: "explan", answer: "ation", hint: "“A clear explanation” names what the study offers." },
+      { id: "o3", prompt: "The samples were care____ selected.", prefix: "care", answer: "fully", hint: "“Carefully selected” tells us how the samples were chosen." },
+      { id: "o4", prompt: "The change happened grad____ over several years.", prefix: "grad", answer: "ually", hint: "“Happened gradually” tells us how the change unfolded." },
+      { id: "o5", prompt: "The method provides reli____ measurements.", prefix: "reli", answer: "able", hint: "“Reliable measurements” describes measurements that can be trusted." },
     ],
   }),
   "academic-vocabulary": content({
@@ -138,9 +149,11 @@ export const learningContentByWeakness: Record<WeaknessKey, LearningContent> = {
     learningDescription: "The goal is not to memorize isolated words; connect each word to a topic, a sentence role, and a close word-family partner.",
     objective: "Use context and word families to retrieve academic vocabulary faster.",
     prompts: [
-      { id: "a1", prompt: "The finding was highly signif____.", prefix: "signif", answer: "icant", hint: "The adjective means important or meaningful." },
-      { id: "a2", prompt: "The policy had a broad imp____.", prefix: "imp", answer: "act", hint: "The noun means an effect or consequence." },
-      { id: "a3", prompt: "The results were consis____ across groups.", prefix: "consis", answer: "tent", hint: "The adjective means stable or matching." },
+      { id: "a1", prompt: "The finding was highly signif____.", prefix: "signif", answer: "icant", hint: "“Highly significant” describes a finding that matters." },
+      { id: "a2", prompt: "The policy had a broad imp____.", prefix: "imp", answer: "act", hint: "“A broad impact” means the policy affected many areas." },
+      { id: "a3", prompt: "The results were consis____ across groups.", prefix: "consis", answer: "tent", hint: "“Consistent across groups” means the results agreed rather than varying widely." },
+      { id: "a4", prompt: "The data provide evid____ for the theory.", prefix: "evid", answer: "ence", hint: "“Provide evidence” means the data give support for the theory." },
+      { id: "a5", prompt: "The study compared two different appro____ to the problem.", prefix: "appro", answer: "aches", hint: "“Two different approaches” means two ways of dealing with the problem." },
     ],
   }),
   "contextual-prediction": content({
@@ -151,9 +164,11 @@ export const learningContentByWeakness: Record<WeaknessKey, LearningContent> = {
     learningDescription: "A blank is never isolated. Read the clause, locate the signal word, and predict the part of speech before checking the letters.",
     objective: "Combine sentence meaning and grammar before completing the visible stem.",
     prompts: [
-      { id: "c1", prompt: "The change may lead __ recovery.", prefix: "", answer: "to", hint: "Lead takes to before a result." },
-      { id: "c2", prompt: "The pattern occurs __ the climate shifts.", prefix: "", answer: "when", hint: "The second clause gives a time condition." },
-      { id: "c3", prompt: "The method is useful __ it is inexpensive.", prefix: "", answer: "because", hint: "The second clause explains why." },
+      { id: "c1", prompt: "The change may lead __ recovery.", prefix: "", answer: "to", hint: "“Lead to recovery” connects the change with its possible result." },
+      { id: "c2", prompt: "The pattern occurs __ the climate shifts.", prefix: "", answer: "when", hint: "“When the climate shifts” tells us the circumstances in which the pattern appears." },
+      { id: "c3", prompt: "The method is useful __ it is inexpensive.", prefix: "", answer: "because", hint: "“Because it is inexpensive” explains why the method is useful." },
+      { id: "c4", prompt: "Without water, the seedlings began to wi____.", prefix: "wi", answer: "lt", hint: "“Without water” explains why the seedlings wilt: they lose their firmness." },
+      { id: "c5", prompt: "A thick layer of snow insul____ the soil from cold air.", prefix: "insul", answer: "ates", hint: "“From cold air” is the clue: snow insulates the soil by slowing heat loss." },
     ],
   }),
 };

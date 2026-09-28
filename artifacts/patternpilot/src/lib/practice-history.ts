@@ -104,14 +104,7 @@ export function findPatterns(history: History, currentId?: string): Pattern[] {
       a[0].localeCompare(b[0]),
   );
   const qualifying = ranked.filter(([, g]) => g.count >= 2).slice(0, 2);
-  const currentCategories = new Set(
-    active(current).map((m) => m.errorCategory),
-  );
-  const chosen = qualifying.length
-    ? qualifying
-    : ranked
-        .filter(([category]) => currentCategories.has(category))
-        .slice(0, 1);
+  const chosen = qualifying.length ? qualifying : ranked.slice(0, 1);
   return chosen.map(([category, g]) => ({
     category,
     count: g.count,
@@ -134,9 +127,6 @@ export const drillForCategory: Record<string, string> = {
   "Grammar ending": "verb-inflection",
   Spelling: "spelling",
   "Context / meaning": "contextual-prediction",
-  Vocabulary: "academic-vocabulary",
-  "Vocabulary gap": "academic-vocabulary",
-  "academic vocabulary": "academic-vocabulary",
   "Word retrieval": "academic-vocabulary",
 };
 export const feedbackForCategory: Record<string, string> = {

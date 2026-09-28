@@ -224,8 +224,8 @@ Check the rules in the order shown. The first match wins.
 - Admin access requires the API-only ADMIN_SECRET through a Bearer header. The editor prompts before loading data, keeps the secret only in memory and clears its isolated query cache on lock or navigation.
 
 - The 3:00 timer is advisory: at zero, learners can still finish and submit. Results show actual elapsed time, which can exceed three minutes.
-- Pattern evidence now uses the latest attempt from each of the last five distinct passages. Both repeated and possible patterns offer a category-specific drill; a perfect drill clears prior active evidence. All attempts remain visible in Progress. The next-passage card now routes to the next unfinished seeded passage or to the waitlist offer after two unique completions.
-- The first two screens reuse the current scoring response. All 24 original blanks now have server-side editorial explanations, shown under Why this answer for correct and incorrect responses alike. Type displays the blank’s errorCategory. Scoring and pattern detection remain unchanged and do not yet implement all of §5. The UI uses real drill counts; no answer metadata is added to public passage responses.
+- Pattern evidence now uses the latest attempt from each of the last five distinct passages. Both repeated and possible patterns offer a category-specific drill; a 5/5 drill clears only that category’s misses contributing to the current five-passage window. All attempts remain visible in Progress. The next-passage card now routes to the next unfinished seeded passage or to the waitlist offer after two unique completions.
+- The first two screens reuse the current scoring response. All 24 original blanks now have server-side editorial explanations, shown under Why this answer for correct and incorrect responses alike. Type displays the blank’s errorCategory. Exact-answer scoring remains unchanged. Browser pattern aggregation follows the confirmed §5 rules, but error categories still come from the blank’s tested skill (empty answers use Word retrieval), not the complete ordered answer-sensitive classifier in §5. Each built-in drill has five items; no answer metadata is added to public passage responses.
 - The practice picker remembers the last accuracy in the current browser tab. Switching passages starts a fresh attempt; cross-device history is outside this change.
 
 ### Decisions confirmed during implementation
@@ -234,9 +234,11 @@ Check the rules in the order shown. The first match wins.
 - Initial offer: **US$5/month**; annual pricing is undecided. v0.2 collects interest only, without charging.
 - Waitlist emails are stored in a small table in the existing Postgres database.
 
+- Targeted practice shows one sentence at a time. Checking an item returns only that item’s feedback; final grading uses all five answers. Untouched legacy seed drills are upgraded to the five-item editorial catalog at read time while keeping existing IDs. Custom database content is preserved and a custom drill with fewer than five items is unavailable until completed.
+
 ## 11. Open questions
 
-- Pricing: one-time pass or subscription? At what price per market?
+- Future pricing: annual option and market-specific tiers remain undecided; the current offer is US$5/month.
 - Free tier: 2 passages for now (configurable). Revisit after the ads test.
 - Where to find the 5 v0.2 test learners in Korea, Japan and Europe?
 - Which merchant of record accepts sellers based in China?
