@@ -1,6 +1,10 @@
 import { legacyDrillContent } from "./legacy-drill-content";
 import { asc, eq } from "drizzle-orm";
-import { db, targetedDrillsTable, weaknessCategoriesTable } from "@workspace/db";
+import {
+  db,
+  targetedDrillsTable,
+  weaknessCategoriesTable,
+} from "@workspace/db";
 import {
   getLearningContent,
   learningContentByWeakness,
@@ -19,7 +23,10 @@ async function seedLearningContent() {
     learningDescription: item.learningDescription,
     objective: item.objective,
   }));
-  await db.insert(weaknessCategoriesTable).values(categories).onConflictDoNothing();
+  await db
+    .insert(weaknessCategoriesTable)
+    .values(categories)
+    .onConflictDoNothing();
 
   for (const item of Object.values(learningContentByWeakness)) {
     const existing = await db
@@ -48,7 +55,9 @@ async function ensureSeeded() {
   await seedPromise;
 }
 
-export async function getStoredLearningContent(key: string | undefined): Promise<LearningContent> {
+export async function getStoredLearningContent(
+  key: string | undefined,
+): Promise<LearningContent> {
   const fallback = getLearningContent(key);
   try {
     await ensureSeeded();
@@ -63,9 +72,35 @@ export async function getStoredLearningContent(key: string | undefined): Promise
       .where(eq(targetedDrillsTable.categoryKey, fallback.categoryKey))
       .orderBy(asc(targetedDrillsTable.position));
     if (!storedCategory[0] || !storedDrills.length) return fallback;
-    const builtIn = storedDrills.every(drill => fallback.prompts.some(p => p.prefix === drill.prefix && p.answer === drill.answer && ((p.prompt === drill.prompt && p.hint === drill.hint) || legacyDrillContent.some(old => old.prompt === drill.prompt && old.hint === drill.hint))));
+    const builtIn = storedDrills.every((drill) =>
+      fallback.prompts.some(
+        (p) =>
+          p.prefix === drill.prefix &&
+          p.answer === drill.answer &&
+          ((p.prompt === drill.prompt && p.hint === drill.hint) ||
+            legacyDrillContent.some(
+              (old) => old.prompt === drill.prompt && old.hint === drill.hint,
+            )),
+      ),
+    );
     // Legacy seeded sets had 3–4 items. Keep their IDs while using the revised five-item editorial catalog.
-    const prompts = builtIn ? fallback.prompts.map(p => ({ ...p, id: storedDrills.find(d => d.prefix === p.prefix && d.answer === p.answer)?.id || p.id })) : storedDrills.slice(0, 5).map(drill => ({ id: drill.id, prompt: drill.prompt, prefix: drill.prefix, answer: drill.answer, hint: drill.hint }));
+    const prompts = builtIn
+      ? fallback.prompts.map((p) => ({
+          ...p,
+          id:
+            storedDrills.find(
+              (d) => d.prefix === p.prefix && d.answer === p.answer,
+            )?.id || p.id,
+        }))
+      : storedDrills
+          .slice(0, 5)
+          .map((drill) => ({
+            id: drill.id,
+            prompt: drill.prompt,
+            prefix: drill.prefix,
+            answer: drill.answer,
+            hint: drill.hint,
+          }));
     return {
       categoryKey: fallback.categoryKey,
       label: storedCategory[0].label,
@@ -80,7 +115,9 @@ export async function getStoredLearningContent(key: string | undefined): Promise
   }
 }
 
-export async function getStoredContentForWeaknesses<T extends { key: WeaknessKey }>(weaknesses: T[]) {
+export async function getStoredContentForWeaknesses<
+  T extends { key: WeaknessKey },
+>(weaknesses: T[]) {
   return Promise.all(
     weaknesses.map(async (weakness) => {
       const stored = await getStoredLearningContent(weakness.key);

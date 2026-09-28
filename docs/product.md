@@ -226,7 +226,7 @@ Check the rules in the order shown. The first match wins.
 - The 3:00 timer is advisory: at zero, learners can still finish and submit. Results show actual elapsed time, which can exceed three minutes.
 - Pattern evidence now uses the latest attempt from each of the last five distinct passages. Both repeated and possible patterns offer a category-specific drill; a 5/5 drill clears only that category’s misses contributing to the current five-passage window. All attempts remain visible in Progress. The next-passage card now routes to the next unfinished seeded passage or to the waitlist offer after two unique completions.
 - The first two screens reuse the current scoring response. All 24 original blanks now have server-side editorial explanations, shown under Why this answer for correct and incorrect responses alike. Type displays the blank’s errorCategory. Exact-answer scoring remains unchanged. Browser pattern aggregation follows the confirmed §5 rules, but error categories still come from the blank’s tested skill (empty answers use Word retrieval), not the complete ordered answer-sensitive classifier in §5. Each built-in drill has five items; no answer metadata is added to public passage responses.
-- The practice picker remembers the last accuracy in the current browser tab. Switching passages starts a fresh attempt; cross-device history is outside this change.
+- The practice picker uses the latest saved accuracy in this browser. Switching passages starts a fresh attempt; cross-device history is outside this change.
 
 ### Decisions confirmed during implementation
 
