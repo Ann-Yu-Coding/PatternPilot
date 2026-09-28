@@ -138,7 +138,7 @@ Correct answers get only a **Why** line.
 | Green tint | `#E3EFE9` | Current word highlight, retry button, pattern tag |
 | Mistake | `#C2410C` (background `#FBEDE5`) | Wrong letters, mistake highlight |
 
-- **Fonts:** Geist for the interface. Source Serif 4 for anything the learner reads (passages, drill sentences, answer words).
+- **Fonts:** Geist for headings, labels, buttons and numbers. **Source Sans 3** for explanation and body text (16–17px, color `#3A4540`); it's much easier to read than Geist at small sizes. Source Serif 4 for anything the learner reads (passages, drill sentences, answer words).
 - **Radius:** buttons 10px · tags 4px · highlights 6px · pattern card 22px · timer fully rounded.
 - **Depth:** a 3px darker bottom border (4px on the pattern card). The pattern card may add one soft green shadow.
 - **Type scale (desktop):** wordmark 20 · nav tabs 14 · page heading 34 (line-height 1.3) · passage title 24 · **passage 22 serif, line-height 1.8** · subheading 16 · meta 13 · timer 18 · buttons 15 · small hints 12. Nothing below 12px.
@@ -169,7 +169,9 @@ Correct answers get only a **Why** line.
 - **Below: the results** (the page opens scrolled to this point, but a line or two of the passage should still show at the top so learners know they can scroll up):
   - `5 of 8 correct · 5:21`
   - **Pattern card** (mint, 22px radius): a solid green *PATTERN FOUND* badge, the pattern name in large type with a highlighter mark (e.g., *Word **form***), one line of feedback (*"Right word family, wrong job in the sentence."*), a ring showing *2/3 mistakes*, and the **Practice word form →** button with *"6 quick sentences · 2 min"*.
-  - **All answers table:** four columns: *Your answer · Correct · Type · What happened*. Mistakes come first, with **You** and **Why** lines. Then a `CORRECT · 5` subheading, where each correct word is shown plainly, the Correct column shows a green check mark, and there is only a **Why** line.
+  - **All answers**, in two parts:
+    - **Mistakes** (label in mistake orange): one white card per mistake (12px radius, 1px border, 3px bottom edge). Left: the correct word large in serif with a green underline, and below it small *"you wrote"* plus the learner's answer with the wrong letters crossed out. Middle: a **bold one-line headline** that says the fix (e.g. *"Needs a noun, not an adjective."*), then one short explanation line that points to the signal in the sentence and ends with the correct word in bold. Right: the type tag.
+    - **Correct**: a compact list, one line per word: green check, the word in serif, one short reason (e.g. *"Base verb after 'can'."*), and the type tag on the right.
   - **Try this passage again** (retry button).
 - **Table rules:** answer words must never break across lines (`white-space: nowrap`); if space is tight, the *What happened* column shrinks instead. Every row, including correct answers, gets its **own** Why line written for that blank (never a generic line like *"Correct form for this sentence."*). The Type tag names the skill that blank tests (from the blank's `errorCategory`), not a guess from the learner's answer.
 - There is no separate review page.
