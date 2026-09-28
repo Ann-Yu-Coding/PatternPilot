@@ -153,7 +153,7 @@ Correct answers get only a **Why** line.
   - Empty: a gray short line under each missing letter.
   - Typing: the current word gets a green-tint background. Typed letters have a green underline **below** the letter, never through it. Show a caret.
   - Filled: the whole word gets a green underline.
-- **Practice picker:** never use the browser's native `<select>` menu. The trigger is plain text *"Practice 01"* with a chevron; when open it gets a green-tint background. The menu is a white card (12px radius, 1px border, 3px bottom edge, soft shadow), about 340px wide. Each row is at least 44px tall and shows: number (`01`), passage title, topic · time, and on the right the status: a green check for the current practice, the last score (e.g. `6/8`) for finished ones, or a green-tint **New** tag. The selected row has a green-tint background. See `docs/design/05-practice-picker.png`.
+- **Practice picker:** never use the browser's native `<select>` menu. The trigger is plain text *"Practice 01"* with a chevron; when open it gets a green-tint background. The menu is a white card (12px radius, 1px border, 3px bottom edge, soft shadow), about 340px wide. Each row is at least 44px tall and shows: number (`01`), passage title, topic · time, and on the right the status: a green check for the current practice, the last accuracy for finished ones (e.g. **75%** in bold with a small *"correct"* below it), or a green-tint **New** tag. The selected row has a green-tint background. See `docs/design/05-practice-picker.png`.
 - **Pattern tags:** 4px radius. Tint `#E3EFE9` for the learner's main pattern, neutral gray for other types.
 
 ### Screens
@@ -169,9 +169,8 @@ Correct answers get only a **Why** line.
 - **Below: the results** (the page opens scrolled to this point, but a line or two of the passage should still show at the top so learners know they can scroll up):
   - `5 of 8 correct · 5:21`
   - **Pattern card** (mint, 22px radius): a solid green *PATTERN FOUND* badge, the pattern name in large type with a highlighter mark (e.g., *Word **form***), one line of feedback (*"Right word family, wrong job in the sentence."*), a ring showing *2/3 mistakes*, and the **Practice word form →** button with *"6 quick sentences · 2 min"*.
-  - **All answers**, in two parts:
-    - **Mistakes** (label in mistake orange): one white card per mistake (12px radius, 1px border, 3px bottom edge). Left: the correct word large in serif with a green underline, and below it small *"you wrote"* plus the learner's answer with the wrong letters crossed out. Middle: a **bold one-line headline** that says the fix (e.g. *"Needs a noun, not an adjective."*), then one short explanation line that points to the signal in the sentence and ends with the correct word in bold. Right: the type tag.
-    - **Correct**: a compact list, one line per word: green check, the word in serif, one short reason (e.g. *"Base verb after 'can'."*), and the type tag on the right.
+  - **All answers table:** four columns: *Your answer · Correct · Type · What happened*. Mistakes come first, then a `CORRECT · 5` subheading. For correct words, the Correct column shows a green check.
+    - **What happened column** (Source Sans 3, 15–16px): **one short line per row**, no YOU/WHY labels, no filler like *"Needs a…, not a…"*. Mistakes: the rule in bold, then a dash and what went wrong, e.g. ***Noun after "the"*** *— you used the adjective.* Correct words: just the rule, e.g. *"Base verb after 'can'."* Keep the same phrasing pattern for both.
   - **Try this passage again** (retry button).
 - **Table rules:** answer words must never break across lines (`white-space: nowrap`); if space is tight, the *What happened* column shrinks instead. Every row, including correct answers, gets its **own** Why line written for that blank (never a generic line like *"Correct form for this sentence."*). The Type tag names the skill that blank tests (from the blank's `errorCategory`), not a guess from the learner's answer.
 - There is no separate review page.
