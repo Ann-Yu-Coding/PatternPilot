@@ -86,11 +86,7 @@ Check the rules in the order shown. The first match wins.
 
 **Ending-aware matching:** if the answer keeps the stem and adds a known ending (-ing, -ed, -s, -ly, -tion, -ment, -ful, -al, -ence, etc.), classify it by that ending even when the result is not a real word. Example: *larging* for *largely* is **Word form**, not **Vocabulary gap**.
 
-**Every mistake gets two lines:**
-- **You:** what the learner did, generated from their answer (e.g., *"wrote the adjective 'resilient'"*, *"added -ing, a verb ending"*).
-- **Why:** why the correct answer fits, written per blank (e.g., *"After 'increases the', you need a noun: resilience."*).
-
-Correct answers get only a **Why** line.
+**Explanation per blank:** every blank (correct or not) has one short *Why this answer* line, written per blank in a teacher's voice: quote the original sentence and explain the blank, with little jargon and no fixed template (see §7). The classification above decides the **Type** tag and the pattern. It is not shown as a "you did X" sentence.
 
 **Pattern detection:**
 - A **pattern** is a category with **2 or more misses** in one session (later: across recent sessions, weighted toward recent ones).
