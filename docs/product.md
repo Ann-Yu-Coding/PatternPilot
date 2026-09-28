@@ -161,7 +161,7 @@ Correct answers get only a **Why** line.
 - Bottom: **Check answers** button with the hint *"Tab to move between words"* below it. No word counter and no *"You can check with blanks left"* text.
 
 **2. After Check answers (one page, not two)**
-- **Top: the passage, marked in place.** Correct words get a green underline. Mistakes get an orange-tint background, with the wrong letters crossed out and followed by the correct letters. A legend above shows `correct · 5` and `mistake · 3`.
+- **Top: the passage, marked in place.** Correct words get a green underline. Mistakes get an orange-tint background, with the wrong letters crossed out and followed by the correct letters. A legend above uses the words themselves as samples: *correct* (underlined) `5` and *mistake* (styled as a mistake) `3`.
 - **Below: the results** (the page opens scrolled to this point, but a line or two of the passage should still show at the top so learners know they can scroll up):
   - `5 of 8 correct · 5:21`
   - **Pattern card** (mint, 22px radius): a solid green *PATTERN FOUND* badge, the pattern name in large type with a highlighter mark (e.g., *Word **form***), one line of feedback (*"Right word family, wrong job in the sentence."*), a ring showing *2/3 mistakes*, and the **Practice word form →** button with *"6 quick sentences · 2 min"*.
