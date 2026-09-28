@@ -2,7 +2,7 @@
 
 This is the single source of truth for product decisions. Every tool (Codex, ChatGPT, Claude) and every contributor reads this before working. **Whenever a decision is made anywhere, update this file.**
 
-Last updated: 2026-09-28
+Last updated: 2026-09-28 (UI direction added)
 
 ---
 
@@ -84,6 +84,14 @@ Rule-based, no AI needed for v1. Compare each wrong answer (prefix + typed lette
 
 Check the rules in the order shown. The first match wins.
 
+**Ending-aware matching:** if the answer keeps the stem and adds a known ending (-ing, -ed, -s, -ly, -tion, -ment, -ful, -al, -ence, etc.), classify it by that ending even when the result is not a real word. Example: *larging* for *largely* is **Word form**, not **Vocabulary gap**.
+
+**Every mistake gets two lines:**
+- **You:** what the learner did, generated from their answer (e.g., *"wrote the adjective 'resilient'"*, *"added -ing, a verb ending"*).
+- **Why:** why the correct answer fits, written per blank (e.g., *"After 'increases the', you need a noun: resilience."*).
+
+Correct answers get only a **Why** line.
+
 **Pattern detection:**
 - A **pattern** is a category with **2 or more misses** in one session (later: across recent sessions, weighted toward recent ones).
 - Show at most **1–2 patterns per session**, most frequent first. The goal is one clear next step, not a report.
@@ -100,12 +108,64 @@ Check the rules in the order shown. The first match wins.
 
 ## 7. UI direction
 
-_To be filled in from the UI plan made with ChatGPT._
+**Visual reference (source of truth for the look):** [PatternPilot Visual Direction canvas](https://claude.ai/artifact/1LE6fjV22o6BTv44hGz7aT). It has three boards: *Visual standard*, *Passage · desktop* and *After Check answers · desktop*, plus *Drill · phone*. If this section and the canvas disagree, the canvas wins. Ask the owner for access if you can't open it.
 
-Known so far:
-- Move away from the generic "AI SaaS" look of the current prototype.
-- Calm, focused and quiet. The product promise is "a quieter kind of prep."
-- The diagnosis and next step are the focus of the results screen, more than the score.
+### Principles
+1. **Reading comes first.** Passages and example sentences use the serif font. Everything around them stays small and quiet.
+2. **One green.** Green is the brand color and the only action color. Orange is used only for mistakes.
+3. **Never rely on color alone.** Correct answers get a check mark or underline. Mistakes are crossed out. Both still read in grayscale.
+4. **Mostly flat.** Use lines instead of boxes. Depth comes only from a soft bottom edge on buttons, the timer and the pattern card. No gradients, no generic "AI SaaS" styling.
+
+### Tokens
+| Token | Value | Use |
+|---|---|---|
+| Ground | `#F6F6F3` | Page background |
+| Surface | `#FFFFFF` | Cards, secondary buttons |
+| Ink | `#17231F` | Main text |
+| Ink secondary | `#55605B` | Secondary text |
+| Muted | `#6B7570` | Hints, labels |
+| Line | `#E3E4E0` | Dividers |
+| Green | `#2E6B55` (dark `#23513F`, edge `#1F4D3C`) | Brand, primary buttons, active states |
+| Green line | `#3B7A63` | Underlines for filled or correct words |
+| Mint | `#EAF4EE` (border `#CFE3D8`, edge `#B9D8C7`) | Pattern card, timer |
+| Green tint | `#E3EFE9` | Current word highlight, retry button, pattern tag |
+| Mistake | `#C2410C` (background `#FBEDE5`) | Wrong letters, mistake highlight |
+
+- **Fonts:** Geist for the interface. Source Serif 4 for anything the learner reads (passages, drill sentences, answer words).
+- **Radius:** buttons 10px · tags 4px · highlights 6px · pattern card 22px · timer fully rounded.
+- **Depth:** a 3px darker bottom border (4px on the pattern card). The pattern card may add one soft green shadow.
+- **Spacing:** 8px grid. Content column 916px wide on desktop.
+
+### Components
+- **Top nav:** lowercase `patternpilot` wordmark · *Practice* / *Progress* tabs (active tab has a 3px green underline) · account avatar.
+- **Buttons:** Primary = green fill with white text. Secondary = white fill with a gray border. Retry = green tint with dark-green text and a rotate-back icon (Lucide `rotate-ccw`). All three have a 3px bottom edge.
+- **Timer:** mint pill with a ring countdown and bold numbers. **Default 3:00.** The ring shrinks as time runs out.
+- **Word blanks:**
+  - Empty: a gray short line under each missing letter.
+  - Typing: the current word gets a green-tint background. Typed letters have a green underline **below** the letter, never through it. Show a caret.
+  - Filled: the whole word gets a green underline.
+- **Pattern tags:** 4px radius. Tint `#E3EFE9` for the learner's main pattern, neutral gray for other types.
+
+### Screens
+**1. Passage (practice)**
+- Label `READING / COMPLETE THE WORDS`.
+- Heading: *"Complete each word with the missing letters."* Subheading: *"A little practice. A clearer pattern."*
+- Meta row: `Practice 01 | Environmental science` on the left, timer on the right.
+- Passage title, then the serif passage with the blanks.
+- Bottom: **Check answers** button with the hint *"Tab to move between words"* below it. No word counter and no *"You can check with blanks left"* text.
+
+**2. After Check answers (one page, not two)**
+- **Top: the passage, marked in place.** Correct words get a green underline. Mistakes get an orange-tint background, with the wrong letters crossed out and followed by the correct letters. A legend above shows `correct · 5` and `mistake · 3`.
+- **Below: the results** (the page opens scrolled to this point, but a line or two of the passage should still show at the top so learners know they can scroll up):
+  - `5 of 8 correct · 5:21`
+  - **Pattern card** (mint, 22px radius): a solid green *PATTERN FOUND* badge, the pattern name in large type with a highlighter mark (e.g., *Word **form***), one line of feedback (*"Right word family, wrong job in the sentence."*), a ring showing *2/3 mistakes*, and the **Practice word form →** button with *"6 quick sentences · 2 min"*.
+  - **All answers table:** four columns: *Your answer · Correct · Type · What happened*. Mistakes come first, with **You** and **Why** lines. Then a `CORRECT · 5` subheading, where each correct word has a check mark, *"Same"* in the Correct column, and only a **Why** line.
+  - **Try this passage again** (retry button).
+- There is no separate review page.
+
+**3. Targeted drill (phone reference)**
+- Close button, segmented progress (6 steps), `3/6`.
+- `WORD FORM PRACTICE` label, the serif sentence, and inline feedback (✓ *Correct* plus an explanation) separated by a thin line. Full-width green **Next** button.
 
 ## 8. Payments (after v0.2)
 
@@ -132,6 +192,10 @@ Known so far:
 | 2026-09-28 | Real questions used only as blueprints | Copyright |
 | 2026-09-28 | v0.2 success = 5 real learners, at least 3 find the diagnosis useful | Needs outside validation, not only the founder's judgment |
 | 2026-09-28 | Payments via a merchant of record, after v0.2 | Handles tax in each market; no company needed to start |
+| 2026-09-28 | UI direction set (§7): green brand, serif reading surface, flat with soft depth | Visual standard agreed on the design canvas |
+| 2026-09-28 | Marked passage and results on one page after Check answers | Learners see mistakes in context without switching pages |
+| 2026-09-28 | Every mistake shows "You" and "Why" lines; ending-aware matching | The explanation must respond to what the learner actually typed |
+| 2026-09-28 | Timer defaults to 3:00 | Short, focused sessions |
 
 ## 11. Open questions
 
