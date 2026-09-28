@@ -968,3 +968,12 @@
   font-size: 12px;
   color: var(--learner-muted);
 }
+
+.pattern-observations {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.pattern-observations .learner-pattern h2 {
+  font-size: 34px;
+}

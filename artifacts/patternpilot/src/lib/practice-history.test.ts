@@ -4,6 +4,8 @@ import {
   emptyHistory,
   recordAttempt,
   findPattern,
+  findPatterns,
+  finishDrill,
   clearCategory,
   latestPassages,
   type Attempt,
@@ -41,7 +43,7 @@ it("finds a repeated category within one passage", () => {
     totalMisses: 2,
     passages: 1,
     possible: false,
-    evidence: "2 of your last 2 mistakes · across 1 passage",
+    evidence: "2 similar misses · across 1 passage",
   });
 });
 it("finds a pattern across passages", () => {
@@ -84,7 +86,7 @@ it("a retry replaces evidence but preserves progress", () => {
 });
 it("perfect drill clears earlier category evidence but preserves scores and future misses", () => {
   let h = recordAttempt(emptyHistory(), attempt("1", "a", 10, ["Word form"]));
-  h = clearCategory(h, "Word form", 15);
+  h = clearCategory(h, "Word form");
   assert.equal(findPattern(h), null);
   assert.equal(h.attempts[0].score, 7);
   h = recordAttempt(h, attempt("2", "b", 20, ["Word form"]));
@@ -108,4 +110,39 @@ it("only the last five distinct passages contribute and repeated recording is id
   assert.equal(findPattern(h)?.count, 5);
   h = recordAttempt(h, attempt("6", "6", 6, ["Word form"]));
   assert.equal(h.attempts.length, 6);
+});
+
+it("caps cards at two and uses count then latest seen, never weighting", () => {
+  let h = emptyHistory();
+  h = recordAttempt(
+    h,
+    attempt("1", "a", 10, ["Spelling", "Spelling", "Spelling"]),
+  );
+  h = recordAttempt(h, attempt("2", "b", 20, ["Word form", "Word form"]));
+  h = recordAttempt(
+    h,
+    attempt("3", "c", 30, ["Grammar ending", "Grammar ending"]),
+  );
+  assert.deepEqual(
+    findPatterns(h).map((p) => p.category),
+    ["Spelling", "Grammar ending"],
+  );
+});
+it("only 5/5 clears the selected category in the latest-five window", () => {
+  let h = emptyHistory();
+  for (let i = 1; i <= 6; i++)
+    h = recordAttempt(
+      h,
+      attempt(String(i), String(i), i, ["Word form", "Spelling"]),
+    );
+  assert.deepEqual(finishDrill(h, "Word form", 4, 5), h);
+  assert.deepEqual(finishDrill(h, "Word form", 4, 4), h);
+  const cleared = finishDrill(h, "Word form", 5, 5);
+  assert.equal(cleared.cleared["1:1-0"], undefined);
+  assert.equal(cleared.cleared["2:2-0"], 1);
+  assert.equal(cleared.cleared["2:2-1"], undefined);
+  assert.deepEqual(
+    findPatterns(cleared).map((p) => p.category),
+    ["Spelling"],
+  );
 });

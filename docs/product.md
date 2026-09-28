@@ -89,16 +89,18 @@ Check the rules in the order shown. The first match wins.
 
 **Explanation per blank:** every blank (correct or not) has one short *Why this answer* line, written per blank in a teacher's voice: quote the original sentence and explain the blank, with little jargon and no fixed template (see §7). The classification above decides the **Type** tag and the pattern. It is not shown as a "you did X" sentence.
 
+**Learner-facing error labels:** Grammar ending · Word form · Spelling · Word retrieval · Context / meaning. Skipped answers are recorded under Word retrieval. Scores are raw correct/total only, never TOEFL-scaled.
+
 **Pattern detection:**
 - Patterns are found **across passages, not just within one passage**. Keep a history of every miss (category, passage, date). For v0.2 there are no accounts, so store it in the browser (`localStorage`); move it to the server when accounts arrive.
-- Only the **latest attempt for each distinct passage** contributes evidence. Retries replace that passage’s previous evidence; all attempts remain in Progress history. Use the five most recently attempted distinct passages. Rank by miss count, then recency weights 5–1, then latest occurrence. Show one primary card.
-- A **pattern** is a category with **2 or more misses across the learner's last 5 passages**, recent passages weighted higher. The card shows the evidence, e.g. *"3 of your last 5 mistakes · across 2 passages"*.
-- **Possible pattern:** if no category reaches 2 misses but this passage has at least one mistake, show the category of that mistake as a *possible* pattern (if several, the one seen most often in history, then the most recent). It still offers the targeted drill, framed as a check: *"Check with 6 sentences · if you get them all, we drop it."* Getting the whole drill right clears it from the history.
-- **No mistakes:** no pattern card. Show a short positive line and the next passage.
+- Only the **latest attempt for each distinct passage** contributes evidence. Retries replace that passage’s previous evidence; all attempts remain in Progress history. Use the five most recently attempted distinct passages. Rank by miss count descending, then latest occurrence descending. Show up to two qualifying cards stacked vertically.
+- A **pattern** is a category with **2 or more misses across the learner's last 5 passages**, without recency weighting. The card shows the evidence, e.g. *"3 similar misses · across 2 passages"*.
+- **Possible pattern:** if no category reaches 2 misses but this passage has at least one mistake, show the category of that mistake as a *possible* pattern (if several, the one seen most often in history, then the most recent). It still offers the targeted drill, framed as a check: *"Check with 5 sentences · if you get them all, we drop it."* Only 5/5 clears that category’s misses currently contributing to the recent window. Non-perfect results do not clear evidence. Older excluded attempts and unrelated categories remain intact.
+- **No mistakes:** no pattern card. Say “No repeated pattern detected in this passage.” and show the next passage.
 - Show at most **1–2 patterns per session**, most frequent first. The goal is one clear next step, not a report.
 
 **Targeted practice:**
-- Each pattern maps to a `weakness_categories` row: a short explanation (what the pattern is, and the signal to look for in the passage) and a **5–8 item drill** from `targeted_drills`.
+- Each pattern maps to a `weakness_categories` row: a short explanation (what the pattern is, and the signal to look for in the passage) and a **5-item drill** from `targeted_drills`.
 - Diagnosis text must be concrete, e.g., *"You recognized the meaning. The ending was the signal: after a singular subject, look for the third-person -s."*
 
 ## 6. Admin and question management
@@ -171,10 +173,10 @@ Check the rules in the order shown. The first match wins.
 - **Top: the passage, marked in place.** Correct words get a green underline. Mistakes get an orange-tint background, with the wrong letters crossed out and followed by the correct letters. A legend above uses the words themselves as samples: *correct* (underlined) `5` and *mistake* (styled as a mistake) `3`.
 - **Below: the results** (the page opens scrolled to this point, but a line or two of the passage should still show at the top so learners know they can scroll up):
   - `5 of 8 correct · 5:21`
-  - **Pattern card** (mint, 22px radius): a solid green *PATTERN FOUND* badge, the pattern name in large type with a highlighter mark (e.g., *Word **form***), one line of feedback (*"Right word family, wrong job in the sentence."*), the **seen-dots** (one filled dot per time this pattern has been seen, with a small "seen 3 times" label) and an evidence line (*"3 of your last 5 mistakes · across 2 passages"*), and the **Practice word form →** button with *"Practice 6 more like this · 2 min"*.
+  - **Pattern card** (mint, 22px radius): a solid green *PATTERN FOUND* badge, the pattern name in large type with a highlighter mark (e.g., *Word **form***), one line of feedback (*"Right word family, wrong job in the sentence."*), the **seen-dots** (one filled dot per time this pattern has been seen, with a small "seen 3 times" label) and an evidence line (*"3 similar misses · across 2 passages"*), and the **Practice word form →** button with *"Practice 5 more like this · 2 min"*.
   - **All answers table:** four columns: *Your answer · Correct · Type · Why this answer*. Mistakes come first, then a `CORRECT · 5` subheading. For correct words, the Correct column shows a green check.
     - **Why this answer column** (Source Sans 3, 15–16px): write it the way a teacher would when marking: **quote the original sentence and explain this blank**. Don't keep pointing out what the learner did wrong, avoid grammar jargon, and don't force every row into the same template. Examples: *"'Increases the' needs a noun here: resilience."* · *"'Growth and survival' pairs two nouns."* · *"'Are now studying' describes an action in progress."* · *"'Can support' takes the plain verb."*
-  - **Possible-pattern variant** (when no category has 2+ misses): the **same mint card** as the pattern card (same highlighter, depth and button), with two differences: the badge is *POSSIBLE PATTERN* in white with a dashed green outline (instead of solid green), and the seen-dots show one filled dot plus one **dashed empty dot** (the threshold). Copy: *"Just one slip here, but it looks like the kind that tends to repeat."* and *"Seen once so far · one more makes it a pattern"*. Button: **Check with 6 sentences →**.
+  - **Possible-pattern variant** (when no category has 2+ misses): the **same mint card** as the pattern card (same highlighter, depth and button), with two differences: the badge is *POSSIBLE PATTERN* in white with a dashed green outline (instead of solid green), and the seen-dots show one filled dot plus one **dashed empty dot** (the threshold). Copy: *"Just one slip here, but it looks like the kind that tends to repeat."* and *"Seen once so far · one more makes it a pattern"*. Button: **Check with 5 sentences →**.
   - **Seen-dots** are the shared indicator for both cards: filled green dot = one occurrence; dashed empty dot = still needed to become a pattern. No ring chart.
   - **Next passage card** at the bottom (white card with a 3px bottom edge): `NEXT PASSAGE` label, title, *topic · 3 min · N free passages left*, a **Try again** retry button, and a primary **Next passage →** button.
   - **Paywall** (when the free limit is reached): a centered white card with *"You've used your 2 free passages."*, a mint summary (*"13 of 16 correct · Pattern: Word form"*), three short benefits, a primary **Unlock full access · [PRICE]** button, and a text link *"Not now: review my answers"*. See `docs/design/07-paywall.png`.
@@ -182,7 +184,7 @@ Check the rules in the order shown. The first match wins.
 - There is no separate review page.
 
 **3. Targeted drill (phone reference)**
-- Close button, segmented progress (6 steps), `3/6`.
+- Close button, segmented progress (5 steps), `3/5`.
 - `WORD FORM PRACTICE` label, the serif sentence, and inline feedback (✓ *Correct* plus an explanation) separated by a thin line. Full-width green **Next** button.
 
 ## 8. Payments (after v0.2)

@@ -39,8 +39,13 @@ export function categoryLabel(category: string) {
     inflection: "Grammar ending",
     plural: "Grammar ending",
     spelling: "Spelling",
-    vocabulary: "Vocabulary",
-    "contextual prediction": "Meaning / context",
+    vocabulary: "Word retrieval",
+    "academic vocabulary": "Word retrieval",
+    Vocabulary: "Word retrieval",
+    "Vocabulary gap": "Word retrieval",
+    "Skipped / time pressure": "Word retrieval",
+    "Meaning / context": "Context / meaning",
+    "contextual prediction": "Context / meaning",
   };
   return labels[category] || category;
 }

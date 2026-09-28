@@ -9,7 +9,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import { GetTargetedTrainingCategoryKey } from "@workspace/api-client-react";
-import { clearCategory } from "@/lib/practice-history";
+import { finishDrill } from "@/lib/practice-history";
 import { readHistory, saveHistory } from "@/lib/history-storage";
 import { ProgressPage } from "@/components/progress-page";
 import { AdminAccess } from "@/components/admin-access";
@@ -62,7 +62,7 @@ function Training() {
   const requestedCategory = trainingParams.get("category");
   const categoryKey = Object.values(GetTargetedTrainingCategoryKey).find(key => key === requestedCategory);
   const patternCategory = trainingParams.get("pattern");
-  const [drillStartedAt] = useState(Date.now);
+  
   const submit = useSubmitTrainingDrill();
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [trainingResult, setTrainingResult] = useState<{ score: number; total: number; accuracy: number; lockedInsights: string[] } | null>(null);
@@ -70,7 +70,7 @@ function Training() {
   const training = useGetTargetedTraining(sessionId, { categoryKey }, { query: { queryKey: getGetTargetedTrainingQueryKey(sessionId, { categoryKey }), enabled: sessionId !== "demo-session", retry: false } });
   const prompts = training.data?.prompts ?? [];
   const run = () => {
-    submit.mutate({ sessionId, params: { categoryKey }, data: { answers: prompts.map((p) => ({ blankId: p.id, value: answers[p.id] || "" })) } }, { onSuccess: (result) => { setTrainingResult(result); if (patternCategory && result.total > 0 && result.score === result.total) saveHistory(clearCategory(readHistory(),patternCategory,drillStartedAt)); sessionStorage.setItem("pp-training-result", JSON.stringify(result)); } });
+    submit.mutate({ sessionId, params: { categoryKey }, data: { answers: prompts.map((p) => ({ blankId: p.id, value: answers[p.id] || "" })) } }, { onSuccess: (result) => { setTrainingResult(result); if (patternCategory && result.total > 0 && result.score === result.total) saveHistory(finishDrill(readHistory(),patternCategory,result.score,result.total)); sessionStorage.setItem("pp-training-result", JSON.stringify(result)); } });
   };
   if (sessionId === "demo-session") return <AppShell><p className="p-10">Complete a <Link href="/practice">practice session</Link> to start training.</p></AppShell>;
   if (training.isLoading) return <AppShell><LoadingBlock label="Loading training" /></AppShell>;

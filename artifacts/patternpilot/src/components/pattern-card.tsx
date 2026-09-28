@@ -32,13 +32,13 @@ export function PatternCard({
   return (
     <section
       className={`learner-pattern ${pattern.possible ? "is-possible" : ""}`}
-      aria-labelledby="pattern-title"
+      aria-labelledby={`pattern-${key}`}
     >
       <div className="learner-pattern-copy">
         <span className="learner-pattern-badge">
           {pattern.possible ? "Possible pattern" : "Pattern found"}
         </span>
-        <h2 id="pattern-title">
+        <h2 id={`pattern-${key}`}>
           {words.slice(0, -1).join(" ")} <mark>{words.at(-1)}</mark>
         </h2>
         <p>
@@ -55,14 +55,14 @@ export function PatternCard({
             href={`/training?category=${encodeURIComponent(key)}&pattern=${encodeURIComponent(pattern.category)}&session=${encodeURIComponent(sessionId)}`}
           >
             {pattern.possible
-              ? `Check with ${count || "a few"} ${count ? "questions" : "questions"}`
+              ? `Check with ${count || 5} sentences`
               : `Practice ${pattern.category.toLowerCase()}`}{" "}
             <ArrowRight size={18} />
           </Link>
           <span>
             {pattern.possible
               ? "If you get them all, we drop it."
-              : `${count || "A few"} quick questions · 2 min`}
+              : `${count || 5} sentences · 2 min`}
           </span>
         </div>
       </div>

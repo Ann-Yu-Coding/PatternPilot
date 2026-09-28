@@ -16,7 +16,7 @@ import { PatternCard } from "./pattern-card";
 import { readHistory, saveHistory } from "../lib/history-storage";
 import {
   recordAttempt,
-  findPattern,
+  findPatterns,
   latestPassages,
   missCategory,
   drillForCategory,
@@ -238,12 +238,7 @@ export function LearnerFlow() {
   const busy = start.isPending || submit.isPending;
   const remaining = Math.max(0, 180 - elapsed);
   const mistakes = result?.items.filter((item) => !item.isCorrect).length || 0;
-  const pattern = result ? findPattern(history, result.sessionId) : null;
-  const primary = pattern
-    ? result?.weaknesses.find(
-        (w) => w.key === drillForCategory[pattern.category],
-      )
-    : undefined;
+  const patterns = result ? findPatterns(history, result.sessionId) : [];
   useEffect(() => {
     const sync = () => setHistory(readHistory());
     window.addEventListener("storage", sync);
@@ -554,27 +549,26 @@ export function LearnerFlow() {
                 <p className="learner-eyebrow">Results</p>
                 <div className="learner-score">
                   <h2>
-                    {result.score} of {result.total}
+                    {result.score} / {result.total}
                   </h2>
                   <span>correct · {timeLabel(review.elapsed)}</span>
                 </div>
-                {pattern ? (
-                  <PatternCard
-                    pattern={pattern}
-                    sessionId={result.sessionId}
-                    drillCount={primary?.drillCount}
-                  />
+                {patterns.length ? (
+                  <div className="pattern-observations">
+                    {patterns.map((pattern) => (
+                      <PatternCard
+                        key={pattern.category}
+                        pattern={pattern}
+                        sessionId={result.sessionId}
+                      />
+                    ))}
+                  </div>
                 ) : (
                   <section className="learner-no-pattern">
-                    <h2>
-                      {mistakes === 0
-                        ? "Every word in place."
-                        : "Pattern checked."}
-                    </h2>
                     <p>
                       {mistakes === 0
-                        ? "You’re ready for the next passage."
-                        : "Review the answers below, then try another passage."}
+                        ? "No repeated pattern detected in this passage."
+                        : "No active pattern to check. Review the answers below."}
                     </p>
                   </section>
                 )}
