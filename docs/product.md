@@ -110,6 +110,12 @@ Correct answers get only a **Why** line.
 
 **Visual reference (source of truth for the look):** [PatternPilot Visual Direction canvas](https://claude.ai/artifact/1LE6fjV22o6BTv44hGz7aT). It has three boards: *Visual standard*, *Passage · desktop* and *After Check answers · desktop*, plus *Drill · phone*. If this section and the canvas disagree, the canvas wins. Ask the owner for access if you can't open it.
 
+**Screenshots (for agents that can't open the canvas):**
+- [`docs/design/01-visual-standard.png`](design/01-visual-standard.png): colors, type and components
+- [`docs/design/02-passage.png`](design/02-passage.png): the practice screen
+- [`docs/design/03-after-check-answers.png`](design/03-after-check-answers.png): the marked passage and results on one page
+- [`docs/design/04-drill-phone.png`](design/04-drill-phone.png): the targeted drill on a phone
+
 ### Principles
 1. **Reading comes first.** Passages and example sentences use the serif font. Everything around them stays small and quiet.
 2. **One green.** Green is the brand color and the only action color. Orange is used only for mistakes.
