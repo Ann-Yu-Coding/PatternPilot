@@ -38,11 +38,12 @@ A practice tool for the **"Complete the Words"** task in the new TOEFL format. L
    `Complete the Words → Submit → See mistakes → Understand pattern → Start targeted practice`
    Design the whole flow first (see §7, UI direction), then build it.
 4. **3 excellent original passages**, deliberately designed to trigger every error type in §5 so they exercise the scoring and diagnosis system.
+5. **Keep practicing:** after results, a **Next passage** card sends the learner to the next passage they haven't done. This repeats until the **free limit (2 passages, configurable)**. After that, *Next passage* opens the **paywall** screen. In v0.2 the paywall's button leads to a waitlist or pre-order page (no real payment yet, see §8). Targeted drills don't count toward the limit.
 
 ### Out of scope for v0.2
 - More than 3 passages
-- Payments (see §8)
-- User accounts, beyond what the learning loop needs
+- Real payments (see §8). The paywall screen exists but its button goes to a waitlist or pre-order page.
+- User accounts, beyond what the learning loop needs (practice history and the free-passage count live in the browser for v0.2)
 - New backend features or infrastructure
 
 ### Definition of done
@@ -89,7 +90,10 @@ Check the rules in the order shown. The first match wins.
 **Explanation per blank:** every blank (correct or not) has one short *Why this answer* line, written per blank in a teacher's voice: quote the original sentence and explain the blank, with little jargon and no fixed template (see §7). The classification above decides the **Type** tag and the pattern. It is not shown as a "you did X" sentence.
 
 **Pattern detection:**
-- A **pattern** is a category with **2 or more misses** in one session (later: across recent sessions, weighted toward recent ones).
+- Patterns are found **across passages, not just within one passage**. Keep a history of every miss (category, passage, date). For v0.2 there are no accounts, so store it in the browser (`localStorage`); move it to the server when accounts arrive.
+- A **pattern** is a category with **2 or more misses across the learner's last 5 passages**, recent passages weighted higher. The card shows the evidence, e.g. *"3 of your last 5 mistakes · across 2 passages"*.
+- **Possible pattern:** if no category reaches 2 misses but this passage has at least one mistake, show the category of that mistake as a *possible* pattern (if several, the one seen most often in history, then the most recent). It still offers the targeted drill, framed as a check: *"Check with 6 sentences · if you get them all, we drop it."* Getting the whole drill right clears it from the history.
+- **No mistakes:** no pattern card. Show a short positive line and the next passage.
 - Show at most **1–2 patterns per session**, most frequent first. The goal is one clear next step, not a report.
 
 **Targeted practice:**
@@ -112,6 +116,8 @@ Check the rules in the order shown. The first match wins.
 - [`docs/design/03-after-check-answers.png`](design/03-after-check-answers.png): the marked passage and results on one page
 - [`docs/design/04-drill-phone.png`](design/04-drill-phone.png): the targeted drill on a phone
 - [`docs/design/05-practice-picker.png`](design/05-practice-picker.png): the practice picker, open
+- [`docs/design/06-possible-pattern.png`](design/06-possible-pattern.png): results with only one mistake (possible pattern + next passage)
+- [`docs/design/07-paywall.png`](design/07-paywall.png): the free limit reached
 
 ### Principles
 1. **Reading comes first.** Passages and example sentences use the serif font. Everything around them stays small and quiet.
@@ -164,10 +170,12 @@ Check the rules in the order shown. The first match wins.
 - **Top: the passage, marked in place.** Correct words get a green underline. Mistakes get an orange-tint background, with the wrong letters crossed out and followed by the correct letters. A legend above uses the words themselves as samples: *correct* (underlined) `5` and *mistake* (styled as a mistake) `3`.
 - **Below: the results** (the page opens scrolled to this point, but a line or two of the passage should still show at the top so learners know they can scroll up):
   - `5 of 8 correct · 5:21`
-  - **Pattern card** (mint, 22px radius): a solid green *PATTERN FOUND* badge, the pattern name in large type with a highlighter mark (e.g., *Word **form***), one line of feedback (*"Right word family, wrong job in the sentence."*), a ring showing *2/3 mistakes*, and the **Practice word form →** button with *"Practice 6 more like this · 2 min"*.
+  - **Pattern card** (mint, 22px radius): a solid green *PATTERN FOUND* badge, the pattern name in large type with a highlighter mark (e.g., *Word **form***), one line of feedback (*"Right word family, wrong job in the sentence."*), a ring and an evidence line showing the cross-passage count (*3/5 · "3 of your last 5 mistakes · across 2 passages"*), and the **Practice word form →** button with *"Practice 6 more like this · 2 min"*.
   - **All answers table:** four columns: *Your answer · Correct · Type · Why this answer*. Mistakes come first, then a `CORRECT · 5` subheading. For correct words, the Correct column shows a green check.
     - **Why this answer column** (Source Sans 3, 15–16px): write it the way a teacher would when marking: **quote the original sentence and explain this blank**. Don't keep pointing out what the learner did wrong, avoid grammar jargon, and don't force every row into the same template. Examples: *"'Increases the' needs a noun here: resilience."* · *"'Growth and survival' pairs two nouns."* · *"'Are now studying' describes an action in progress."* · *"'Can support' takes the plain verb."*
-  - **Try this passage again** (retry button).
+  - **Possible-pattern variant** (when no category has 2+ misses): white card with a dashed mint border, a *POSSIBLE PATTERN* tint badge, the pattern name (no highlighter), one line such as *"Just one slip here, but it looks like the kind that tends to repeat."*, the evidence line (*"Seen once in this passage · also once in Practice 02"*), dots for how many times it's been seen, and the **Check with 6 sentences →** button.
+  - **Next passage card** at the bottom (white card with a 3px bottom edge): `NEXT PASSAGE` label, title, *topic · 3 min · N free passages left*, a **Try again** retry button, and a primary **Next passage →** button.
+  - **Paywall** (when the free limit is reached): a centered white card with *"You've used your 2 free passages."*, a mint summary (*"13 of 16 correct · Pattern: Word form"*), three short benefits, a primary **Unlock full access · [PRICE]** button, and a text link *"Not now: review my answers"*. See `docs/design/07-paywall.png`.
 - **Table rules:** answer words must never break across lines (`white-space: nowrap`); if space is tight, the *What happened* column shrinks instead. Every row, including correct answers, gets its **own** Why line written for that blank (never a generic line like *"Correct form for this sentence."*). The Type tag names the skill that blank tests (from the blank's `errorCategory`), not a guess from the learner's answer.
 - There is no separate review page.
 
@@ -204,6 +212,8 @@ Check the rules in the order shown. The first match wins.
 | 2026-09-28 | Marked passage and results on one page after Check answers | Learners see mistakes in context without switching pages |
 | 2026-09-28 | Every mistake shows "You" and "Why" lines; ending-aware matching | The explanation must respond to what the learner actually typed |
 | 2026-09-28 | Timer defaults to 3:00 | Short, focused sessions |
+| 2026-09-28 | Patterns tracked across passages; single mistakes shown as a "possible pattern" with a drill | One passage is too little evidence; learners should always get a next step |
+| 2026-09-28 | Next passage flow until 2 free passages, then a paywall (waitlist in v0.2) | Keeps learners practicing and tests willingness to pay |
 
 ### Learner UI implementation notes (2026-09-28)
 
@@ -214,6 +224,6 @@ Check the rules in the order shown. The first match wins.
 ## 11. Open questions
 
 - Pricing: one-time pass or subscription? At what price per market?
-- Free tier: how many passages or sessions before the paywall?
+- Free tier: 2 passages for now (configurable). Revisit after the ads test.
 - Where to find the 5 v0.2 test learners in Korea, Japan and Europe?
 - Which merchant of record accepts sellers based in China?
