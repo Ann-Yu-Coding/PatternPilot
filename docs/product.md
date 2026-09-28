@@ -153,7 +153,7 @@ Correct answers get only a **Why** line.
   - Empty: a gray short line under each missing letter.
   - Typing: the current word gets a green-tint background. Typed letters have a green underline **below** the letter, never through it. Show a caret.
   - Filled: the whole word gets a green underline.
-- **Practice picker:** never use the browser's native `<select>` menu. The trigger is plain text *"Practice 01"* with a chevron; when open it gets a green-tint background. The menu is a white card (12px radius, 1px border, 3px bottom edge, soft shadow), about 340px wide. Each row is at least 44px tall and shows: number (`01`), passage title, topic · time, and on the right the status: a green check for the current practice, the last accuracy for finished ones (e.g. **75%** in bold with a small *"correct"* below it), or a green-tint **New** tag. The selected row has a green-tint background. See `docs/design/05-practice-picker.png`.
+- **Practice picker:** never use the browser's native `<select>` menu. The trigger is plain text *"Practice 01"* with a chevron; when open it gets a green-tint background. The menu is a white card (12px radius, 1px border, 3px bottom edge, soft shadow), about 340px wide. Each row is at least 44px tall and shows: number (`01`), passage title, topic · time, and on the right the status: a green check for the current practice, the last accuracy for finished ones (e.g. **75%** in bold with a small *"correct"* below it); practices not started yet show nothing on the right (no "New" tag). The selected row has a green-tint background. See `docs/design/05-practice-picker.png`.
 - **Pattern tags:** 4px radius. Tint `#E3EFE9` for the learner's main pattern, neutral gray for other types.
 
 ### Screens
