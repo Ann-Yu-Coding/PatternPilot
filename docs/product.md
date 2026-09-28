@@ -47,7 +47,7 @@ A practice tool for the **"Complete the Words"** task in the new TOEFL format. L
 - New backend features or infrastructure
 
 ### Definition of done
-- [ ] Admin routes and page protected, and the link hidden from learners
+- [x] Admin routes and page protected, and the link hidden from learners
 - [ ] The full learning loop works end-to-end with 3 original passages
 - [ ] **5 real TOEFL learners** (ideally from Korea, Japan or Europe) have tried the loop, e.g., locally over a video call
 - [ ] **At least 3 of 5** say the diagnosis told them something useful
@@ -217,6 +217,8 @@ Check the rules in the order shown. The first match wins.
 | 2026-09-28 | Next passage flow until 2 free passages, then a paywall (waitlist in v0.2) | Keeps learners practicing and tests willingness to pay |
 
 ### Learner UI implementation notes (2026-09-28)
+
+- Admin access requires the API-only ADMIN_SECRET through a Bearer header. The editor prompts before loading data, keeps the secret only in memory and clears its isolated query cache on lock or navigation.
 
 - The 3:00 timer is advisory: at zero, learners can still finish and submit. Results show actual elapsed time, which can exceed three minutes.
 - Target behavior follows §5: repeated patterns use misses across the last 5 passages; a passage with mistakes but no repeated category shows a possible pattern and offers a checking drill. An all-correct passage shows a positive line and the next passage. Cross-passage history, possible-pattern cards and the next-passage flow are pending implementation; the saved UI still uses the earlier single-session threshold.

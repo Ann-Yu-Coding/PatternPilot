@@ -8,10 +8,12 @@ import { seedPracticeSets as practiceSets } from "../data/practice-question-seed
 import { learningContentByWeakness } from "../services/diagnosis";
 import type { QuestionImportResult, PracticeSession, PracticeSet, TrainingSet, PracticeResult, TrainingResult } from "@workspace/api-zod";
 
+const adminSecret = "test-only-admin-secret";
 let server: Server;
 let base: string;
 before(async () => {
   process.env.LOG_LEVEL = "silent";
+  process.env.ADMIN_SECRET = adminSecret;
   if (!process.env.TEST_DATABASE_URL) throw new Error("TEST_DATABASE_URL must point to a dedicated migrated test database");
   process.env.DATABASE_URL = process.env.TEST_DATABASE_URL;
   const { pool } = await import("@workspace/db");
@@ -37,9 +39,7 @@ after(async () => {
   await pool.end();
 });
 async function request(path: string, body?: unknown) {
-  const response = await fetch(base + path, body === undefined ? undefined : {
-    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
-  });
+  const response = await rawRequest(path, body);
   assert.ok(response.ok, `${path}: ${response.status}`);
   return response.json();
 }
@@ -114,7 +114,11 @@ async function removeQuestions(ids: string[]) {
   await pool.query("DELETE FROM questions WHERE public_id = ANY($1)", [ids]);
 }
 async function rawRequest(path: string, body?: unknown) {
-  return fetch(base + path, body === undefined ? undefined : { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  return fetch(base + path, {
+    method: body === undefined ? "GET" : "POST",
+    headers: { "Content-Type": "application/json", ...(path.startsWith("/admin/") ? { Authorization: `Bearer ${adminSecret}` } : {}) },
+    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+  });
 }
 
 describe("Postgres question durability", () => {
@@ -220,5 +224,29 @@ describe("Postgres question durability", () => {
         assert.deepEqual(await response.json(), { error: "Question database unavailable" });
       }
     } finally { failure.mock.restore(); }
+  });
+});
+
+
+describe("admin authentication", () => {
+  it("rejects missing and incorrect credentials on every admin route before reading data or input", async () => {
+    for (const [method, path] of [["GET", "/admin/questions"], ["POST", "/admin/questions"], ["POST", "/admin/questions/import"], ["DELETE", "/admin/future-route"]]) {
+      for (const token of [undefined, "wrong-secret"]) {
+        const response = await fetch(base + path, { method, headers: token ? { Authorization: `Bearer ${token}` } : {} });
+        assert.equal(response.status, 401);
+        assert.equal(response.headers.get("cache-control"), "no-store");
+        assert.deepEqual(await response.json(), { error: "Admin authentication required" });
+      }
+    }
+  });
+  it("fails closed when the server secret is missing", async () => {
+    delete process.env.ADMIN_SECRET;
+    try { assert.equal((await rawRequest("/admin/questions")).status, 401); }
+    finally { process.env.ADMIN_SECRET = adminSecret; }
+  });
+  it("allows authenticated reads while public responses still hide answers", async () => {
+    const admin = await request("/admin/questions") as typeof practiceSets;
+    assert.ok(admin.some(set => set.blanks.some(blank => blank.fullWord)));
+    assertNoAnswerFields(await request("/practice/sets"));
   });
 });

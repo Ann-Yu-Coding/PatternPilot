@@ -51,3 +51,9 @@ Verified: frontend typecheck and production build, 4 review-helper tests, 32 API
 - Only the backend's primary diagnosis with at least two misses is highlighted. No pattern is claimed for an all-correct or single-miss result.
 - Passage selection starts a fresh attempt. Unsubmitted drafts are not restored on refresh. Completed reviews are restored from tab-scoped storage. API sessions remain transient: if the API restarts, retry the passage before starting training.
 - Mobile layout was checked in a desktop browser at narrow widths; native mobile keyboards and screen-reader interaction still need device testing.
+
+## Admin access
+
+Set `ADMIN_SECRET` on the API process (see `.env.example`); it is not a frontend environment variable. Unset/empty disables admin access. Open `/admin/questions`, enter the secret, and use **Lock admin** when finished. Navigating away or refreshing requires re-entry. The learner navigation has no admin link.
+
+Without credentials, `curl -i http://localhost:5059/api/admin/questions` returns 401. Authenticated reads, creates and imports use `Authorization: Bearer <ADMIN_SECRET>`. The test suite covers missing/incorrect credentials, disabled admin access, authenticated operations and public answer secrecy.

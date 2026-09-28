@@ -1,3 +1,4 @@
+import { requireAdmin } from "./middleware/admin-auth";
 import { QuestionDatabaseError } from "./services/question-repository";
 import { QuestionValidationError } from "./services/question-validation";
 import express, { type Express, type ErrorRequestHandler } from "express";
@@ -28,6 +29,7 @@ app.use(
   }),
 );
 app.use(cors());
+app.use("/api/admin", requireAdmin);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
