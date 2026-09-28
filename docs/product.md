@@ -115,6 +115,7 @@ Correct answers get only a **Why** line.
 - [`docs/design/02-passage.png`](design/02-passage.png): the practice screen
 - [`docs/design/03-after-check-answers.png`](design/03-after-check-answers.png): the marked passage and results on one page
 - [`docs/design/04-drill-phone.png`](design/04-drill-phone.png): the targeted drill on a phone
+- [`docs/design/05-practice-picker.png`](design/05-practice-picker.png): the practice picker, open
 
 ### Principles
 1. **Reading comes first.** Passages and example sentences use the serif font. Everything around them stays small and quiet.
@@ -152,6 +153,7 @@ Correct answers get only a **Why** line.
   - Empty: a gray short line under each missing letter.
   - Typing: the current word gets a green-tint background. Typed letters have a green underline **below** the letter, never through it. Show a caret.
   - Filled: the whole word gets a green underline.
+- **Practice picker:** never use the browser's native `<select>` menu. The trigger is plain text *"Practice 01"* with a chevron; when open it gets a green-tint background. The menu is a white card (12px radius, 1px border, 3px bottom edge, soft shadow), about 340px wide. Each row is at least 44px tall and shows: number (`01`), passage title, topic · time, and on the right the status: a green check for the current practice, the last score (e.g. `6/8`) for finished ones, or a green-tint **New** tag. The selected row has a green-tint background. See `docs/design/05-practice-picker.png`.
 - **Pattern tags:** 4px radius. Tint `#E3EFE9` for the learner's main pattern, neutral gray for other types.
 
 ### Screens
@@ -169,6 +171,7 @@ Correct answers get only a **Why** line.
   - **Pattern card** (mint, 22px radius): a solid green *PATTERN FOUND* badge, the pattern name in large type with a highlighter mark (e.g., *Word **form***), one line of feedback (*"Right word family, wrong job in the sentence."*), a ring showing *2/3 mistakes*, and the **Practice word form →** button with *"6 quick sentences · 2 min"*.
   - **All answers table:** four columns: *Your answer · Correct · Type · What happened*. Mistakes come first, with **You** and **Why** lines. Then a `CORRECT · 5` subheading, where each correct word is shown plainly, the Correct column shows a green check mark, and there is only a **Why** line.
   - **Try this passage again** (retry button).
+- **Table rules:** answer words must never break across lines (`white-space: nowrap`); if space is tight, the *What happened* column shrinks instead. Every row, including correct answers, gets its **own** Why line written for that blank (never a generic line like *"Correct form for this sentence."*). The Type tag names the skill that blank tests (from the blank's `errorCategory`), not a guess from the learner's answer.
 - There is no separate review page.
 
 **3. Targeted drill (phone reference)**
