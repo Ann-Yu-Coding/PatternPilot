@@ -51,7 +51,7 @@ A practice tool for the **"Complete the Words"** task in the new TOEFL format. L
 - [ ] The full learning loop works end-to-end with 3 original passages
 - [ ] **5 real TOEFL learners** (ideally from Korea, Japan or Europe) have tried the loop, e.g., locally over a video call
 - [ ] **At least 3 of 5** say the diagnosis told them something useful
-- [ ] Landing page has no placeholder or made-up numbers (e.g., "14,280 words mapped", "© 2025")
+- [x] Landing page has no placeholder or made-up numbers (e.g., "14,280 words mapped", "© 2025")
 
 ### Decision after v0.2
 - **Useful feedback and demand signals:** set up payments and run a real ads test (§8, §9).
