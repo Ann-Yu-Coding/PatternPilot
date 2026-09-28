@@ -140,7 +140,8 @@ Correct answers get only a **Why** line.
 - **Fonts:** Geist for the interface. Source Serif 4 for anything the learner reads (passages, drill sentences, answer words).
 - **Radius:** buttons 10px · tags 4px · highlights 6px · pattern card 22px · timer fully rounded.
 - **Depth:** a 3px darker bottom border (4px on the pattern card). The pattern card may add one soft green shadow.
-- **Spacing:** 8px grid. Content column 916px wide on desktop.
+- **Spacing:** 8px grid. Content column 1100px wide on desktop (about 75 characters per line; don't go wider). Keep vertical gaps between blocks at 16–28px.
+- **Fit:** on a 1440×800 laptop window at 100% zoom, the whole practice screen (passage and **Check answers**) must fit without scrolling. The reference design ends at about 760px.
 
 ### Components
 - **Top nav:** lowercase `patternpilot` wordmark · *Practice* / *Progress* tabs (active tab has a 3px green underline) · account avatar.
@@ -158,7 +159,7 @@ Correct answers get only a **Why** line.
 - Heading: *"Complete each word with the missing letters."* Subheading: *"A little practice. A clearer pattern."*
 - Meta row: `Practice 01 | Environmental science` on the left, timer on the right.
 - Passage title, then the serif passage with the blanks.
-- Bottom: **Check answers** button with the hint *"Tab to move between words"* below it. No word counter and no *"You can check with blanks left"* text.
+- Bottom: one row directly under the passage, right-aligned: the hint *"Tab to move between words"*, then the **Check answers** button. No word counter, no *"You can check with blanks left"* text and no footer.
 
 **2. After Check answers (one page, not two)**
 - **Top: the passage, marked in place.** Correct words get a green underline. Mistakes get an orange-tint background, with the wrong letters crossed out and followed by the correct letters. A legend above uses the words themselves as samples: *correct* (underlined) `5` and *mistake* (styled as a mistake) `3`.
@@ -202,6 +203,12 @@ Correct answers get only a **Why** line.
 | 2026-09-28 | Marked passage and results on one page after Check answers | Learners see mistakes in context without switching pages |
 | 2026-09-28 | Every mistake shows "You" and "Why" lines; ending-aware matching | The explanation must respond to what the learner actually typed |
 | 2026-09-28 | Timer defaults to 3:00 | Short, focused sessions |
+
+### Learner UI implementation notes (2026-09-28)
+
+- The 3:00 timer is advisory: at zero, learners can still finish and submit. Results show actual elapsed time, which can exceed three minutes.
+- A session with fewer than two related misses shows no repeated pattern; an all-correct session shows a positive review state.
+- The first two screens reuse the current scoring response. Its diagnosis categories and generic Why explanations do not yet implement all of §5. The UI quotes the submitted word for You, displays the server explanation for Why, and uses the real drill count rather than the six-item reference placeholder. Updating diagnosis/content is a separate follow-up; no answer metadata is added to public passage responses.
 
 ## 11. Open questions
 
