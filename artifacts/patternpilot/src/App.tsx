@@ -1,13 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query";
 import { Link, Route, Switch, useLocation, Router as WouterRouter } from "wouter";
 import { ArrowRight, BarChart3, BookOpen, Check, ChevronRight, CircleHelp, FileJson, FileText, Home, LockKeyhole, Menu, Plus, RefreshCw, Search, Settings2, Sparkles, Target, Upload, X } from "lucide-react";
-import { getGetTargetedTrainingQueryKey, getListAdminQuestionsQueryKey, useCreateAdminQuestion, useGetDashboardSummary, useGetTargetedTraining, useHealthCheck, useImportAdminQuestions, useListAdminQuestions, useListPracticeSets, useStartPracticeSession, useSubmitPracticeSession, useSubmitTrainingDrill } from "@workspace/api-client-react";
-import type { AdminQuestion, PracticeResult } from "@workspace/api-client-react";
+import { getGetTargetedTrainingQueryKey, getListAdminQuestionsQueryKey, useCreateAdminQuestion, useGetDashboardSummary, useGetTargetedTraining, useHealthCheck, useImportAdminQuestions, useListAdminQuestions, useListPracticeSets, useSubmitTrainingDrill } from "@workspace/api-client-react";
+import type { AdminQuestion } from "@workspace/api-client-react";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
+import { LearnerFlow } from "@/components/learner-flow";
 
 const queryClient = new QueryClient();
 
@@ -47,92 +48,9 @@ function Landing() {
   return <div className="pp-grain min-h-[100dvh] bg-[#f5f0e6]"><MarketingHeader /><section className="mx-auto grid max-w-6xl gap-12 px-5 pb-20 pt-16 lg:grid-cols-[1.02fr_.98fr] lg:items-center lg:px-8 lg:pb-32 lg:pt-24"><div className="pp-reveal"><SectionKicker>TOEFL · COMPLETE THE WORDS</SectionKicker><h1 className="max-w-2xl font-serif text-[clamp(3.5rem,8vw,7.5rem)] leading-[.89] tracking-[-.045em] text-[#252a40]">Know what to<br /><em className="text-[#ad762c]">practice next.</em></h1><p className="mt-8 max-w-md text-lg leading-8 text-[#676577]">PatternPilot turns a wrong answer into a useful pattern — so each passage leaves you with a next move, not just a number.</p><div className="mt-9 flex flex-wrap items-center gap-3"><AppButton href="/practice" kind="yellow" testId="link-hero-start">Try two passages free <ArrowRight size={16} /></AppButton><a href="#method" className="px-3 py-2.5 text-sm font-semibold text-[#676577] underline decoration-[#cfc8bb] underline-offset-4" data-testid="link-hero-method">See the method</a></div><div className="mt-12 flex items-center gap-7 text-xs text-[#676577]"><span><b className="font-mono text-[#252a40]">08</b> min sessions</span><span><b className="font-mono text-[#252a40]">01</b> clear next step</span></div></div><div className="relative pp-reveal [animation-delay:120ms]"><div className="absolute -right-3 -top-3 h-24 w-24 rounded-full border border-[#ad762c]/30" /><div className="relative overflow-hidden rounded-lg bg-[#252a40] p-6 text-[#fffaf0] shadow-2xl lg:p-9"><div className="flex items-center justify-between border-b border-[#4a4f68] pb-5"><span className="font-mono text-[10px] uppercase tracking-[.18em] text-[#f7c948]">Today’s pattern</span><span className="rounded-full bg-[#f7c948]/15 px-2.5 py-1 font-mono text-[10px] text-[#f7c948]">VERB FORM</span></div><div className="py-9"><p className="font-serif text-3xl leading-tight lg:text-4xl">The evidence <span className="border-b-2 border-[#f7c948] text-[#f7c948]">suggests</span> a quiet shift.</p><p className="mt-7 max-w-sm text-sm leading-6 text-[#babac5]">You recognized the meaning. The ending was the signal. Look for third-person singular after a singular subject.</p></div><div className="flex items-center justify-between border-t border-[#4a4f68] pt-5"><span className="text-xs text-[#babac5]">Pattern found in 3 answers</span><span className="grid h-8 w-8 place-items-center rounded-full bg-[#f7c948] text-[#252a40]"><ArrowRight size={15} /></span></div></div></div></section><section id="method" className="border-y border-[#ddd6c9] bg-[#ebe6d9]"><div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[.72fr_1.28fr] lg:px-8 lg:py-24"><div><SectionKicker>The method</SectionKicker><h2 className="max-w-sm font-serif text-5xl leading-[.96] tracking-[-.03em]">Practice with a point of view.</h2></div><div className="grid gap-8 sm:grid-cols-3"><div><span className="font-mono text-xs text-[#ad762c]">01</span><h3 className="mt-4 font-semibold">Complete</h3><p className="mt-2 text-sm leading-6 text-[#676577]">Fill the missing word in passages written for the new TOEFL format.</p></div><div><span className="font-mono text-xs text-[#ad762c]">02</span><h3 className="mt-4 font-semibold">Diagnose</h3><p className="mt-2 text-sm leading-6 text-[#676577]">See whether the miss was a suffix, form, meaning, or family issue.</p></div><div><span className="font-mono text-xs text-[#ad762c]">03</span><h3 className="mt-4 font-semibold">Repeat</h3><p className="mt-2 text-sm leading-6 text-[#676577]">A small targeted drill turns the diagnosis into an instinct.</p></div></div></div></section><section className="mx-auto max-w-6xl px-5 py-20 lg:px-8 lg:py-28"><div className="flex flex-col justify-between gap-6 border-b border-[#cfc8bb] pb-8 sm:flex-row sm:items-end"><div><SectionKicker>A quieter kind of prep</SectionKicker><h2 className="font-serif text-5xl tracking-[-.03em]">Your score is a signal.</h2></div><p className="max-w-sm text-sm leading-6 text-[#676577]">Not a verdict. We make the signal legible, then give you a short route forward.</p></div><div className="grid gap-0 md:grid-cols-3">{[["14,280", "words mapped", "Across the patterns that make Complete the Words feel tricky."], ["4", "useful diagnoses", "Enough detail to act, never enough to overwhelm."], ["8 min", "to a next step", "Short sessions built for busy application weeks."]].map(([value, label, copy], i) => <div key={label} className={`py-9 md:px-7 ${i > 0 ? "border-t md:border-l md:border-t-0 border-[#ddd6c9]" : ""}`}><div className="font-mono text-4xl tracking-[-.06em] text-[#ad762c]">{value}</div><div className="mt-3 font-semibold">{label}</div><p className="mt-2 max-w-xs text-sm leading-6 text-[#676577]">{copy}</p></div>)}</div></section><section className="bg-[#252a40] px-5 py-20 text-[#fffaf0] lg:px-8 lg:py-28"><div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 md:flex-row md:items-end"><div><SectionKicker><span className="text-[#f7c948]">A good first session</span></SectionKicker><h2 className="max-w-xl font-serif text-5xl leading-none tracking-[-.03em]">Leave knowing<br /><em className="text-[#f7c948]">what changed.</em></h2></div><AppButton href="/practice" kind="yellow" testId="link-bottom-start">Start with two free passages <ArrowRight size={16} /></AppButton></div></section><footer className="mx-auto flex max-w-6xl flex-col justify-between gap-4 px-5 py-7 text-xs text-[#676577] sm:flex-row lg:px-8"><span>© 2025 PatternPilot TOEFL</span><span>Built for the new format.</span></footer></div>;
 }
 
-function Practice() {
-  const { data, isLoading, isError, refetch } = useListPracticeSets();
-  const sets = (data ?? []).slice(0, 2);
-  const start = useStartPracticeSession();
-  const submit = useSubmitPracticeSession();
-  const [selected, setSelected] = useState<string[]>([]);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [activeSet, setActiveSet] = useState(0);
-  const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
-  const [, navigate] = useLocation();
-  const current = sets[activeSet];
-  const allBlanks = sets.flatMap((s) => s.blanks);
-  const answered = allBlanks.filter((blank) => answers[blank.id]?.trim()).length;
-  const selectedSetIds = selected.length ? selected : sets.map((set) => set.id);
-  const updateAnswer = (blankId: string, value: string, maxLength: number) => {
-    const nextValue = value.slice(0, maxLength);
-    setAnswers((prev) => ({ ...prev, [blankId]: nextValue }));
-    if (nextValue.length >= maxLength) {
-      const nextBlank = allBlanks[allBlanks.findIndex((blank) => blank.id === blankId) + 1];
-      if (nextBlank) inputRefs.current[nextBlank.id]?.focus();
-    }
-  };
-  const renderPassage = () => {
-    if (!current) return null;
-    if (!current.passage.includes("{{")) {
-      return current.blanks.map((blank) => (
-        <span key={blank.id}>
-          {blank.prefix}
-          <input
-            aria-label={`Missing word ${blank.order}`}
-            data-testid={`input-blank-${blank.id}`}
-            value={answers[blank.id] || ""}
-            onChange={(event) => updateAnswer(blank.id, event.target.value, blank.missingLength)}
-            ref={(node) => { inputRefs.current[blank.id] = node; }}
-            style={{ width: `${Math.max(62, blank.missingLength * 11)}px` }}
-            className={`mx-1 inline-block border-b-2 bg-transparent px-1 text-center font-semibold outline-none ${answers[blank.id] ? "border-[#ad762c] text-[#ad762c]" : "border-[#252a40]/30 focus:border-[#ad762c]"}`}
-            placeholder={"_".repeat(Math.min(blank.missingLength, 9))}
-          />
-        </span>
-      ));
-    }
-    return current.passage.split(/(\{\{[^}]+\}\})/g).map((part, index) => {
-      const match = part.match(/^\{\{([^}]+)\}\}$/);
-      if (!match) return <span key={`${part}-${index}`}>{part}</span>;
-      const blank = current.blanks.find((item) => item.id === match[1]);
-      if (!blank) return null;
-      return (
-        <span key={blank.id} className="whitespace-nowrap">
-          <input
-            aria-label={`Missing letters for ${blank.prefix}`}
-            data-testid={`input-blank-${blank.id}`}
-            value={answers[blank.id] || ""}
-            onChange={(event) => updateAnswer(blank.id, event.target.value, blank.missingLength)}
-            onKeyDown={(event) => {
-              if (event.key === "Backspace" && !answers[blank.id]) {
-                const previousBlank = allBlanks[allBlanks.findIndex((item) => item.id === blank.id) - 1];
-                if (previousBlank) inputRefs.current[previousBlank.id]?.focus();
-              }
-            }}
-            ref={(node) => { inputRefs.current[blank.id] = node; }}
-            style={{ width: `${Math.max(54, blank.missingLength * 12)}px` }}
-            className={`mx-1 inline-block border-b-2 bg-transparent px-1 text-center font-semibold outline-none ${answers[blank.id] ? "border-[#ad762c] text-[#ad762c]" : "border-[#252a40]/30 focus:border-[#ad762c]"}`}
-            placeholder={"_".repeat(Math.min(blank.missingLength, 8))}
-          />
-        </span>
-      );
-    });
-  };
-  const submitPractice = () => {
-    const finish = (sessionId: string) => submit.mutate({ sessionId, data: { answers: allBlanks.map((blank) => ({ blankId: blank.id, value: answers[blank.id] || "" })) } }, { onSuccess: (result) => { sessionStorage.setItem("pp-result", JSON.stringify(result)); sessionStorage.setItem("pp-session", sessionId); navigate("/results"); } });
-    start.mutate({ data: { setIds: selectedSetIds } }, { onSuccess: (session) => finish(session.id) });
-  };
-  if (isLoading) return <AppShell><LoadingBlock label="Loading passages" /></AppShell>;
-  if (start.isError || submit.isError) return <AppShell><ErrorBlock retry={submitPractice} /></AppShell>;
-  if (!isLoading && !isError && !current) return <AppShell><p className="p-10">No practice passages available.</p></AppShell>;
-  if (isError && !data) return <AppShell><ErrorBlock retry={refetch} /></AppShell>;
-  return <AppShell><div className="mx-auto max-w-5xl px-5 py-10 lg:px-10 lg:py-14"><div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><SectionKicker>Practice / complete the words</SectionKicker><h1 className="font-serif text-5xl tracking-[-.03em]">A short passage. A useful read.</h1><p className="mt-3 max-w-xl text-sm leading-6 text-[#676577]">Two free passages, then a diagnosis that tells you where your English is asking for attention.</p></div><div className="text-left sm:text-right"><div className="font-mono text-2xl text-[#ad762c]">{String(answered).padStart(2, "0")} <span className="text-sm text-[#676577]">/ {allBlanks.length}</span></div><div className="mt-1 text-xs text-[#676577]">words completed</div></div></div><div className="mt-10 grid gap-8 lg:grid-cols-[220px_1fr]"><div className="space-y-2">{sets.map((set, i) => <button key={set.id} onClick={() => setActiveSet(i)} className={`w-full rounded-md border p-4 text-left ${activeSet === i ? "border-[#ad762c] bg-[#fffaf0] shadow-sm" : "border-[#ddd6c9] bg-transparent"}`} data-testid={`button-passage-${set.id}`}><div className="flex items-center justify-between"><span className="font-mono text-[10px] text-[#ad762c]">0{i + 1}</span><span className="text-xs text-[#676577]">{set.estimatedMinutes} min</span></div><div className="mt-3 text-sm font-semibold">{set.title}</div><div className="mt-2 text-xs text-[#676577]">{set.topic}</div></button>)}</div><div className="rounded-lg border border-[#ddd6c9] bg-[#fffaf0] p-6 shadow-sm sm:p-9"><div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e2dbcf] pb-5"><div><span className="font-mono text-[10px] uppercase tracking-[.15em] text-[#ad762c]">{current.topic}</span><h2 className="mt-2 text-xl font-semibold">{current.title}</h2></div><span className="rounded-full bg-[#ebe6d9] px-3 py-1 text-xs text-[#676577]">{current.difficulty}</span></div><p className="mt-8 text-lg leading-[2.3] text-[#3e4054]">{renderPassage()}</p><div className="mt-10 flex flex-col justify-between gap-4 border-t border-[#e2dbcf] pt-5 sm:flex-row sm:items-center"><p className="text-xs text-[#676577]">Type only the missing letters. The next blank picks up when you finish one.</p><AppButton onClick={submitPractice} kind="yellow" disabled={start.isPending || submit.isPending} testId="button-submit-practice">{start.isPending || submit.isPending ? "Reading your answers…" : "See my pattern"} <ArrowRight size={15} /></AppButton></div></div></div></div></AppShell>;
-}
+function Practice() { return <LearnerFlow />; }
 
-function Results() {
-  const [result, setResult] = useState<PracticeResult | null>(null);
-  useEffect(() => { try { const stored = sessionStorage.getItem("pp-result"); if (stored) setResult(JSON.parse(stored)); } catch { setResult(null); } }, []);
-  if (!result) return <AppShell><p className="p-10">Complete a <Link href="/practice">practice session</Link> to see your results.</p></AppShell>;
-  const shown = result;
-  return <AppShell><div className="mx-auto max-w-5xl px-5 py-10 lg:px-10 lg:py-14"><SectionKicker>Your practice read</SectionKicker><div className="grid gap-10 lg:grid-cols-[.75fr_1.25fr] lg:items-end"><div><h1 className="font-serif text-6xl leading-none tracking-[-.04em]">{Math.round(shown.accuracy)}<span className="text-3xl text-[#ad762c]">%</span></h1><p className="mt-3 text-[#676577]">accuracy across {shown.total} words</p></div><div className="border-l-2 border-[#f7c948] pl-5 text-lg leading-8 text-[#3e4054]">{shown.reviewCopy}</div></div><div className="mt-12 grid gap-5 md:grid-cols-[1.1fr_.9fr]"><div className="rounded-lg bg-[#252a40] p-7 text-[#fffaf0]"><div className="flex items-center justify-between"><span className="font-mono text-[10px] uppercase tracking-[.15em] text-[#f7c948]">Your clearest next step</span><span className="font-mono text-sm text-[#b7b7c1]">{shown.topWeakness.count} misses</span></div><h2 className="mt-6 font-serif text-4xl">{shown.topWeakness.label}</h2><p className="mt-4 max-w-md text-sm leading-7 text-[#c7c6ce]">{shown.topWeakness.detail}</p><AppButton href="/training" kind="yellow" className="mt-7" testId="link-result-training">Train this pattern <ArrowRight size={15} /></AppButton></div><div className="rounded-lg border border-[#ddd6c9] bg-[#fffaf0] p-7"><SectionKicker>What the misses say</SectionKicker><div className="space-y-5">{shown.weaknesses.map((weakness) => <div key={weakness.key}><div className="flex justify-between text-sm font-semibold"><span>{weakness.label}</span><span className="font-mono text-xs text-[#ad762c]">{weakness.count}</span></div><div className="mt-2 h-1.5 rounded-full bg-[#ebe6d9]"><div className="h-full rounded-full bg-[#ad762c]" style={{ width: `${Math.min(100, weakness.count * 24)}%` }} /></div></div>)}</div></div></div><div className="mt-10 rounded-lg border border-[#ddd6c9] bg-[#fffaf0] p-6 sm:p-8"><SectionKicker>Review each word</SectionKicker><div className="grid gap-3 sm:grid-cols-2">{shown.items.map((item) => <div key={item.blankId} className={`flex items-center justify-between gap-4 rounded-md border px-4 py-3 ${item.isCorrect ? "border-[#b9d7c7] bg-[#edf6f0]" : "border-[#e7c0b7] bg-[#fff1ed]"}`}><div><div className="text-sm font-semibold">{item.fullWord}</div><div className="mt-1 text-xs text-[#676577]">{item.isCorrect ? "Your answer matched" : item.submitted ? `You entered “${item.submitted}”` : "No answer entered"}</div></div><span className={`font-mono text-xs ${item.isCorrect ? "text-[#316956]" : "text-[#b14e3d]"}`}>{item.isCorrect ? "Correct" : "Review"}</span></div>)}</div></div><div className="mt-12 flex flex-col justify-between gap-4 border-t border-[#ddd6c9] pt-6 sm:flex-row sm:items-center"><p className="text-sm text-[#676577]">A score is useful when it changes what you do next.</p><AppButton href="/practice" kind="outline" testId="link-results-again">Practice another passage <ChevronRight size={15} /></AppButton></div></div></AppShell>;
-}
+function Results() { return <LearnerFlow />; }
 
 function Training() {
   const submit = useSubmitTrainingDrill();

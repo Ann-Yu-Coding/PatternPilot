@@ -219,7 +219,8 @@ Check the rules in the order shown. The first match wins.
 
 - The 3:00 timer is advisory: at zero, learners can still finish and submit. Results show actual elapsed time, which can exceed three minutes.
 - A session with fewer than two related misses shows no repeated pattern; an all-correct session shows a positive review state.
-- The first two screens reuse the current scoring response. Its diagnosis categories and generic Why explanations do not yet implement all of §5. The UI quotes the submitted word for You, displays the server explanation for Why, and uses the real drill count rather than the six-item reference placeholder. Updating diagnosis/content is a separate follow-up; no answer metadata is added to public passage responses.
+- The first two screens reuse the current scoring response. All 24 original blanks now have server-side editorial explanations, shown under Why this answer for correct and incorrect responses alike. Type displays the blank’s errorCategory. Scoring and pattern detection remain unchanged and do not yet implement all of §5. The UI uses real drill counts; no answer metadata is added to public passage responses.
+- The practice picker remembers the last accuracy in the current browser tab. Switching passages starts a fresh attempt; cross-device history is outside this change.
 
 ## 11. Open questions
 

@@ -1,3 +1,4 @@
+import { explainPracticeBlank } from "../data/practice-explanations";
 import type { Blank } from "../data/patternpilot";
 
 export type SubmittedAnswer = {
@@ -32,7 +33,7 @@ export function scorePracticeAnswers(
       errorCategory: item.errorCategory,
       suffix: item.suffix,
       wordFamily: item.wordFamily,
-      explanation: isCorrect ? "Correct form for this sentence." : `The complete word is ${item.fullWord}.`,
+      explanation: explainPracticeBlank(item),
     };
   });
 }
