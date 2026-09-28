@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { ArrowRight, Check, RotateCcw, UserRound } from "lucide-react";
 import {
   useListPracticeSets,
@@ -12,6 +12,9 @@ import type {
   ResultItem,
 } from "@workspace/api-client-react";
 import { PracticePicker } from "./practice-picker";
+import { NextPassage } from "./next-passage";
+import { canOpenPassage, nextPassageId } from "../lib/free-practice";
+import { SEEDED_PASSAGE_ORDER } from "../lib/product-config";
 import { PatternCard } from "./pattern-card";
 import { readHistory, saveHistory } from "../lib/history-storage";
 import {
@@ -202,6 +205,7 @@ function AnswerTable({
 }
 
 export function LearnerFlow() {
+  const [,navigate] = useLocation();
   const { data, isLoading, isError, refetch } = useListPracticeSets();
   const start = useStartPracticeSession();
   const submit = useSubmitPracticeSession();
@@ -224,7 +228,7 @@ export function LearnerFlow() {
   const resultsRef = useRef<HTMLElement | null>(null);
   const sessionId = useRef<string | null>(null);
   const submitting = useRef(false);
-  const sets = (data || []).slice(0, 3);
+  const sets = SEEDED_PASSAGE_ORDER.flatMap(id => (data || []).filter(set=>set.id===id));
   const current =
     review?.set || sets.find((set) => set.id === selectedId) || sets[0];
   const blanks = current
@@ -278,6 +282,7 @@ export function LearnerFlow() {
   }, [review]);
 
   const reset = (id = current?.id) => {
+    if (id && !canOpenPassage(readHistory(),id)) { navigate("/unlock"); return; }
     setReview(null);
     setSelectedId(id || null);
     setAnswers({});
@@ -304,6 +309,7 @@ export function LearnerFlow() {
   };
   const checkAnswers = () => {
     if (!current || submitting.current || review) return;
+    if (!canOpenPassage(readHistory(),current.id)) { navigate("/unlock"); return; }
     submitting.current = true;
     const seconds = Math.floor((Date.now() - startedAt.current) / 1000);
     const finish = (id: string) =>
@@ -573,14 +579,7 @@ export function LearnerFlow() {
                   </section>
                 )}
                 <AnswerTable result={result} set={current} />
-                <button
-                  className="learner-button retry"
-                  onClick={() => reset()}
-                  data-testid="button-retry-passage"
-                >
-                  <RotateCcw size={18} />
-                  Try this passage again
-                </button>
+                <NextPassage history={history} next={sets.find(s=>s.id===nextPassageId(history,sets.map(s=>s.id)))} onRetry={()=>reset()} onNext={()=>{const id=nextPassageId(readHistory(),sets.map(s=>s.id)); if(id)reset(id);}}/>
               </section>
             )}
           </>

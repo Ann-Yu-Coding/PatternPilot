@@ -264,3 +264,17 @@ it("selects and grades the requested historical pattern without exposing drill a
     assert.equal((await rawRequest(`/practice/sessions/${id}/training?categoryKey=invalid`)).status,400);
   } finally { sessions.delete(id); }
 });
+
+
+it("stores normalized waitlist emails once and rejects invalid addresses", async () => {
+ const email=`waitlist-${randomUUID()}@example.com`;
+ const { pool }=await import("@workspace/db");
+ try {
+   assert.equal((await rawRequest("/waitlist",{email:`  ${email.toUpperCase()}  `})).status,201);
+   assert.equal((await rawRequest("/waitlist",{email})).status,201);
+   const saved=await pool.query("SELECT email FROM waitlist WHERE email=$1",[email]);
+   assert.deepEqual(saved.rows,[{email}]);
+   assert.equal((await rawRequest("/waitlist",{email:"invalid"})).status,400);
+   assert.equal((await rawRequest("/waitlist",{email:123})).status,400);
+ } finally { await pool.query("DELETE FROM waitlist WHERE email=$1",[email]); }
+});

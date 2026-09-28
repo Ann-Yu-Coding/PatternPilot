@@ -11,6 +11,7 @@ import NotFound from "@/pages/not-found";
 import { GetTargetedTrainingCategoryKey } from "@workspace/api-client-react";
 import { finishDrill } from "@/lib/practice-history";
 import { readHistory, saveHistory } from "@/lib/history-storage";
+import { Paywall, Waitlist } from "@/components/paywall";
 import { ProgressPage } from "@/components/progress-page";
 import { AdminAccess } from "@/components/admin-access";
 import { LearnerFlow } from "@/components/learner-flow";
@@ -62,7 +63,7 @@ function Training() {
   const requestedCategory = trainingParams.get("category");
   const categoryKey = Object.values(GetTargetedTrainingCategoryKey).find(key => key === requestedCategory);
   const patternCategory = trainingParams.get("pattern");
-  
+
   const submit = useSubmitTrainingDrill();
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [trainingResult, setTrainingResult] = useState<{ score: number; total: number; accuracy: number; lockedInsights: string[] } | null>(null);
@@ -87,10 +88,7 @@ function Library() {
   return <AppShell><div className="mx-auto max-w-5xl px-5 py-10 lg:px-10 lg:py-14"><SectionKicker>Practice library</SectionKicker><div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><h1 className="font-serif text-5xl tracking-[-.03em]">Passages with a point.</h1><p className="mt-3 text-sm text-[#676577]">Pick a topic. We will help you read the pattern in your answers.</p></div><div className="relative"><Search size={15} className="absolute left-3 top-3 text-[#676577]" /><input placeholder="Search passages" className="w-full rounded-md border border-[#cfc8bb] bg-[#fffaf0] py-2.5 pl-9 pr-3 text-sm outline-none focus:border-[#ad762c] sm:w-52" data-testid="input-search-library" /></div></div>{isLoading ? <LoadingBlock label="Loading library" /> : <div className="mt-10 divide-y divide-[#ddd6c9] border-y border-[#ddd6c9]">{sets.map((set, i) => <div key={set.id} className="grid gap-4 py-6 sm:grid-cols-[60px_1fr_auto] sm:items-center"><span className="font-mono text-xs text-[#ad762c]">0{i + 1}</span><div><div className="flex flex-wrap items-center gap-3"><h2 className="text-lg font-semibold">{set.title}</h2><span className="rounded-full bg-[#ebe6d9] px-2 py-1 text-[10px] text-[#676577]">{set.difficulty}</span></div><p className="mt-1 text-sm text-[#676577]">{set.topic} · {set.blankCount} words</p></div><AppButton href="/practice" kind="outline" testId={`link-library-set-${set.id}`}>Open set <ChevronRight size={15} /></AppButton></div>)}</div>}</div></AppShell>;
 }
 
-function Unlock() {
-  const [email, setEmail] = useState(""); const [state, setState] = useState<"idle" | "signup" | "checkout">("idle");
-  return <div className="min-h-[100dvh] bg-[#252a40] px-5 py-6 text-[#fffaf0]"><div className="mx-auto max-w-5xl"><Brand light /><div className="grid gap-12 py-16 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:py-24"><div><SectionKicker><span className="text-[#f7c948]">PatternPilot / full access</span></SectionKicker><h1 className="font-serif text-6xl leading-[.9] tracking-[-.04em]">Make the next<br /><em className="text-[#f7c948]">step yours.</em></h1><p className="mt-7 max-w-md text-base leading-7 text-[#c7c6ce]">Unlock the full passage library, targeted drills, and a dashboard that remembers what your English is asking for.</p><Link href="/" className="mt-8 inline-block text-sm text-[#c7c6ce] underline underline-offset-4" data-testid="link-unlock-back">Back to PatternPilot</Link></div><div className="rounded-lg bg-[#fffaf0] p-7 text-[#252a40] shadow-2xl sm:p-9">{state === "checkout" ? <div className="pp-reveal"><div className="grid h-10 w-10 place-items-center rounded-full bg-[#f7c948]"><Check size={20} /></div><h2 className="mt-6 font-serif text-4xl">You are on the list.</h2><p className="mt-3 text-sm leading-6 text-[#676577]">We will send your checkout link to {email}. This demo is ready for the handoff.</p><AppButton href="/dashboard" kind="dark" className="mt-7" testId="link-unlock-dashboard">Go to my overview <ArrowRight size={15} /></AppButton></div> : <><div className="flex items-start justify-between"><div><span className="font-mono text-[10px] uppercase tracking-[.14em] text-[#ad762c]">PatternPilot full access</span><h2 className="mt-3 font-serif text-4xl">Study with the whole map.</h2></div><span className="font-mono text-2xl">$12<span className="text-sm text-[#676577]">/mo</span></span></div><div className="my-7 space-y-4 border-y border-[#e2dbcf] py-6 text-sm">{["Unlimited Complete the Words passages", "Targeted drills from every diagnosis", "A dashboard that tracks your patterns"].map((item) => <div key={item} className="flex items-center gap-3"><Check size={16} className="text-[#ad762c]" />{item}</div>)}</div><label className="text-xs font-semibold">Email address<input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="you@university.edu" className="mt-2 w-full rounded-md border border-[#cfc8bb] bg-transparent px-3 py-3 text-sm outline-none focus:border-[#ad762c]" data-testid="input-unlock-email" /></label><AppButton onClick={() => { if (email) setState("checkout"); else setState("signup"); }} kind="yellow" className="mt-5 w-full" testId="button-unlock-checkout">{state === "signup" ? "Add your email first" : "Continue to checkout"} <ArrowRight size={15} /></AppButton><p className="mt-3 text-center text-[11px] text-[#676577]">No payment is taken in this preview.</p></>}</div></div></div></div>;
-}
+function Unlock() { return <Paywall/>; }
 
 function Login() {
   const [, navigate] = useLocation(); const [email, setEmail] = useState(""); const [submitted, setSubmitted] = useState(false);
@@ -114,7 +112,7 @@ function AdminQuestionEditor({ secret }: { secret: string }) {
 
 function Router() {
   const [location] = useLocation();
-  return <ErrorBoundary resetKey={location}><Switch><Route path="/" component={Landing} /><Route path="/practice" component={Practice} /><Route path="/results" component={Results} /><Route path="/training" component={Training} /><Route path="/unlock" component={Unlock} /><Route path="/dashboard" component={Dashboard} /><Route path="/library" component={Library} /><Route path="/login" component={Login} /><Route path="/admin/questions" component={AdminQuestions} /><Route component={NotFound} /></Switch></ErrorBoundary>;
+  return <ErrorBoundary resetKey={location}><Switch><Route path="/" component={Landing} /><Route path="/practice" component={Practice} /><Route path="/results" component={Results} /><Route path="/training" component={Training} /><Route path="/unlock" component={Unlock} /><Route path="/waitlist" component={Waitlist} /><Route path="/dashboard" component={Dashboard} /><Route path="/library" component={Library} /><Route path="/login" component={Login} /><Route path="/admin/questions" component={AdminQuestions} /><Route component={NotFound} /></Switch></ErrorBoundary>;
 }
 
 function AppContent() {

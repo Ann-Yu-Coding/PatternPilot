@@ -38,7 +38,7 @@ A practice tool for the **"Complete the Words"** task in the new TOEFL format. L
    `Complete the Words → Submit → See mistakes → Understand pattern → Start targeted practice`
    Design the whole flow first (see §7, UI direction), then build it.
 4. **3 excellent original passages**, deliberately designed to trigger every error type in §5 so they exercise the scoring and diagnosis system.
-5. **Keep practicing:** after results, a **Next passage** card sends the learner to the next passage they haven't done. This repeats until the **free limit (2 passages, configurable)**. After that, *Next passage* opens the **paywall** screen. In v0.2 the paywall's button leads to a waitlist or pre-order page (no real payment yet, see §8). Targeted drills don't count toward the limit.
+5. **Keep practicing:** after results, a **Next passage** card sends the learner to the next passage they haven't done. This repeats until the **free limit (2 unique completed passages, configurable)**. After that, *Next passage* opens the **paywall** screen. In v0.2 the paywall's button leads to a waitlist or pre-order page (no real payment yet, see §8). Retries and targeted drills don't count toward the limit. Next passage follows the fixed seeded order and chooses the next uncompleted passage.
 
 ### Out of scope for v0.2
 - More than 3 passages
@@ -224,7 +224,7 @@ Check the rules in the order shown. The first match wins.
 - Admin access requires the API-only ADMIN_SECRET through a Bearer header. The editor prompts before loading data, keeps the secret only in memory and clears its isolated query cache on lock or navigation.
 
 - The 3:00 timer is advisory: at zero, learners can still finish and submit. Results show actual elapsed time, which can exceed three minutes.
-- Pattern evidence now uses the latest attempt from each of the last five distinct passages. Both repeated and possible patterns offer a category-specific drill; a perfect drill clears prior active evidence. All attempts remain visible in Progress. Next-passage flow is implemented in Step 3.
+- Pattern evidence now uses the latest attempt from each of the last five distinct passages. Both repeated and possible patterns offer a category-specific drill; a perfect drill clears prior active evidence. All attempts remain visible in Progress. The next-passage card now routes to the next unfinished seeded passage or to the waitlist offer after two unique completions.
 - The first two screens reuse the current scoring response. All 24 original blanks now have server-side editorial explanations, shown under Why this answer for correct and incorrect responses alike. Type displays the blank’s errorCategory. Scoring and pattern detection remain unchanged and do not yet implement all of §5. The UI uses real drill counts; no answer metadata is added to public passage responses.
 - The practice picker remembers the last accuracy in the current browser tab. Switching passages starts a fresh attempt; cross-device history is outside this change.
 
