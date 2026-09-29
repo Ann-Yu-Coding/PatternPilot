@@ -268,10 +268,12 @@ export function classifyAnswer(
     )
       return "Word form";
   }
+  const missing = normalize(blank.answer);
+  const spellingLimit = missing.length <= 4 ? 1 : 2;
   if (
     !real &&
-    Math.abs(candidate.length - correct.length) <= 2 &&
-    editDistance(candidate, correct) <= 2
+    Math.abs(suffix.length - missing.length) <= spellingLimit &&
+    editDistance(suffix, missing) <= spellingLimit
   )
     return "Spelling";
   if (real) return "Context / meaning";

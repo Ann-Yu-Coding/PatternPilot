@@ -79,7 +79,7 @@ Rule-based, no AI needed for v1. Compare each wrong answer (prefix + typed lette
 | Empty | **Skipped / time pressure** | — |
 | Same lemma, different inflection (-s / -ed / -ing / -er / -est) | **Grammar ending** | suggest, suggested |
 | Same word family, different part of speech | **Word form** | suggestion |
-| Edit distance 1–2 from the correct word, not a real word | **Spelling** | sugests |
+| Not a real word; typed letters vs missing letters have edit distance ≤1 for 1–4 missing letters, ≤2 for 5+ missing letters | **Spelling** | sugests |
 | A real word with a different lemma | **Meaning / context** | supports |
 | Not a real word and not close | **Vocabulary gap** | sugrom |
 
@@ -222,6 +222,7 @@ Check the rules in the order shown. The first match wins.
 | 2026-09-28 | Encouraging, passage-specific all-correct copy; Check another passage CTA; only Possible pattern / Pattern labels | Avoid overclaiming mastery or presenting long-term persistence before it is supported |
 | 2026-09-29 | Classify the actual answer on the server; preserve the Type column’s tested skill and existing browser history | Pattern evidence and drills must follow what the learner typed |
 | 2026-09-29 | Type column shows the learner's mistake type; correct rows have no tag | Must match the pattern card now that diagnosis follows the typed answer |
+| 2026-09-29 | Spelling compares typed vs missing letters, stricter for short endings | Whole-word distance mislabelled guesses as spelling slips |
 
 ### Learner UI implementation notes (2026-09-28)
 
@@ -251,6 +252,6 @@ Check the rules in the order shown. The first match wins.
 
 - `classifyAnswer(blank, submitted)` receives missing letters, trims/case-folds them, and prepends the visible prefix. Correct returns null; an empty suffix is Word retrieval. No full-word/suffix guessing.
 - A checked-in `word-list@4.1.0` dictionary (MIT, 274,137 entries) implements the real-word gate, with `a` and `i` added in code. It is loaded only on the server, including in production. No network or AI classification.
-- Explicit POS families cover all 24 seed blanks and the §5 examples. Inflection uses the actual answer’s grammatical base, separately from a derivational source lemma (e.g. consolidate → consolidation). Known nonword stem-plus-ending forms follow ending-aware rules; `studyed` is Grammar ending, while `studyies` is Spelling. `larging` for `largely` is Word form.
+- Explicit POS families cover all 24 seed blanks and the §5 examples. Inflection uses the actual answer’s grammatical base, separately from a derivational source lemma (e.g. consolidate → consolidation). Known nonword stem-plus-ending forms follow ending-aware rules; `studyed` is Grammar ending, while `studyies` is Word retrieval (two edits in a three-letter ending). `larging` for `largely` is Word form.
 - Ambiguous words are compared in the target’s part of speech. Same-family, same-POS real alternatives such as relation/relationship or careless/careful fall through to Context / meaning. Rare dictionary entries also reach Context / meaning; no hidden exception list is applied. These limitations and exact browser inputs are in `docs/learner-flow.md`.
 - All seed metadata is explicit. Rerunning the existing seed command repairs only exact original metadata fingerprints, leaving admin edits and all passage text/answers intact. No schema or localStorage migration.

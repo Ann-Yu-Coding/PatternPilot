@@ -99,7 +99,7 @@ const examples: Array<[string, MissCategory]> = [
   ["supports", "Grammar ending"],
   ["resilence", "Spelling"],
   ["recovery", "Word form"],
-  ["studyies", "Spelling"],
+  ["studyies", "Word retrieval"],
   ["growths", "Grammar ending"],
   ["survive", "Word form"],
   ["recort", "Spelling"],
@@ -218,4 +218,19 @@ it("handles the specified -es, -ing, -er and -est inflections", () => {
   };
   assert.equal(classifyAnswer(large, "larger"), "Grammar ending");
   assert.equal(classifyAnswer(large, "largest"), "Grammar ending");
+});
+
+
+it("short guesses compare only typed letters with missing letters", () => {
+  assert.equal(classifyAnswer(seedPracticeSets[1].blanks[1], "pe"), "Word retrieval");
+  assert.equal(classifyAnswer(seedPracticeSets[0].blanks[3], " LENCE "), "Spelling");
+});
+
+it("spelling allows one edit for four missing letters and two for five", () => {
+  const four = { ...suggests, prefix: "sugg", answer: "ests", missingLength: 4 };
+  assert.equal(classifyAnswer(four, "eqts"), "Spelling");
+  assert.equal(classifyAnswer(four, "eqqs"), "Word retrieval");
+  const five = { ...suggests, prefix: "sug", answer: "gests", missingLength: 5 };
+  assert.equal(classifyAnswer(five, "geqqs"), "Spelling");
+  assert.equal(classifyAnswer(five, "gqqqs"), "Word retrieval");
 });
