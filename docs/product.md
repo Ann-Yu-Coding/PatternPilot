@@ -191,17 +191,18 @@ Check the rules in the order shown. The first match wins.
 - `WORD FORM PRACTICE` label, the serif sentence, and inline feedback (✓ *Correct* plus an explanation) separated by a thin line. Full-width green **Next** button.
 
 **4. Progress** (see `docs/design/08-progress.png`)
-Order: summary → Patterns & practice → Skills tested → Passages. Calm and editorial: section headings with thin rules, no KPI cards, no passage chart. Never TOEFL-scaled. Everything uses the **latest attempt per distinct passage**, as in pattern detection.
+Order: summary → Patterns & practice (table, then one drill-accuracy chart) → Passages. Calm and editorial: section headings with thin rules, no KPI cards, no passage chart. Never TOEFL-scaled. Passage figures use the **latest attempt per distinct passage**, as in pattern detection.
 - **Summary line:** `3 passages · 75% accuracy · 4 targeted drills` (large numbers, small words, one line). Accuracy = correct blanks ÷ all blanks, latest attempt per passage, rounded to a whole percent.
 - **Patterns & practice** (the learner's *mistake types*, last 5 passages). Columns: *Pattern · Status · Evidence · Practice · Action*. One row per category that has at least one miss in the window, or that was cleared by a drill. Order: Pattern, then Possible pattern, then Cleared; within a status, by miss count, then most recent.
-  - **Status:** plain text labels, not badges, so they don't look clickable (15px). *Pattern* (2+ active misses; filled green dot) · *Possible pattern* (1 active miss; dashed empty dot, as in the seen-dots) · **Cleared** (a 5/5 drill cleared its misses and no new miss has come since; green check, gray text). No other labels.
-  - **Evidence:** `3 misses · 2 passages`; possible: `1 miss · 1 passage`; cleared: `2 misses · 2 passages / cleared by 5/5 drill`.
-  - **Practice:** a small line chart of every drill's accuracy for that pattern, in order (100×56px, y = 0–100%, dashed line at 100%; hollow dots, the latest one filled). Under it: latest accuracy in bold and the change from the previous drill, e.g. **80%** · +20% since last. One drill = a single dot and no change text. Never drilled = *Not practiced*, no chart. Footnote: *"Each dot is one drill's accuracy; the dashed line is 100%. A 100% drill clears a pattern until the same kind of miss comes back."*
+  - **Status:** plain text labels, not badges, so they don't look clickable (15px). *Pattern* (2+ active misses; filled green dot) · *Possible pattern* (1 active miss; dashed empty dot, as in the seen-dots) · **Cleared** (a 100% drill cleared its misses and no new miss has come since; green check, gray text). No other labels.
+  - **Evidence:** `3 misses · 2 passages`; possible: `1 miss · 1 passage`; cleared: `2 misses · 2 passages / cleared by a 100% drill`.
+  - **Practice:** latest drill accuracy in bold and the change from the previous drill, e.g. **80%** / +20% since last (no change line after a single drill). Never drilled = *Not practiced*.
   - **Action:** Pattern = primary **Practice again →** (or **Practice →** if never drilled); Possible = retry-style **Check with 5**; Cleared = text link *Practice again*. Only one primary button on the page.
-- **Skills tested** (the *skills the blanks test*, from each blank's `errorCategory`; kept separate from mistake types on purpose). One row per skill: name, a thin green bar, `9 of 13`. Sorted by number of blanks. A skill with fewer than 3 blanks gets a pale bar and *"too few to tell"*. No percentages.
+  - Footnote: *"A 100% drill clears a pattern until the same kind of miss comes back."*
+- **Drill accuracy over time:** one white card under the table (12px radius, 3px bottom edge, 36px above it). Title plus a legend; one line per pattern that has been drilled (main pattern in green `#2E6B55`, others in gray-green `#7F948A`); x = drill date in order, y = accuracy 0–100% with a dashed line at 100%; each dot labelled with its % and the change, e.g. `80% (+20)`, placed so labels never sit on a line. Hidden until at least one drill exists. This is the only skill-accuracy view on the page; the separate "Skills tested" section was dropped (see §10).
 - **Passages:** newest first; title, `topic · date` (plus `tried twice` when retried), a small score bar, `7 / 8`, and a **Review** link to that passage's results.
 - **Empty state** (no passages yet): one line, *"Finish a passage to see your patterns here."*, and a **Start practice** button.
-- **Data needed (browser storage, v0.2):** each attempt also stores its blanks' tested skill and correct/incorrect (for Skills tested); a drill log `{category, score, total, timestamp}` (for drill counts, latest result and Cleared).
+- **Data needed (browser storage, v0.2):** a drill log `{category, score, total, timestamp}` (for drill counts, the chart, latest result and Cleared).
 
 ## 8. Payments (after v0.2)
 
