@@ -189,8 +189,8 @@ Check the rules in the order shown. The first match wins.
 - `WORD FORM PRACTICE` label, the serif sentence, and inline feedback (✓ *Correct* plus an explanation) separated by a thin line. Full-width green **Next** button.
 
 **4. Progress** (see `docs/design/08-progress.png`)
-Order: summary → Patterns & practice → Skills tested → Passages. Calm and editorial: section headings with thin rules, no KPI cards, no passage chart. Raw counts, never TOEFL-scaled. Everything uses the **latest attempt per distinct passage**, as in pattern detection.
-- **Summary line:** `3 passages · 18 of 24 correct · 2 targeted drills` (large numbers, small words, one line).
+Order: summary → Patterns & practice → Skills tested → Passages. Calm and editorial: section headings with thin rules, no KPI cards, no passage chart. Never TOEFL-scaled. Everything uses the **latest attempt per distinct passage**, as in pattern detection.
+- **Summary line:** `3 passages · 75% accuracy · 2 targeted drills` (large numbers, small words, one line). Accuracy = correct blanks ÷ all blanks, latest attempt per passage, rounded to a whole percent.
 - **Patterns & practice** (the learner's *mistake types*, last 5 passages). Columns: *Pattern · Status · Evidence · Practice · Action*. One row per category that has at least one miss in the window, or that was cleared by a drill. Order: Pattern, then Possible pattern, then Cleared; within a status, by miss count, then most recent.
   - **Status:** *Pattern* (2+ active misses; solid green badge) · *Possible pattern* (1 active miss; dashed badge) · **Cleared** (a 5/5 drill cleared its misses and no new miss has come since; gray badge with a check). No other labels.
   - **Evidence:** `3 similar misses / across 2 passages`; possible: `1 miss / one more makes a pattern`; cleared: `2 misses · 2 passages / cleared by 5/5 drill`.
