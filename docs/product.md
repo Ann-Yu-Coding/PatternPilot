@@ -39,6 +39,7 @@ A practice tool for the **"Complete the Words"** task in the new TOEFL format. L
    Design the whole flow first (see §7, UI direction), then build it.
 4. **3 excellent original passages**, deliberately designed to trigger every error type in §5 so they exercise the scoring and diagnosis system.
 5. **Keep practicing:** after results, a **Next passage** card sends the learner to the next passage they haven't done. This repeats until the **free limit (2 unique completed passages, configurable)**. After that, *Next passage* opens the **paywall** screen. In v0.2 the paywall's button leads to a waitlist or pre-order page (no real payment yet, see §8). Retries and targeted drills don't count toward the limit. Next passage follows the fixed seeded order and chooses the next uncompleted passage.
+6. **Progress page** (§7, screen 4): shows how the loop works over time, from patterns to drills to cleared. Browser storage only.
 
 ### Out of scope for v0.2
 - More than 3 passages
@@ -186,6 +187,20 @@ Check the rules in the order shown. The first match wins.
 **3. Targeted drill (phone reference)**
 - Close button, segmented progress (5 steps), `3/5`.
 - `WORD FORM PRACTICE` label, the serif sentence, and inline feedback (✓ *Correct* plus an explanation) separated by a thin line. Full-width green **Next** button.
+
+**4. Progress** (see `docs/design/08-progress.png`)
+Order: summary → Patterns & practice → Skills tested → Passages. Calm and editorial: section headings with thin rules, no KPI cards, no passage chart. Raw counts, never TOEFL-scaled. Everything uses the **latest attempt per distinct passage**, as in pattern detection.
+- **Summary line:** `3 passages · 18 of 24 correct · 2 targeted drills` (large numbers, small words, one line).
+- **Patterns & practice** (the learner's *mistake types*, last 5 passages). Columns: *Pattern · Status · Evidence · Practice · Action*. One row per category that has at least one miss in the window, or that was cleared by a drill. Order: Pattern, then Possible pattern, then Cleared; within a status, by miss count, then most recent.
+  - **Status:** *Pattern* (2+ active misses; solid green badge) · *Possible pattern* (1 active miss; dashed badge) · **Cleared** (a 5/5 drill cleared its misses and no new miss has come since; gray badge with a check). No other labels.
+  - **Evidence:** `3 similar misses / across 2 passages`; possible: `1 miss / one more makes a pattern`; cleared: `2 misses · 2 passages / cleared by 5/5 drill`.
+  - **Practice:** `1 drill / latest 4/5`, or *Not practiced*.
+  - **Action:** Pattern = primary **Practice again →** (or **Practice →** if never drilled); Possible = retry-style **Check with 5**; Cleared = text link *Practice again*. Only one primary button on the page.
+  - Footnote: *"A 5/5 drill clears a pattern. If the same kind of miss comes back, it shows up here again."*
+- **Skills tested** (the *skills the blanks test*, from each blank's `errorCategory`; kept separate from mistake types on purpose). One row per skill: name, a thin green bar, `9 of 13`. Sorted by number of blanks. A skill with fewer than 3 blanks gets a pale bar and *"too few to tell"*. No percentages.
+- **Passages:** newest first; title, `topic · date` (plus `tried twice` when retried), a small score bar, `7 / 8`, and a **Review** link to that passage's results.
+- **Empty state** (no passages yet): one line, *"Finish a passage to see your patterns here."*, and a **Start practice** button.
+- **Data needed (browser storage, v0.2):** each attempt also stores its blanks' tested skill and correct/incorrect (for Skills tested); a drill log `{category, score, total, timestamp}` (for drill counts, latest result and Cleared).
 
 ## 8. Payments (after v0.2)
 
