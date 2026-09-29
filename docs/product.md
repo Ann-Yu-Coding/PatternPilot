@@ -80,11 +80,13 @@ Rule-based, no AI needed for v1. Compare each wrong answer (prefix + typed lette
 | Empty | **Skipped / time pressure** | — |
 | Same lemma, different inflection (-s / -ed / -ing / -er / -est) | **Grammar ending** | suggest, suggested |
 | Same word family, different part of speech | **Word form** | suggestion |
-| Edit distance 1–2 from the correct word, not a real word | **Spelling** | sugests |
+| Not a real word, and the **typed letters** are close to the **missing letters** (edit distance ≤ 1 when 4 or fewer letters are missing, ≤ 2 when 5 or more) | **Spelling** | sugests |
 | A real word with a different lemma | **Meaning / context** | supports |
 | Not a real word and not close | **Vocabulary gap** | sugrom |
 
 Check the rules in the order shown. The first match wins.
+
+**Spelling closeness ignores the given prefix.** Comparing whole words would make almost any short guess look close, because the prefix is shared. Example: *reca__* for *recall*: typing `pe` (both letters wrong) is **Word retrieval**, not Spelling; typing `l` is Spelling.
 
 **Ending-aware matching:** if the answer keeps the stem and adds a known ending (-ing, -ed, -s, -ly, -tion, -ment, -ful, -al, -ence, etc.), classify it by that ending even when the result is not a real word. Example: *larging* for *largely* is **Word form**, not **Vocabulary gap**.
 
