@@ -1,4 +1,9 @@
-import { emptyHistory, type History, type Attempt } from "./practice-history";
+import {
+  emptyHistory,
+  type History,
+  type Attempt,
+  type DrillLog,
+} from "./practice-history";
 export const HISTORY_KEY = "pp-history-v1";
 let fallback: History = emptyHistory();
 export function readHistory(): History {
@@ -37,7 +42,20 @@ export function readHistory(): History {
         ([, v]) => typeof v === "number" && Number.isFinite(v),
       ),
     );
-    fallback = { attempts, cleared: cleared as Record<string, number> };
+    const drills = Array.isArray(value.drills)
+      ? value.drills.filter(
+          (d: DrillLog) =>
+            d &&
+            typeof d.category === "string" &&
+            Number.isFinite(d.timestamp) &&
+            Number.isInteger(d.score) &&
+            Number.isInteger(d.total) &&
+            d.total > 0 &&
+            d.score >= 0 &&
+            d.score <= d.total,
+        )
+      : [];
+    fallback = { attempts, cleared: cleared as Record<string, number>, drills };
     return fallback;
   } catch {
     return fallback;

@@ -135,8 +135,8 @@ it("only 5/5 clears the selected category in the latest-five window", () => {
       h,
       attempt(String(i), String(i), i, ["Word form", "Spelling"]),
     );
-  assert.deepEqual(finishDrill(h, "Word form", 4, 5), h);
-  assert.deepEqual(finishDrill(h, "Word form", 4, 4), h);
+  assert.deepEqual(finishDrill(h, "Word form", 4, 5).cleared, h.cleared);
+  assert.deepEqual(finishDrill(h, "Word form", 4, 4).cleared, h.cleared);
   const cleared = finishDrill(h, "Word form", 5, 5);
   assert.equal(cleared.cleared["1:1-0"], undefined);
   assert.equal(cleared.cleared["2:2-0"], 1);

@@ -238,8 +238,12 @@ Order: summary → Patterns & practice (table, then one drill-accuracy chart) �
 | 2026-09-28 | Next passage flow until 2 free passages, then a paywall (waitlist in v0.2) | Keeps learners practicing and tests willingness to pay |
 | 2026-09-28 | Encouraging, passage-specific all-correct copy; Check another passage CTA; only Possible pattern / Pattern labels | Avoid overclaiming mastery or presenting long-term persistence before it is supported |
 | 2026-09-29 | Classify the actual answer on the server; preserve the Type column’s tested skill and existing browser history | Pattern evidence and drills must follow what the learner typed |
-| 2026-09-29 | Type column shows the learner's mistake type; correct rows have no tag | Must match the pattern card now that diagnosis follows the typed answer |
+| 2026-09-29 | Results Type column shows the learner's mistake type; correct rows have no tag | Must match the pattern card now that diagnosis follows the typed answer |
 | 2026-09-29 | Spelling compares typed vs missing letters, stricter for short endings | Whole-word distance mislabelled guesses as spelling slips |
+| 2026-09-29 | Progress page in v0.2: summary, Patterns & practice table, one drill-accuracy chart, Passages; no passage chart, no Skills tested | One clear, actionable view; 1–3 passages can't show a trend |
+| 2026-09-29 | New status "Cleared" after a 100% drill; statuses are plain labels; Progress actions are text links | Learners see when a pattern is beaten; Progress is for looking back, the results page keeps the primary CTA |
+| 2026-09-29 | Keep dictionary entry recal: reca + l is Context / meaning | Real-word rule takes precedence over the originally requested Spelling example |
+| 2026-09-29 | Keep Cleared visible beyond the five-passage window until a new miss occurs | Preserve drill achievements without treating later misses as cleared |
 
 ### Learner UI implementation notes (2026-09-28)
 

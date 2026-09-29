@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import { Check, X, ArrowRight } from "lucide-react";
 import {
@@ -6,6 +6,7 @@ import {
   GetTargetedTrainingCategoryKey,
   useGetTargetedTraining,
   useSubmitTrainingDrill,
+  useStartPracticeSession,
 } from "@workspace/api-client-react";
 import type { ResultItem, TrainingResult } from "@workspace/api-client-react";
 import { InlineBlank } from "./inline-blank";
@@ -15,8 +16,23 @@ import "../practice.css";
 
 export function TrainingFlow() {
   const params = new URLSearchParams(window.location.search);
-  const sessionId =
-    params.get("session") || sessionStorage.getItem("pp-session") || "";
+  const passageId = params.get("passage");
+  const start = useStartPracticeSession();
+  const started = useRef(false);
+  const [progressSession, setProgressSession] = useState("");
+  useEffect(() => {
+    if (!passageId || started.current) return;
+    started.current = true;
+    start.mutate(
+      { data: { setIds: [passageId] } },
+      {
+        onSuccess: (session) => setProgressSession(session.id),
+      },
+    );
+  }, [passageId]);
+  const sessionId = passageId
+    ? progressSession
+    : params.get("session") || sessionStorage.getItem("pp-session") || "";
   const categoryKey = Object.values(GetTargetedTrainingCategoryKey).find(
     (k) => k === params.get("category"),
   );
@@ -38,6 +54,7 @@ export function TrainingFlow() {
   const [result, setResult] = useState<TrainingResult | null>(null);
   const input = useRef<HTMLInputElement | null>(null);
   const action = useRef<HTMLButtonElement | null>(null);
+  const logged = useRef(false);
   const prompts = training.data?.prompts || [];
   const prompt = prompts[index];
   // Derive the category from the API's selected drill, never an arbitrary URL label.
@@ -87,7 +104,10 @@ export function TrainingFlow() {
       {
         onSuccess: (r) => {
           setResult(r);
-          saveHistory(finishDrill(readHistory(), category, r.score, r.total));
+          if (!logged.current) {
+            logged.current = true;
+            saveHistory(finishDrill(readHistory(), category, r.score, r.total));
+          }
           requestAnimationFrame(() =>
             document.getElementById("drill-result")?.focus(),
           );
@@ -103,7 +123,10 @@ export function TrainingFlow() {
   return (
     <div className="learner-page drill-page">
       <header className="drill-header">
-        <Link href="/results" aria-label="Close practice">
+        <Link
+          href={passageId ? "/dashboard" : "/results"}
+          aria-label="Close practice"
+        >
           <X size={24} />
         </Link>
         <div
@@ -121,7 +144,9 @@ export function TrainingFlow() {
         <span>{result ? 5 : index + 1} / 5</span>
       </header>
       <main className="drill-main">
-        {!sessionId || training.isError ? (
+        {passageId && !progressSession && !start.isError ? (
+          <p role="status">Loading your sentences…</p>
+        ) : !sessionId || training.isError ? (
           <div>
             <h1>Start with a passage.</h1>
             <p>

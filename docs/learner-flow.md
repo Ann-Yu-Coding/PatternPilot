@@ -106,3 +106,17 @@ For a conventional real-word Grammar ending example, use Practice 02, fill `d`, 
 - **UI limits:** some unit examples are longer than a blank’s fixed slot count. Tests pass them to the classifier directly; browser steps above all fit existing prefixes and slot limits. UI changes remain out of scope.
 
 **Type-column highlighting check:** after the two-passage Spelling example, retry Practice 02 with `d`, `ll`, `ral`, `ble`, `erable`, `ort`, `idation`, `upt`. Spelling matches the displayed pattern and stays green; the single Grammar ending tag for support is grey. All six correct rows have truly empty Type cells, without a dash. A single miss in fresh history also gets a green tag when it matches the Possible pattern card.
+
+## Progress browser checks (2026-09-29)
+
+Open `/dashboard` using the Progress tab. Check at 1440px and 320px widths:
+
+1. With no completed passages, see “Finish a passage to see your patterns here.” and Start practice. The chart is hidden before the first logged drill.
+2. Complete Ecology with `endent`, `ange`, `ort`, `lence`, `over`, `ing`, `th`, `val`. Progress shows one Spelling possible pattern. Open its drill from Progress; fill `ccur`, `ive`, `rate`, `nment`, `sary`. Finish all five: Progress adds one drill, shows 100%, and marks Spelling Cleared.
+3. Retry Ecology with `endent`, `ange`, `ort`, `lient`, `over`, `ed`, `th`, `ve`. Progress now shows Word form (Pattern, two misses), Grammar ending (Possible pattern, one miss), then Spelling (Cleared). The passage count does not increase; latest-attempt accuracy changes and the retry count increases.
+4. Open Word form practice. Answer `tion`, `ment`, `ance`, then leave the last two blank. Finish: 60%, pattern remains active. Repeat with `tion`, `ment`, `ance`, `ence`, then leave the last blank: 80%, +20% since last. The chart includes both categories and its accessible label lists each result.
+5. Review Ecology from the Passages list. Its latest marked passage and 5 / 8 result are restored. Refresh Progress: drill counts, statuses, and chart remain. Existing test attempts without saved answer snapshots are left unchanged; no review reconstruction is attempted.
+6. At 320px, table rows stack; the page has no horizontal overflow. Short chart histories fit; long histories scroll only within the chart so all labels remain legible. At 1440px, the five columns remain aligned. Value labels are positioned away from plotted lines and the 100% guide.
+7. Spelling regressions in Memory: `pe` after `reca` is Word retrieval; `l` is **Context / meaning**, because the owner confirmed retaining dictionary entry `recal`. Ecology `lence` after `resi` is Spelling. The `l` expectation supersedes the initial requested test.
+
+Progress retains a Cleared achievement outside the latest-five window until another miss in that category occurs, as confirmed by the owner. New attempts save topic and already-revealed review data locally. Progress drill links create a session through the existing endpoint, so server restarts do not invalidate those links. No backend or history migration is introduced.

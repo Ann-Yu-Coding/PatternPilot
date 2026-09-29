@@ -32,7 +32,10 @@ const REVIEW_KEY = "pp-learner-review";
 type Review = { set: PracticeSet; result: PracticeResult; elapsed: number };
 function storedReview(): Review | null {
   try {
-    const review = JSON.parse(sessionStorage.getItem(REVIEW_KEY) || "null");
+    const attemptId = new URLSearchParams(window.location.search).get("attempt");
+    const review = attemptId
+      ? readHistory().attempts.find(a => a.id === attemptId)?.review
+      : JSON.parse(sessionStorage.getItem(REVIEW_KEY) || "null");
     return review?.set?.id &&
       typeof review.set.passage === "string" &&
       Array.isArray(review.set.blanks) &&
@@ -344,6 +347,8 @@ export function LearnerFlow() {
               id: nextResult.sessionId,
               passageId: current.id,
               title: current.title,
+              topic: current.topic,
+              review: nextReview,
               timestamp,
               score: nextResult.score,
               total: nextResult.total,

@@ -1,3 +1,4 @@
+import type { PracticeSet, PracticeResult } from "@workspace/api-client-react";
 export type Miss = {
   blankId: string;
   errorCategory: string;
@@ -8,14 +9,30 @@ export type Attempt = {
   id: string;
   passageId: string;
   title: string;
+  topic?: string;
+  review?: { set: PracticeSet; result: PracticeResult; elapsed: number };
   timestamp: number;
   score: number;
   total: number;
   elapsed: number;
   misses: Miss[];
 };
-export type History = { attempts: Attempt[]; cleared: Record<string, number> };
-export const emptyHistory = (): History => ({ attempts: [], cleared: {} });
+export type DrillLog = {
+  category: string;
+  score: number;
+  total: number;
+  timestamp: number;
+};
+export type History = {
+  attempts: Attempt[];
+  cleared: Record<string, number>;
+  drills?: DrillLog[];
+};
+export const emptyHistory = (): History => ({
+  attempts: [],
+  cleared: {},
+  drills: [],
+});
 export function latestPassages(history: History): Attempt[] {
   const seen = new Set<string>();
   return [...history.attempts]
@@ -48,10 +65,13 @@ export function finishDrill(
   category: string,
   score: number,
   total: number,
+  timestamp = Date.now(),
 ): History {
-  return score === 5 && total === 5
-    ? clearCategory(history, category)
-    : history;
+  const next = {
+    ...history,
+    drills: [...(history.drills || []), { category, score, total, timestamp }],
+  };
+  return score === 5 && total === 5 ? clearCategory(next, category) : next;
 }
 export function missCategory(item: {
   missCategory?: string | null;
