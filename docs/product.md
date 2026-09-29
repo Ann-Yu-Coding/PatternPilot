@@ -39,6 +39,7 @@ A practice tool for the **"Complete the Words"** task in the new TOEFL format. L
    Design the whole flow first (see §7, UI direction), then build it.
 4. **3 excellent original passages**, deliberately designed to trigger every error type in §5 so they exercise the scoring and diagnosis system.
 5. **Keep practicing:** after results, a **Next passage** card sends the learner to the next passage they haven't done. This repeats until the **free limit (2 unique completed passages, configurable)**. After that, *Next passage* opens the **paywall** screen. In v0.2 the paywall's button leads to a waitlist or pre-order page (no real payment yet, see §8). Retries and targeted drills don't count toward the limit. Next passage follows the fixed seeded order and chooses the next uncompleted passage.
+6. **Progress page** (§7, screen 4): shows how the loop works over time, from patterns to drills to cleared. Browser storage only.
 
 ### Out of scope for v0.2
 - More than 3 passages
@@ -79,11 +80,13 @@ Rule-based, no AI needed for v1. Compare each wrong answer (prefix + typed lette
 | Empty | **Skipped / time pressure** | — |
 | Same lemma, different inflection (-s / -ed / -ing / -er / -est) | **Grammar ending** | suggest, suggested |
 | Same word family, different part of speech | **Word form** | suggestion |
-| Not a real word; typed letters vs missing letters have edit distance ≤1 for 1–4 missing letters, ≤2 for 5+ missing letters | **Spelling** | sugests |
+| Not a real word, and the **typed letters** are close to the **missing letters** (edit distance ≤ 1 when 4 or fewer letters are missing, ≤ 2 when 5 or more) | **Spelling** | sugests |
 | A real word with a different lemma | **Meaning / context** | supports |
 | Not a real word and not close | **Vocabulary gap** | sugrom |
 
 Check the rules in the order shown. The first match wins.
+
+**Spelling closeness ignores the given prefix.** Comparing whole words would make almost any short guess look close, because the prefix is shared. Example: *reca__* for *recall*: typing `pe` (both letters wrong) is **Word retrieval**, not Spelling; typing `l` is Spelling.
 
 **Ending-aware matching:** if the answer keeps the stem and adds a known ending (-ing, -ed, -s, -ly, -tion, -ment, -ful, -al, -ence, etc.), classify it by that ending even when the result is not a real word. Example: *larging* for *largely* is **Word form**, not **Vocabulary gap**.
 
@@ -187,6 +190,20 @@ Check the rules in the order shown. The first match wins.
 **3. Targeted drill (phone reference)**
 - Close button, segmented progress (5 steps), `3/5`.
 - `WORD FORM PRACTICE` label, the serif sentence, and inline feedback (✓ *Correct* plus an explanation) separated by a thin line. Full-width green **Next** button.
+
+**4. Progress** (see `docs/design/08-progress.png`)
+Order: summary → Patterns & practice (table, then one drill-accuracy chart) → Passages. Calm and editorial: section headings with thin rules, no KPI cards, no passage chart. Never TOEFL-scaled. Passage figures use the **latest attempt per distinct passage**, as in pattern detection.
+- **Summary line:** `3 passages · 75% accuracy · 4 targeted drills` (large numbers, small words, one line). Accuracy = correct blanks ÷ all blanks, latest attempt per passage, rounded to a whole percent.
+- **Patterns & practice** (the learner's *mistake types*, last 5 passages). Columns: *Pattern · Status · Evidence · Practice · Action*. One row per category that has at least one miss in the window, or that was cleared by a drill. Order: Pattern, then Possible pattern, then Cleared; within a status, by miss count, then most recent.
+  - **Status:** plain text labels, not badges, so they don't look clickable (15px). *Pattern* (2+ active misses; filled green dot) · *Possible pattern* (1 active miss; dashed empty dot, as in the seen-dots) · **Cleared** (a 100% drill cleared its misses and no new miss has come since; green check, gray text). No other labels.
+  - **Evidence:** `3 misses · 2 passages`; possible: `1 miss · 1 passage`; cleared: `2 misses · 2 passages / cleared by a 100% drill`.
+  - **Practice:** latest drill accuracy in bold and the change from the previous drill, e.g. **80%** / +20% since last (no change line after a single drill). Never drilled = *Not practiced*.
+  - **Action:** quiet green text links with an arrow (14px, 600), not buttons: **Practice again →** (or **Practice →** if never drilled), **Go practice →** for a possible pattern, **Practice again →** for cleared. Progress is a place to look back; the drill CTA on the results page stays the primary button.
+  - Footnote: *"A 100% drill clears a pattern until the same kind of miss comes back."*
+- **Drill accuracy over time:** one white card under the table (12px radius, 3px bottom edge, 36px above it). Title plus a legend; one line per pattern that has been drilled (main pattern in green `#2E6B55`, others in gray-green `#7F948A`); x = drill date in order, y = accuracy 0–100% with a dashed line at 100%; each dot labelled with its %, e.g. `80%`, placed so labels never sit on a line (the change from the previous drill is shown in the table). Hidden until at least one drill exists. This is the only skill-accuracy view on the page; the separate "Skills tested" section was dropped (see §10).
+- **Passages:** newest first; title, `topic · date` (plus `tried twice` when retried), a small score bar, `7 / 8`, and a **Review** link to that passage's results.
+- **Empty state** (no passages yet): one line, *"Finish a passage to see your patterns here."*, and a **Start practice** button.
+- **Data needed (browser storage, v0.2):** a drill log `{category, score, total, timestamp}` (for drill counts, the chart, latest result and Cleared).
 
 ## 8. Payments (after v0.2)
 
