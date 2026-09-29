@@ -25,7 +25,7 @@ import {
   drillForCategory,
 } from "../lib/practice-history";
 import { InlineBlank } from "./inline-blank";
-import { categoryLabel, timeLabel, wordChange } from "../lib/learner-review";
+import { timeLabel, wordChange } from "../lib/learner-review";
 import "../practice.css";
 
 const REVIEW_KEY = "pp-learner-review";
@@ -128,15 +128,15 @@ function MarkedWord({
 function AnswerTable({
   result,
   set,
+  patternCategories,
 }: {
   result: PracticeResult;
   set: PracticeSet;
+  patternCategories: string[];
 }) {
   const mistakes = result.items.filter((item) => !item.isCorrect);
   const correct = result.items.filter((item) => item.isCorrect);
-  const patternWords = new Set(
-    result.topWeakness.evidence.map((evidence) => evidence.split(" · ")[0]),
-  );
+  const highlightedCategories = new Set(patternCategories);
   const row = (item: ResultItem) => {
     const prefix =
       set.blanks.find((blank) => blank.id === item.blankId)?.prefix || "";
@@ -159,11 +159,13 @@ function AnswerTable({
           )}
         </td>
         <td data-label="Type">
-          <span
-            className={`learner-tag ${!item.isCorrect && result.topWeakness.count >= 2 && patternWords.has(item.fullWord) ? "is-pattern" : ""}`}
-          >
-            {categoryLabel(item.errorCategory)}
-          </span>
+          {!item.isCorrect && item.missCategory && (
+            <span
+              className={`learner-tag ${highlightedCategories.has(item.missCategory) ? "is-pattern" : ""}`}
+            >
+              {item.missCategory}
+            </span>
+          )}
         </td>
         <td data-label="Why this answer" className="learner-explanation">
           <p>{item.explanation}</p>
@@ -347,10 +349,10 @@ export function LearnerFlow() {
               total: nextResult.total,
               elapsed: seconds,
               misses: nextResult.items
-                .filter((item) => !item.isCorrect)
+                .filter((item) => !item.isCorrect && missCategory(item) !== null)
                 .map((item) => ({
                   blankId: item.blankId,
-                  errorCategory: missCategory(item),
+                  errorCategory: missCategory(item)!,
                   passageId: current.id,
                   timestamp,
                 })),
@@ -581,7 +583,7 @@ export function LearnerFlow() {
                     )}
                   </section>
                 )}
-                <AnswerTable result={result} set={current} />
+                <AnswerTable result={result} set={current} patternCategories={patterns.map(pattern => pattern.category)} />
                 <NextPassage allCorrect={mistakes === 0} history={history} next={sets.find(s=>s.id===nextPassageId(history,sets.map(s=>s.id)))} onRetry={()=>reset()} onNext={()=>{const id=nextPassageId(readHistory(),sets.map(s=>s.id)); if(id)reset(id);}}/>
               </section>
             )}

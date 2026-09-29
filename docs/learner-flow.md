@@ -7,6 +7,7 @@ From the repository root, use an existing local Postgres database prepared as de
 ```sh
 export DATABASE_URL='postgres://patternpilot:local-development-only@127.0.0.1:5432/patternpilot'
 pnpm --filter @workspace/db migrate
+pnpm --filter @workspace/api-server seed:questions
 export ADMIN_SECRET='choose-a-local-admin-secret'
 PORT=5059 pnpm --filter @workspace/api-server dev
 ```
@@ -39,7 +40,7 @@ Use a fresh browser profile for a clean history. Alternatively clear this localh
 1. **Slots, caret and fit.** At 1440×800 and 100% zoom, the full first passage and Check answers fit; measured button bottom: 735px. Fill `indep` with `endent`: focus advances to `exch`. Shift+Tab returns to the completed answer at position 6. Each typed character replaces one slot. Tab remains normal; incomplete blanks can be submitted. At zero the advisory timer stops, without a timeout sentence or forced submission.
 2. **Possible pattern.** For Practice 01, enter suffixes in order: `endent`, `ange`, `ort`, `lient`, `over`, `ing`, `th`, `val`. Expect **7 / 8**, a possible Word form observation and **1 similar miss · across 1 passage**. The sentence records `resilient` exactly as typed. The CTA opens five sentences.
 3. **Perfect drill.** The Word form drill's suffixes are `tion`, `ment`, `ance`, `ence`, `ment`. Check each answer, then Next; finish after item five. Expect **5 / 5** and the category's current-window evidence cleared. Return to answers: no active pattern remains in this clean example. Original passage score remains in Progress. Closing an unfinished drill does not clear evidence.
-4. **Two patterns across passages.** Retry Practice 01 using `endent`, `ange`, `ort`, `lient`, `over`, `ies`, `th`, `ve` (**5 / 8**). Next passage must be Practice 02. Enter `d`, `ll`, `ral`, `xxxx`, `erable`, `ort`, `idation`, `upt` (**6 / 8**). Expect vertically stacked Word form (**3 similar misses · across 2 passages**) and Grammar ending (**2 similar misses · across 2 passages**). These are aggregation checks using the current skill-based error categories, not validation of the unfinished answer-sensitive classifier.
+4. **Two patterns across passages.** Retry Practice 01 using `endent`, `ange`, `ort`, `lient`, `over`, `ed`, `th`, `ve` (**5 / 8**). Next passage must be Practice 02. Enter `d`, `ll`, `ral`, `ibly`, `erable`, `ort`, `idation`, `upt` (**6 / 8**). Expect vertically stacked Word form (**3 similar misses · across 2 passages**) and Grammar ending (**2 similar misses · across 2 passages**). These now exercise actual-answer diagnosis: resilient/survive/flexibly produce Word form, and studyed/support produce Grammar ending.
 5. **Non-perfect drill.** In the Word form drill, enter `xxxx` first and the other four correct suffixes above. Expect **4 / 5** and unchanged pattern evidence. The first feedback says Not quite and shows a correction and explanation. Checking item one must not reveal answers to items two–five in the response.
 6. **Free limit/paywall.** After the two distinct completions, Next passage opens **You've used your 2 free passages**. The summary uses latest attempt totals (11 / 16 in step 4), not retry totals. Selecting Practice 03 in the picker also opens the offer. Retrying either completed passage is allowed and does not use another free passage. The offer is **$5/month**, routes to the waitlist, and clearly says no payment is taken.
 7. **Waitlist.** Enter a test email; success appears only after the server saves it. A repeated address is deduplicated; invalid addresses are rejected. An unavailable database returns an error, not a false success. The browser QA address was saved only to the isolated test database. There is no email delivery integration; contacting the list is a later/manual operation.
@@ -62,9 +63,46 @@ The final build includes workspace typechecking. API tests cover all public pass
 
 ## Boundaries and remaining work
 
-- **The ordered §5 answer-sensitive classifier is not implemented by these steps.** Exact-answer grading and per-blank editorial explanations are preserved. Non-empty misses currently inherit the blank's tested skill, normalized to the five labels; empty answers become Word retrieval. For example, nonsense in a Word form blank still counts as Word form. Do not represent this as a completed spelling/lemma/real-word diagnosis. See the content audit in `docs/v0.2-report.md`.
+- The server now classifies actual answers in §5 order. The spelling-only dictionary is not a semantic or POS dictionary: explicit POS families cover the seed content and §5 examples; new content should supply accurate metadata and extend families for irregular derivations. Type shows missCategory for wrong answers; correct rows have an empty Type cell. Existing browser history is intentionally not migrated.
 - History/free limits are browser-local and can be reset or bypassed by clearing storage. They are a v0.2 product gate, not payment entitlement enforcement. If localStorage is unavailable, only the current page's in-memory fallback survives.
 - All passage attempts remain in Progress. Drill scores are displayed at completion but do not create a separate persistent drill timeline.
 - Unsubmitted passage/drill drafts are not restored on refresh. Completed passage review is tab-scoped; broader history is localStorage. API sessions are transient: after an API restart, complete a fresh passage attempt before starting its drill.
 - The same fixed five built-in sentences are reused for each category. Untouched old seed drills receive the revised content at read time, retaining stored IDs. Custom content is preserved; custom sets shorter than five require an editorial update before the drill is available. No passage text was rewritten.
 - Annual pricing, accounts/cross-device sync, real payments, email sending and device/screen-reader QA remain outside these steps.
+
+## Actual-answer diagnosis: exact browser checks
+
+Restart the API after building this change. Run `pnpm --filter @workspace/api-server seed:questions` with your development `DATABASE_URL` first: it repairs exact untouched original metadata only. Admin-edited metadata is not overwritten. The test run used the isolated database only.
+
+Use a fresh browser profile, or retry both passages to replace their latest evidence. Existing history is intentionally left unchanged, so an old unrelated pattern may still appear until replaced or outside the last-five window. Do not type the visible prefix again.
+
+First fill Practice 01 correctly: `endent`, `ange`, `ort`, `lience`, `over`, `ing`, `th`, `val`. Then, in separate retries, change only the indicated field:
+
+| Diagnosis | Visible prefix | Type these missing letters | Full submitted word |
+|---|---|---|---|
+| Spelling | resi | `lence` | resilence |
+| Word form | resi | `lient` | resilient |
+| Context / meaning | resi | `stance` | resistance |
+| Word retrieval | resi | leave empty, or `zzzzzz` | skipped, or resizzzzzz |
+| Grammar ending | study | `ed` | studyed (retained stem + known inflection) |
+
+A single isolated miss gives the corresponding Possible pattern. The `resi` examples show their actual diagnosis in Type: Spelling, Word form or Context / meaning. Correct rows have no tag. Tags matching a displayed Pattern or Possible pattern card are green; other mistake tags are grey. Check the submission response’s `items[].missCategory` for the actual diagnosis (null for correct items). Nothing diagnostic appears in GET practice sets/session blanks.
+
+For a conventional real-word Grammar ending example, use Practice 02, fill `d`, `ll`, `ral`, `ible`, `erable`, `ort`, `idation`, `upt`: `supp` + `ort` gives support where supports is required.
+
+**Cross-passage Spelling pattern on Word-form blanks:**
+1. Practice 01: `endent`, `ange`, `ort`, `lence`, `over`, `ing`, `th`, `val` → 7/8, resilence is Spelling.
+2. Practice 02: `d`, `ll`, `ral`, `ble`, `erable`, `orts`, `idation`, `upt` → 7/8, flexble is Spelling.
+3. Expect **Spelling**, **2 similar misses · across 2 passages**, and a Spelling drill. Both mistaken table rows show Spelling in green. errorCategory is retained internally but not displayed. Retry a completed passage without consuming a third free passage.
+
+### Explicit rule interpretations and limits
+
+- **Input contract:** missing suffix only; surrounding whitespace/case ignored, internal spaces retained. A typed full word is not auto-detected or accepted twice. Empty suffix is skipped, even if the visible prefix could itself be a word.
+- **Inflection vs derivation:** inflect the actual noun/adjective/verb, not a derivational source lemma. `consolidate` for `consolidation` is Word form; `hierarchy` for `hierarchies` is Grammar ending.
+- **Ending-aware nonwords:** retained base + verbal -s/-es/-ed/-ing counts as Grammar ending before edit distance (`studyed`). An ending that changes POS counts as Word form (`larging` for `largely`). A misspelled stem with no such ending match falls to Spelling (`resilence`, `studyies`). Levenshtein transposition costs two edits.
+- **Ambiguous POS:** when a word can share the target POS, do not claim a POS change from the word alone. Same-family, same-POS real alternatives (`careless` for `careful`, `relation` for `relationships`) fall through to Context / meaning.
+- **Dictionary membership:** uncommon entries such as `recal` count as real, so they are not Spelling. There is no context-aware frequency filter. An English word absent from the list can be treated as a nonword.
+- **Scope:** explicit lexical/POS families cover the three passages and §5 examples, with metadata/ending-based fallback for new words. This is rule-based morphology, not a full English parser; novel irregular forms need content-level review.
+- **UI limits:** some unit examples are longer than a blank’s fixed slot count. Tests pass them to the classifier directly; browser steps above all fit existing prefixes and slot limits. UI changes remain out of scope.
+
+**Type-column highlighting check:** after the two-passage Spelling example, retry Practice 02 with `d`, `ll`, `ral`, `ble`, `erable`, `ort`, `idation`, `upt`. Spelling matches the displayed pattern and stays green; the single Grammar ending tag for support is grey. All six correct rows have truly empty Type cells, without a dash. A single miss in fresh history also gets a green tag when it matches the Possible pattern card.

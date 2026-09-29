@@ -1,3 +1,4 @@
+import { seedMorphologyUpgrade } from "./seed-morphology-upgrade";
 import { and, asc, eq, inArray, sql } from "drizzle-orm";
 import {
   db,
@@ -33,6 +34,7 @@ const gradingFields = {
   partOfSpeech: sql<string>`coalesce(${blanks.partOfSpeech}, '')`,
   wordFamily: sql<string>`coalesce(${blanks.wordFamily}, '')`,
   root: sql<string>`coalesce(${blanks.root}, '')`,
+  linguisticPrefix: sql<string>`coalesce(${blanks.linguisticPrefix}, '')`,
   suffix: sql<string>`coalesce(${blanks.suffix}, '')`,
   errorCategory: sql<string>`coalesce(${blanks.errorCategory}, '')`,
   tags: blanks.tags,
@@ -151,26 +153,25 @@ async function insertQuestion(
     })
     .returning();
   if (set.blanks.length)
-    await tx
-      .insert(blanks)
-      .values(
-        set.blanks.map((b) => ({
-          publicId: b.id,
-          questionId: question.id,
-          position: b.order,
-          prefix: b.prefix,
-          missingLength: b.missingLength,
-          correctAnswer: b.answer,
-          fullWord: b.fullWord,
-          lemma: b.lemma,
-          partOfSpeech: b.partOfSpeech,
-          wordFamily: b.wordFamily,
-          root: b.root,
-          suffix: b.suffix,
-          errorCategory: b.errorCategory,
-          tags: b.tags,
-        })),
-      );
+    await tx.insert(blanks).values(
+      set.blanks.map((b) => ({
+        publicId: b.id,
+        questionId: question.id,
+        position: b.order,
+        prefix: b.prefix,
+        missingLength: b.missingLength,
+        correctAnswer: b.answer,
+        fullWord: b.fullWord,
+        lemma: b.lemma,
+        partOfSpeech: b.partOfSpeech,
+        wordFamily: b.wordFamily,
+        root: b.root,
+        linguisticPrefix: b.linguisticPrefix ?? "",
+        suffix: b.suffix,
+        errorCategory: b.errorCategory,
+        tags: b.tags,
+      })),
+    );
 }
 
 /** A single lock orders admin batches and seed runs without MAX()+1 races. */
@@ -190,7 +191,7 @@ export async function createQuestions(sets: PracticeSet[]): Promise<void> {
   );
 }
 
-/** Insert-only seed: reruns never overwrite administrator content. */
+/** Insert new questions; repair only exact untouched legacy seed morphology. */
 export async function seedQuestions(
   sets: PracticeSet[],
 ): Promise<{ inserted: number; existing: number }> {
@@ -212,7 +213,7 @@ export async function seedQuestions(
           .where(eq(questions.publicId, set.id));
         if (found) {
           const stored = await tx
-            .select({ id: blanks.publicId })
+            .select(gradingFields)
             .from(blanks)
             .where(eq(blanks.questionId, found.id));
           const expected = set.blanks.map((b) => b.id).sort();
@@ -221,6 +222,20 @@ export async function seedQuestions(
             JSON.stringify(expected)
           )
             throw new Error(`Incomplete seed record: ${set.id}`);
+          for (const current of stored) {
+            const target = set.blanks.find((b) => b.id === current.id)!;
+            const patch = seedMorphologyUpgrade(current, target);
+            if (patch)
+              await tx
+                .update(blanks)
+                .set(patch)
+                .where(
+                  and(
+                    eq(blanks.questionId, found.id),
+                    eq(blanks.publicId, current.id),
+                  ),
+                );
+          }
           existing++;
           continue;
         }

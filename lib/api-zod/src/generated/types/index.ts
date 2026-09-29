@@ -28,6 +28,7 @@ export * from './questionImportInput';
 export * from './questionImportInputFormat';
 export * from './questionImportResult';
 export * from './resultItem';
+export * from './resultItemMissCategory';
 export * from './submitTrainingDrillCategoryKey';
 export * from './submitTrainingDrillParams';
 export * from './trainingPrompt';

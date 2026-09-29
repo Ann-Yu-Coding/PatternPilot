@@ -1,3 +1,4 @@
+import { classifyAnswer, type MissCategory } from "./classify-answer";
 import type { Blank } from "../data/patternpilot";
 
 export type WeaknessKey =
@@ -173,28 +174,9 @@ export const learningContentByWeakness: Record<WeaknessKey, LearningContent> = {
   }),
 };
 
-const categoryAliases: Record<string, WeaknessKey[]> = {
-  "word formation": ["noun-formation", "suffix-recognition"],
-  "noun ending": ["noun-formation", "suffix-recognition"],
-  "adjective ending": ["part-of-speech", "suffix-recognition"],
-  "word family": ["word-family", "part-of-speech"],
-  spelling: ["spelling"],
-  "verb tense / inflection": ["verb-inflection"],
-  inflection: ["verb-inflection"],
-  plural: ["part-of-speech", "suffix-recognition"],
-  "contextual prediction": ["contextual-prediction"],
-  vocabulary: ["academic-vocabulary", "contextual-prediction"],
-};
-
-const tagAliases: Record<string, WeaknessKey[]> = {
-  "academic vocabulary": ["academic-vocabulary"],
-  "noun endings": ["noun-formation", "suffix-recognition"],
-  "adjective endings": ["part-of-speech", "suffix-recognition"],
-  "word family": ["word-family"],
-  spelling: ["spelling"],
-  context: ["contextual-prediction"],
-  inflection: ["verb-inflection"],
-  plural: ["part-of-speech"],
+const categoryKeys: Record<MissCategory, WeaknessKey> = {
+  "Grammar ending": "verb-inflection", "Word form": "noun-formation", Spelling: "spelling",
+  "Word retrieval": "academic-vocabulary", "Context / meaning": "contextual-prediction",
 };
 
 export type RankedWeakness = {
@@ -222,11 +204,8 @@ export function diagnoseAttempts(attempts: DiagnosisAttempt[]): RankedWeakness[]
 
   for (const attempt of attempts) {
     if (attempt.isCorrect) continue;
-    const categoryKeys = categoryAliases[attempt.blank.errorCategory] ?? ["academic-vocabulary"];
-    categoryKeys.forEach((key, index) => contribute(key, index === 0 ? 3 : 1, attempt));
-    for (const tag of attempt.blank.tags) {
-      for (const key of tagAliases[tag] ?? []) contribute(key, 1, attempt);
-    }
+    const category = classifyAnswer(attempt.blank, attempt.submitted);
+    if (category) contribute(categoryKeys[category], 1, attempt);
   }
 
   return [...scores.entries()]
@@ -234,7 +213,7 @@ export function diagnoseAttempts(attempts: DiagnosisAttempt[]): RankedWeakness[]
       const learning = learningContentByWeakness[key];
       return {
         key,
-        label: learning.label,
+        label: Object.entries(categoryKeys).find(([, value]) => value === key)![0],
         count: score.blankIds.size,
         score: score.score,
         detail: learning.detail,

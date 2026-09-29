@@ -40,6 +40,7 @@ export function prepareQuestion(
       partOfSpeech: blank.partOfSpeech ?? "",
       wordFamily: blank.wordFamily ?? "",
       root: blank.root ?? "",
+      linguisticPrefix: blank.linguisticPrefix ?? "",
       suffix: blank.suffix ?? "",
     };
   });

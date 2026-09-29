@@ -80,6 +80,7 @@ export const SubmitPracticeSessionResponse = zod.object({
   "fullWord": zod.string(),
   "isCorrect": zod.boolean(),
   "errorCategory": zod.string(),
+  "missCategory": zod.union([zod.literal('Grammar ending'),zod.literal('Word form'),zod.literal('Spelling'),zod.literal('Word retrieval'),zod.literal('Context / meaning'),zod.literal(null)]).nullish().describe('Actual-answer diagnosis for practice results; null when correct. Absent on legacy/drill responses.'),
   "suffix": zod.string(),
   "wordFamily": zod.string(),
   "explanation": zod.string().optional()
@@ -164,6 +165,7 @@ export const SubmitTrainingDrillResponse = zod.object({
   "fullWord": zod.string(),
   "isCorrect": zod.boolean(),
   "errorCategory": zod.string(),
+  "missCategory": zod.union([zod.literal('Grammar ending'),zod.literal('Word form'),zod.literal('Spelling'),zod.literal('Word retrieval'),zod.literal('Context / meaning'),zod.literal(null)]).nullish().describe('Actual-answer diagnosis for practice results; null when correct. Absent on legacy/drill responses.'),
   "suffix": zod.string(),
   "wordFamily": zod.string(),
   "explanation": zod.string().optional()
@@ -225,6 +227,7 @@ export const ListAdminQuestionsResponseItem = zod.object({
   "partOfSpeech": zod.string().optional(),
   "wordFamily": zod.string().optional(),
   "root": zod.string().optional(),
+  "linguisticPrefix": zod.string().optional(),
   "suffix": zod.string().optional(),
   "errorCategory": zod.string(),
   "tags": zod.array(zod.string())
@@ -256,6 +259,7 @@ export const CreateAdminQuestionBody = zod.object({
   "partOfSpeech": zod.string().optional(),
   "wordFamily": zod.string().optional(),
   "root": zod.string().optional(),
+  "linguisticPrefix": zod.string().optional(),
   "suffix": zod.string().optional(),
   "errorCategory": zod.string(),
   "tags": zod.array(zod.string())
@@ -283,6 +287,7 @@ export const CreateAdminQuestionResponse = zod.object({
   "partOfSpeech": zod.string().optional(),
   "wordFamily": zod.string().optional(),
   "root": zod.string().optional(),
+  "linguisticPrefix": zod.string().optional(),
   "suffix": zod.string().optional(),
   "errorCategory": zod.string(),
   "tags": zod.array(zod.string())

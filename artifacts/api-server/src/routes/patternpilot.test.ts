@@ -43,7 +43,7 @@ async function request(path: string, body?: unknown) {
   assert.ok(response.ok, `${path}: ${response.status}`);
   return response.json();
 }
-const forbidden = new Set(["answer", "fullWord", "lemma", "partOfSpeech", "wordFamily", "root", "suffix", "errorCategory", "tags", "hint", "explanation"]);
+const forbidden = new Set(["answer", "fullWord", "lemma", "partOfSpeech", "wordFamily", "root", "suffix", "errorCategory", "missCategory", "linguisticPrefix", "tags", "hint", "explanation"]);
 function assertNoAnswerFields(value: unknown) {
   if (!value || typeof value !== "object") return;
   for (const [key, child] of Object.entries(value)) {
@@ -294,4 +294,20 @@ it("five-item drills reveal only the checked item before the final submission", 
     const invalid = await rawRequest(`/practice/sessions/${id}/training`, { itemId: "not-a-drill-item", answers: [] });
     assert.equal(invalid.status, 400);
   } finally { sessions.delete(id); }
+});
+
+
+it("post-submit diagnosis follows the answer while the tested skill is unchanged", async () => {
+  const set = practiceSets[0];
+  const b = set.blanks[3];
+  const session = await request("/practice/sessions", { setIds: [set.id] }) as PracticeSession;
+  try {
+    for (const [value, expected] of [["lence", "Spelling"], ["stance", "Context / meaning"], ["lient", "Word form"], ["", "Word retrieval"], [b.answer, null]]) {
+      const result = await request(`/practice/sessions/${session.id}/submit`, { answers: set.blanks.map(blank => ({ blankId: blank.id, value: blank.id === b.id ? value : blank.answer })) }) as PracticeResult;
+      const item = result.items.find(i => i.blankId === b.id)!;
+      assert.equal(item.missCategory, expected);
+      assert.equal(item.errorCategory, "word formation");
+      assert.equal(result.score, expected === null ? 8 : 7);
+    }
+  } finally { sessions.delete(session.id); }
 });

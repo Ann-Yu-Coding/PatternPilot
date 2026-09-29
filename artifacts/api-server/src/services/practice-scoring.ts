@@ -1,3 +1,4 @@
+import { classifyAnswer, type MissCategory } from "./classify-answer";
 import { explainPracticeBlank } from "../data/practice-explanations";
 import type { Blank } from "../data/patternpilot";
 
@@ -12,6 +13,7 @@ export type ScoredBlankItem = {
   fullWord: string;
   isCorrect: boolean;
   errorCategory: string;
+  missCategory: MissCategory | null;
   suffix: string;
   wordFamily: string;
   explanation: string;
@@ -23,14 +25,17 @@ export function scorePracticeAnswers(
   answers: SubmittedAnswer[],
 ): ScoredBlankItem[] {
   return blanks.map((item) => {
-    const submitted = answers.find((answer) => answer.blankId === item.id)?.value ?? "";
-    const isCorrect = submitted.trim().toLowerCase() === item.answer.toLowerCase();
+    const submitted =
+      answers.find((answer) => answer.blankId === item.id)?.value ?? "";
+    const missCategory = classifyAnswer(item, submitted);
+    const isCorrect = missCategory === null;
     return {
       blankId: item.id,
       submitted,
       fullWord: item.fullWord,
       isCorrect,
       errorCategory: item.errorCategory,
+      missCategory,
       suffix: item.suffix,
       wordFamily: item.wordFamily,
       explanation: explainPracticeBlank(item),

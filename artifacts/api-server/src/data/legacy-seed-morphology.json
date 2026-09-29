@@ -1,0 +1,242 @@
+{
+  "set-ecology__b1": {
+    "prefix": "indep",
+    "fullWord": "independent",
+    "lemma": "independent",
+    "partOfSpeech": "verb",
+    "wordFamily": "independent independence",
+    "root": "independent",
+    "suffix": "ent",
+    "linguisticPrefix": ""
+  },
+  "set-ecology__b2": {
+    "prefix": "exch",
+    "fullWord": "exchange",
+    "lemma": "exchange",
+    "partOfSpeech": "verb",
+    "wordFamily": "exchange exchangeable",
+    "root": "exchange",
+    "suffix": "ange",
+    "linguisticPrefix": ""
+  },
+  "set-ecology__b3": {
+    "prefix": "supp",
+    "fullWord": "support",
+    "lemma": "support",
+    "partOfSpeech": "verb",
+    "wordFamily": "support supportive",
+    "root": "support",
+    "suffix": "ort",
+    "linguisticPrefix": ""
+  },
+  "set-ecology__b4": {
+    "prefix": "resi",
+    "fullWord": "resilience",
+    "lemma": "resilience",
+    "partOfSpeech": "noun",
+    "wordFamily": "resilient resilience",
+    "root": "resilient",
+    "suffix": "lience",
+    "linguisticPrefix": ""
+  },
+  "set-ecology__b5": {
+    "prefix": "rec",
+    "fullWord": "recover",
+    "lemma": "recover",
+    "partOfSpeech": "verb",
+    "wordFamily": "recover recovery",
+    "root": "recover",
+    "suffix": "over",
+    "linguisticPrefix": ""
+  },
+  "set-ecology__b6": {
+    "prefix": "study",
+    "fullWord": "studying",
+    "lemma": "study",
+    "partOfSpeech": "verb",
+    "wordFamily": "study studying",
+    "root": "study",
+    "suffix": "ing",
+    "linguisticPrefix": ""
+  },
+  "set-ecology__b7": {
+    "prefix": "grow",
+    "fullWord": "growth",
+    "lemma": "growth",
+    "partOfSpeech": "verb",
+    "wordFamily": "grow growth",
+    "root": "grow",
+    "suffix": "th",
+    "linguisticPrefix": ""
+  },
+  "set-ecology__b8": {
+    "prefix": "survi",
+    "fullWord": "survival",
+    "lemma": "survival",
+    "partOfSpeech": "verb",
+    "wordFamily": "survive survival",
+    "root": "survive",
+    "suffix": "val",
+    "linguisticPrefix": ""
+  },
+  "set-memory__b1": {
+    "prefix": "recor",
+    "fullWord": "record",
+    "lemma": "record",
+    "partOfSpeech": "verb",
+    "wordFamily": "record recording",
+    "root": "record",
+    "suffix": "d",
+    "linguisticPrefix": ""
+  },
+  "set-memory__b2": {
+    "prefix": "reca",
+    "fullWord": "recall",
+    "lemma": "recall",
+    "partOfSpeech": "verb",
+    "wordFamily": "recall recollection",
+    "root": "recall",
+    "suffix": "ll",
+    "linguisticPrefix": ""
+  },
+  "set-memory__b3": {
+    "prefix": "gene",
+    "fullWord": "general",
+    "lemma": "general",
+    "partOfSpeech": "verb",
+    "wordFamily": "general generally",
+    "root": "general",
+    "suffix": "ral",
+    "linguisticPrefix": ""
+  },
+  "set-memory__b4": {
+    "prefix": "flex",
+    "fullWord": "flexible",
+    "lemma": "flexible",
+    "partOfSpeech": "verb",
+    "wordFamily": "flexible flexibility",
+    "root": "flexible",
+    "suffix": "ible",
+    "linguisticPrefix": ""
+  },
+  "set-memory__b5": {
+    "prefix": "vuln",
+    "fullWord": "vulnerable",
+    "lemma": "vulnerable",
+    "partOfSpeech": "verb",
+    "wordFamily": "vulnerable vulnerability",
+    "root": "vulnerable",
+    "suffix": "erable",
+    "linguisticPrefix": ""
+  },
+  "set-memory__b6": {
+    "prefix": "supp",
+    "fullWord": "supports",
+    "lemma": "support",
+    "partOfSpeech": "verb",
+    "wordFamily": "support supportive",
+    "root": "support",
+    "suffix": "orts",
+    "linguisticPrefix": ""
+  },
+  "set-memory__b7": {
+    "prefix": "consol",
+    "fullWord": "consolidation",
+    "lemma": "consolida",
+    "partOfSpeech": "noun",
+    "wordFamily": "consolidate consolidation",
+    "root": "consolidate",
+    "suffix": "idation",
+    "linguisticPrefix": ""
+  },
+  "set-memory__b8": {
+    "prefix": "disr",
+    "fullWord": "disrupt",
+    "lemma": "disrupt",
+    "partOfSpeech": "verb",
+    "wordFamily": "disrupt disruption",
+    "root": "disrupt",
+    "suffix": "upt",
+    "linguisticPrefix": ""
+  },
+  "set-archaeology__b1": {
+    "prefix": "evid",
+    "fullWord": "evidence",
+    "lemma": "evidence",
+    "partOfSpeech": "noun",
+    "wordFamily": "evident evidence",
+    "root": "evident",
+    "suffix": "ence",
+    "linguisticPrefix": ""
+  },
+  "set-archaeology__b2": {
+    "prefix": "orga",
+    "fullWord": "organized",
+    "lemma": "organiz",
+    "partOfSpeech": "verb",
+    "wordFamily": "organize organization",
+    "root": "organize",
+    "suffix": "nized",
+    "linguisticPrefix": ""
+  },
+  "set-archaeology__b3": {
+    "prefix": "hier",
+    "fullWord": "hierarchies",
+    "lemma": "hierarchie",
+    "partOfSpeech": "verb",
+    "wordFamily": "hierarchy hierarchical",
+    "root": "hierarchy",
+    "suffix": "archies",
+    "linguisticPrefix": ""
+  },
+  "set-archaeology__b4": {
+    "prefix": "rela",
+    "fullWord": "relationships",
+    "lemma": "relationship",
+    "partOfSpeech": "verb",
+    "wordFamily": "relate relationship",
+    "root": "relate",
+    "suffix": "tionships",
+    "linguisticPrefix": ""
+  },
+  "set-archaeology__b5": {
+    "prefix": "care",
+    "fullWord": "careful",
+    "lemma": "careful",
+    "partOfSpeech": "verb",
+    "wordFamily": "care careful",
+    "root": "care",
+    "suffix": "ful",
+    "linguisticPrefix": ""
+  },
+  "set-archaeology__b6": {
+    "prefix": "incre",
+    "fullWord": "increasingly",
+    "lemma": "increasingly",
+    "partOfSpeech": "verb",
+    "wordFamily": "increase increasingly",
+    "root": "increase",
+    "suffix": "asingly",
+    "linguisticPrefix": ""
+  },
+  "set-archaeology__b7": {
+    "prefix": "exca",
+    "fullWord": "excavating",
+    "lemma": "excavat",
+    "partOfSpeech": "verb",
+    "wordFamily": "excavate excavation",
+    "root": "excavate",
+    "suffix": "vating",
+    "linguisticPrefix": ""
+  },
+  "set-archaeology__b8": {
+    "prefix": "inter",
+    "fullWord": "interpretation",
+    "lemma": "interpreta",
+    "partOfSpeech": "noun",
+    "wordFamily": "interpret interpretation",
+    "root": "interpret",
+    "suffix": "pretation",
+    "linguisticPrefix": ""
+  }
+}

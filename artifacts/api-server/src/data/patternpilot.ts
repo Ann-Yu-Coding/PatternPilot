@@ -11,6 +11,7 @@ export type Blank = {
   partOfSpeech: string;
   wordFamily: string;
   root: string;
+  linguisticPrefix?: string;
   suffix: string;
   errorCategory: string;
   tags: string[];

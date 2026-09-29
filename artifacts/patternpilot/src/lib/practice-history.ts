@@ -1,4 +1,3 @@
-import { categoryLabel } from "./learner-review";
 export type Miss = {
   blankId: string;
   errorCategory: string;
@@ -55,12 +54,9 @@ export function finishDrill(
     : history;
 }
 export function missCategory(item: {
-  submitted: string;
-  errorCategory: string;
-}): string {
-  return !item.submitted.trim()
-    ? "Word retrieval"
-    : categoryLabel(item.errorCategory);
+  missCategory?: string | null;
+}): string | null {
+  return item.missCategory ?? null;
 }
 export type Pattern = {
   category: string;

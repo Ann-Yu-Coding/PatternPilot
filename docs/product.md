@@ -87,7 +87,7 @@ Check the rules in the order shown. The first match wins.
 
 **Ending-aware matching:** if the answer keeps the stem and adds a known ending (-ing, -ed, -s, -ly, -tion, -ment, -ful, -al, -ence, etc.), classify it by that ending even when the result is not a real word. Example: *larging* for *largely* is **Word form**, not **Vocabulary gap**.
 
-**Explanation per blank:** every blank (correct or not) has one short *Why this answer* line, written per blank in a teacher's voice: quote the original sentence and explain the blank, with little jargon and no fixed template (see §7). The classification above decides the **Type** tag and the pattern. It is not shown as a "you did X" sentence.
+**Explanation per blank:** every blank (correct or not) has one short *Why this answer* line, written per blank in a teacher's voice: quote the original sentence and explain the blank, with little jargon and no fixed template (see §7). The classification above decides `missCategory` and the pattern. The **Type** tag shows that mistake classification on wrong answers; correct rows have no tag, per §7. It is not shown as a "you did X" sentence.
 
 **Learner-facing error labels:** Grammar ending · Word form · Spelling · Word retrieval · Context / meaning. Skipped answers are recorded under Word retrieval. Scores are raw correct/total only, never TOEFL-scaled.
 
@@ -181,7 +181,7 @@ Check the rules in the order shown. The first match wins.
   - **Seen-dots** are the shared indicator for both cards: filled green dot = one occurrence; dashed empty dot = still needed to become a pattern. No ring chart.
   - **Next passage card** at the bottom (white card with a 3px bottom edge): `NEXT PASSAGE` label, title, *topic · 3 min · N free passages left*, a **Try again** retry button, and a primary **Next passage →** button (**Check another passage →** for an all-correct result).
   - **Paywall** (when the free limit is reached): a centered white card with *"You've used your 2 free passages."*, a mint summary (*"13 of 16 correct · Pattern: Word form"*), three short benefits, a primary **Unlock full access · [PRICE]** button, and a text link *"Not now: review my answers"*. See `docs/design/07-paywall.png`.
-- **Table rules:** answer words must never break across lines (`white-space: nowrap`); if space is tight, the *What happened* column shrinks instead. Every row, including correct answers, gets its **own** Why line written for that blank (never a generic line like *"Correct form for this sentence."*). The Type tag names the skill that blank tests (from the blank's `errorCategory`), not a guess from the learner's answer.
+- **Table rules:** answer words must never break across lines (`white-space: nowrap`); if space is tight, the *What happened* column shrinks instead. Every row, including correct answers, gets its **own** Why line written for that blank (never a generic line like *"Correct form for this sentence."*). The Type tag shows the learner's mistake type (from the §5 classification). Correct rows have no tag.
 - There is no separate review page.
 
 **3. Targeted drill (phone reference)**
@@ -220,6 +220,8 @@ Check the rules in the order shown. The first match wins.
 | 2026-09-28 | Patterns tracked across passages; single mistakes shown as a "possible pattern" with a drill | One passage is too little evidence; learners should always get a next step |
 | 2026-09-28 | Next passage flow until 2 free passages, then a paywall (waitlist in v0.2) | Keeps learners practicing and tests willingness to pay |
 | 2026-09-28 | Encouraging, passage-specific all-correct copy; Check another passage CTA; only Possible pattern / Pattern labels | Avoid overclaiming mastery or presenting long-term persistence before it is supported |
+| 2026-09-29 | Classify the actual answer on the server; preserve the Type column’s tested skill and existing browser history | Pattern evidence and drills must follow what the learner typed |
+| 2026-09-29 | Type column shows the learner's mistake type; correct rows have no tag | Must match the pattern card now that diagnosis follows the typed answer |
 
 ### Learner UI implementation notes (2026-09-28)
 
@@ -227,7 +229,7 @@ Check the rules in the order shown. The first match wins.
 
 - The 3:00 timer is advisory: at zero, learners can still finish and submit. Results show actual elapsed time, which can exceed three minutes.
 - Pattern evidence now uses the latest attempt from each of the last five distinct passages. Both repeated and possible patterns offer a category-specific drill; a 5/5 drill clears only that category’s misses contributing to the current five-passage window. All attempts remain visible in Progress. The next-passage card now routes to the next unfinished seeded passage or to the waitlist offer after two unique completions.
-- The first two screens reuse the current scoring response. All 24 original blanks now have server-side editorial explanations, shown under Why this answer for correct and incorrect responses alike. Type displays the blank’s errorCategory. Exact-answer scoring remains unchanged. Browser pattern aggregation follows the confirmed §5 rules, but error categories still come from the blank’s tested skill (empty answers use Word retrieval), not the complete ordered answer-sensitive classifier in §5. Each built-in drill has five items; no answer metadata is added to public passage responses.
+- The first two screens reuse the current scoring response. All 24 original blanks now have server-side editorial explanations, shown under Why this answer for correct and incorrect responses alike. Type displays missCategory on wrong answers and is empty on correct answers. Exact-answer scoring remains unchanged. Browser pattern aggregation uses the server’s ordered §5 `missCategory` classification of the actual submitted suffix. Tags matching either displayed Pattern or Possible pattern card are green; other mistake tags are grey. errorCategory remains internal data for drills and coverage. Existing localStorage records are not migrated. Each built-in drill has five items; no answer metadata is added to public passage responses.
 - The practice picker uses the latest saved accuracy in this browser. Switching passages starts a fresh attempt; cross-device history is outside this change.
 
 ### Decisions confirmed during implementation
@@ -244,3 +246,11 @@ Check the rules in the order shown. The first match wins.
 - Free tier: 2 passages for now (configurable). Revisit after the ads test.
 - Where to find the 5 v0.2 test learners in Korea, Japan and Europe?
 - Which merchant of record accepts sellers based in China?
+
+### Diagnosis implementation details (2026-09-29)
+
+- `classifyAnswer(blank, submitted)` receives missing letters, trims/case-folds them, and prepends the visible prefix. Correct returns null; an empty suffix is Word retrieval. No full-word/suffix guessing.
+- A checked-in `word-list@4.1.0` dictionary (MIT, 274,137 entries) implements the real-word gate, with `a` and `i` added in code. It is loaded only on the server, including in production. No network or AI classification.
+- Explicit POS families cover all 24 seed blanks and the §5 examples. Inflection uses the actual answer’s grammatical base, separately from a derivational source lemma (e.g. consolidate → consolidation). Known nonword stem-plus-ending forms follow ending-aware rules; `studyed` is Grammar ending, while `studyies` is Spelling. `larging` for `largely` is Word form.
+- Ambiguous words are compared in the target’s part of speech. Same-family, same-POS real alternatives such as relation/relationship or careless/careful fall through to Context / meaning. Rare dictionary entries also reach Context / meaning; no hidden exception list is applied. These limitations and exact browser inputs are in `docs/learner-flow.md`.
+- All seed metadata is explicit. Rerunning the existing seed command repairs only exact original metadata fingerprints, leaving admin edits and all passage text/answers intact. No schema or localStorage migration.

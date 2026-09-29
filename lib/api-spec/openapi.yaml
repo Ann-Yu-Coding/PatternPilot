@@ -316,6 +316,7 @@ components:
         partOfSpeech: { type: string }
         wordFamily: { type: string }
         root: { type: string }
+        linguisticPrefix: { type: string }
         suffix: { type: string }
         errorCategory: { type: string }
         tags:
@@ -385,6 +386,10 @@ components:
         fullWord: { type: string }
         isCorrect: { type: boolean }
         errorCategory: { type: string }
+        missCategory:
+          type: [string, "null"]
+          enum: [Grammar ending, Word form, Spelling, Word retrieval, Context / meaning, null]
+          description: Actual-answer diagnosis for practice results; null when correct. Absent on legacy/drill responses.
         suffix: { type: string }
         wordFamily: { type: string }
         explanation: { type: string }

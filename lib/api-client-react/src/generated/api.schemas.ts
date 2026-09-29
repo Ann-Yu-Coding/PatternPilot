@@ -24,6 +24,7 @@ export interface Blank {
   partOfSpeech?: string;
   wordFamily?: string;
   root?: string;
+  linguisticPrefix?: string;
   suffix?: string;
   errorCategory: string;
   tags: string[];
@@ -70,12 +71,32 @@ export interface PracticeSubmission {
   answers: Answer[];
 }
 
+/**
+ * Actual-answer diagnosis for practice results; null when correct. Absent on legacy/drill responses.
+ * @nullable
+ */
+export type ResultItemMissCategory = typeof ResultItemMissCategory[keyof typeof ResultItemMissCategory] | null;
+
+
+export const ResultItemMissCategory = {
+  Grammar_ending: 'Grammar ending',
+  Word_form: 'Word form',
+  Spelling: 'Spelling',
+  Word_retrieval: 'Word retrieval',
+  'Context_/_meaning': 'Context / meaning',
+} as const;
+
 export interface ResultItem {
   blankId: string;
   submitted: string;
   fullWord: string;
   isCorrect: boolean;
   errorCategory: string;
+  /**
+     * Actual-answer diagnosis for practice results; null when correct. Absent on legacy/drill responses.
+     * @nullable
+     */
+  missCategory?: ResultItemMissCategory;
   suffix: string;
   wordFamily: string;
   explanation?: string;

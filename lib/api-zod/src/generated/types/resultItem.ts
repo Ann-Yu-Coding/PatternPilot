@@ -5,6 +5,7 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { ResultItemMissCategory } from './resultItemMissCategory';
 
 export interface ResultItem {
   blankId: string;
@@ -12,6 +13,11 @@ export interface ResultItem {
   fullWord: string;
   isCorrect: boolean;
   errorCategory: string;
+  /**
+     * Actual-answer diagnosis for practice results; null when correct. Absent on legacy/drill responses.
+     * @nullable
+     */
+  missCategory?: ResultItemMissCategory;
   suffix: string;
   wordFamily: string;
   explanation?: string;

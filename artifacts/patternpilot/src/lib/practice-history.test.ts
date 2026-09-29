@@ -146,3 +146,30 @@ it("only 5/5 clears the selected category in the latest-five window", () => {
     ["Spelling"],
   );
 });
+
+it("actual Spelling diagnoses on Word-form blanks produce a Spelling pattern", async () => {
+  const { missCategory } = await import("./practice-history");
+  const results = [
+    {
+      missCategory: "Spelling",
+      errorCategory: "word formation",
+      submitted: "lence",
+    },
+    {
+      missCategory: "Spelling",
+      errorCategory: "adjective ending",
+      submitted: "ble",
+    },
+  ];
+  let h = emptyHistory();
+  results.forEach((item, i) => {
+    h = recordAttempt(
+      h,
+      attempt(String(i), String(i), i + 1, [missCategory(item)!]),
+    );
+  });
+  assert.equal(findPattern(h)?.category, "Spelling");
+  assert.equal(findPattern(h)?.passages, 2);
+  assert.equal(missCategory({ missCategory: null }), null);
+  assert.equal(missCategory({}), null); // Never infer a legacy result's category from its skill.
+});
