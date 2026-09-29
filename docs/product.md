@@ -190,11 +190,11 @@ Check the rules in the order shown. The first match wins.
 
 **4. Progress** (see `docs/design/08-progress.png`)
 Order: summary → Patterns & practice → Skills tested → Passages. Calm and editorial: section headings with thin rules, no KPI cards, no passage chart. Never TOEFL-scaled. Everything uses the **latest attempt per distinct passage**, as in pattern detection.
-- **Summary line:** `3 passages · 75% accuracy · 2 targeted drills` (large numbers, small words, one line). Accuracy = correct blanks ÷ all blanks, latest attempt per passage, rounded to a whole percent.
+- **Summary line:** `3 passages · 75% accuracy · 4 targeted drills` (large numbers, small words, one line). Accuracy = correct blanks ÷ all blanks, latest attempt per passage, rounded to a whole percent.
 - **Patterns & practice** (the learner's *mistake types*, last 5 passages). Columns: *Pattern · Status · Evidence · Practice · Action*. One row per category that has at least one miss in the window, or that was cleared by a drill. Order: Pattern, then Possible pattern, then Cleared; within a status, by miss count, then most recent.
   - **Status:** *Pattern* (2+ active misses; solid green badge) · *Possible pattern* (1 active miss; dashed badge) · **Cleared** (a 5/5 drill cleared its misses and no new miss has come since; gray badge with a check). No other labels.
-  - **Evidence:** `3 similar misses / across 2 passages`; possible: `1 miss / one more makes a pattern`; cleared: `2 misses · 2 passages / cleared by 5/5 drill`.
-  - **Practice:** `1 drill / latest 4/5`, or *Not practiced*.
+  - **Evidence:** `3 misses · 2 passages`; possible: `1 miss · 1 passage / one more makes a pattern`; cleared: `2 misses · 2 passages / cleared by 5/5 drill`.
+  - **Practice:** a small line chart of that pattern's drill scores in order (100×56px, y = 0–5, dashed line at 5/5; hollow dots, the latest one filled), with `2 drills · latest 4/5` under it. One drill = a single dot. Never drilled = *Not practiced*, no chart. The footnote explains the chart: *"Each dot is a drill score; the dashed line is 5/5."*
   - **Action:** Pattern = primary **Practice again →** (or **Practice →** if never drilled); Possible = retry-style **Check with 5**; Cleared = text link *Practice again*. Only one primary button on the page.
   - Footnote: *"A 5/5 drill clears a pattern. If the same kind of miss comes back, it shows up here again."*
 - **Skills tested** (the *skills the blanks test*, from each blank's `errorCategory`; kept separate from mistake types on purpose). One row per skill: name, a thin green bar, `9 of 13`. Sorted by number of blanks. A skill with fewer than 3 blanks gets a pale bar and *"too few to tell"*. No percentages.
