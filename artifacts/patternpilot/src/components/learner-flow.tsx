@@ -573,13 +573,16 @@ export function LearnerFlow() {
                   <section className="learner-no-pattern">
                     <p>
                       {mistakes === 0
-                        ? "No repeated pattern detected in this passage."
+                        ? "Nice work — no repeated pattern showed up here."
                         : "No active pattern to check. Review the answers below."}
                     </p>
+                    {mistakes === 0 && (
+                      <p>Try one more passage to check for smaller gaps that didn’t appear in this one.</p>
+                    )}
                   </section>
                 )}
                 <AnswerTable result={result} set={current} />
-                <NextPassage history={history} next={sets.find(s=>s.id===nextPassageId(history,sets.map(s=>s.id)))} onRetry={()=>reset()} onNext={()=>{const id=nextPassageId(readHistory(),sets.map(s=>s.id)); if(id)reset(id);}}/>
+                <NextPassage allCorrect={mistakes === 0} history={history} next={sets.find(s=>s.id===nextPassageId(history,sets.map(s=>s.id)))} onRetry={()=>reset()} onNext={()=>{const id=nextPassageId(readHistory(),sets.map(s=>s.id)); if(id)reset(id);}}/>
               </section>
             )}
           </>

@@ -36,7 +36,7 @@ export function PatternCard({
     >
       <div className="learner-pattern-copy">
         <span className="learner-pattern-badge">
-          {pattern.possible ? "Possible pattern" : "Pattern found"}
+          {pattern.possible ? "Possible pattern" : "Pattern"}
         </span>
         <h2 id={`pattern-${key}`}>
           {words.slice(0, -1).join(" ")} <mark>{words.at(-1)}</mark>

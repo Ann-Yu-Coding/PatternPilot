@@ -147,8 +147,8 @@ export function TrainingFlow() {
             </h1>
             <p>
               {result.score === 5
-                ? `No misses this time. We’ve cleared the current ${category.toLowerCase()} evidence from your recent patterns.`
-                : "A few to revisit. Your recent pattern history stays as it is."}
+                ? `No misses this time. We’ve cleared the current ${category.toLowerCase()} evidence from your patterns.`
+                : "A few to revisit. Your pattern history stays as it is."}
             </p>
             <Link className="learner-button" href="/results">
               Back to my answers <ArrowRight size={16} />

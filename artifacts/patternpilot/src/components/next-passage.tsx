@@ -4,11 +4,13 @@ import { remainingFree } from "../lib/free-practice";
 import type { History } from "../lib/practice-history";
 export function NextPassage({
   next,
+  allCorrect = false,
   history,
   onNext,
   onRetry,
 }: {
   next?: PracticeSet;
+  allCorrect?: boolean;
   history: History;
   onNext: () => void;
   onRetry: () => void;
@@ -42,7 +44,7 @@ export function NextPassage({
             data-testid="button-next-passage"
             onClick={onNext}
           >
-            Next passage <ArrowRight size={16} />
+            {allCorrect ? "Check another passage" : "Next passage"} <ArrowRight size={16} />
           </button>
         )}
       </div>
