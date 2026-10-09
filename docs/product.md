@@ -253,6 +253,7 @@ Order: summary â†’ Patterns & practice (table, then one drill-accuracy chart) â†
 | 2026-09-29 | Keep dictionary entry recal: reca + l is Context / meaning | Real-word rule takes precedence over the originally requested Spelling example |
 | 2026-09-29 | Keep Cleared visible beyond the five-passage window until a new miss occurs | Preserve drill achievements without treating later misses as cleared |
 | 2026-09-30 | Add minimal single-instance hosting to v0.2 (scope item 7); monitoring, rate limiting, session storage and Replit cleanup deferred to v0.3 | Remote learners in Korea, Japan and Europe need an online link to run the 5-learner test |
+| 2026-10-09 | Host on Render, Singapore region: one Starter web service (Docker, serves site + API) and Render Postgres Basic, about US$13/month plus the domain; deploys are manual (see `docs/deploy.md`) | Simplest single-instance setup with managed Postgres and HTTPS; closest Render region to Seoul and Tokyo; manual deploys avoid restarts during learner sessions |
 
 ### Learner UI implementation notes (2026-09-28)
 

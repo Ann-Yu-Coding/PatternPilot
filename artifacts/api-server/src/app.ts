@@ -1,6 +1,7 @@
 import { requireAdmin } from "./middleware/admin-auth";
 import { QuestionDatabaseError } from "./services/question-repository";
 import { QuestionValidationError } from "./services/question-validation";
+import path from "node:path";
 import express, { type Express, type ErrorRequestHandler } from "express";
 import cors from "cors";
 import pinoHttp from "pino-http";
@@ -34,6 +35,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", router);
+
+// Production: serve the built website from the same origin as the API.
+const staticDir = process.env["STATIC_DIR"];
+if (staticDir) {
+  const root = path.resolve(staticDir);
+  app.use("/assets", express.static(path.join(root, "assets"), { immutable: true, maxAge: "1y" }));
+  app.use(express.static(root, { index: false }));
+  app.get(/^(?!\/api(?:\/|$)).*/, (_req, res) => {
+    res.setHeader("Cache-Control", "no-cache");
+    res.sendFile("index.html", { root });
+  });
+}
 
 const errorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
   if (error instanceof QuestionDatabaseError) {
