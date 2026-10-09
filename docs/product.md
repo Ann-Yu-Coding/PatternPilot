@@ -2,7 +2,7 @@
 
 This is the single source of truth for product decisions. Every tool (Codex, ChatGPT, Claude) and every contributor reads this before working. **Whenever a decision is made anywhere, update this file.**
 
-Last updated: 2026-09-28 (UI direction added)
+Last updated: 2026-09-30 (minimal hosting for the learner test added to v0.2)
 
 ---
 
@@ -40,17 +40,25 @@ A practice tool for the **"Complete the Words"** task in the new TOEFL format. L
 4. **3 excellent original passages**, deliberately designed to trigger every error type in §5 so they exercise the scoring and diagnosis system.
 5. **Keep practicing:** after results, a **Next passage** card sends the learner to the next passage they haven't done. This repeats until the **free limit (2 unique completed passages, configurable)**. After that, *Next passage* opens the **paywall** screen. In v0.2 the paywall's button leads to a waitlist or pre-order page (no real payment yet, see §8). Retries and targeted drills don't count toward the limit. Next passage follows the fixed seeded order and chooses the next uncompleted passage.
 6. **Progress page** (§7, screen 4): shows how the loop works over time, from patterns to drills to cleared. Browser storage only.
+7. **Minimal online link for the learner test.** The only infrastructure exception in v0.2, kept as small as possible:
+   - The Node server serves the built website and the API from one domain (the Vite `/api` proxy is local-only).
+   - **One** always-on application instance (not autoscale: practice sessions live in server memory) plus a managed PostgreSQL database. Run migrations and seed the 3 passages.
+   - `ADMIN_SECRET` and `DATABASE_URL` set as production secrets; HTTPS.
+   - Hide or clarify the preview sign-in screen (real authentication doesn't exist).
+   - A short privacy note where the waitlist collects emails.
+   - Test the full flow on the live link: practice → results → targeted drill → progress → waitlist.
 
 ### Out of scope for v0.2
 - More than 3 passages
 - Real payments (see §8). The paywall screen exists but its button goes to a waitlist or pre-order page.
 - User accounts, beyond what the learning loop needs (practice history and the free-passage count live in the browser for v0.2)
-- New backend features or infrastructure
+- New backend features or infrastructure, except the minimal hosting in scope item 7
+- Deferred to v0.3: error monitoring, backups beyond the host's defaults, waitlist rate limiting, shared/persistent session storage, multiple instances, removing Replit dependencies (a repo review is planned)
 
 ### Definition of done
 - [x] Admin routes and page protected, and the link hidden from learners
 - [ ] The full learning loop works end-to-end with 3 original passages
-- [ ] **5 real TOEFL learners** (ideally from Korea, Japan or Europe) have tried the loop, e.g., locally over a video call
+- [ ] **5 real TOEFL learners** (ideally from Korea, Japan or Europe) have tried the loop via the online link
 - [ ] **At least 3 of 5** say the diagnosis told them something useful
 - [x] Landing page has no placeholder or made-up numbers (e.g., "14,280 words mapped", "© 2025")
 
@@ -244,6 +252,8 @@ Order: summary → Patterns & practice (table, then one drill-accuracy chart) �
 | 2026-09-29 | New status "Cleared" after a 100% drill; statuses are plain labels; Progress actions are text links | Learners see when a pattern is beaten; Progress is for looking back, the results page keeps the primary CTA |
 | 2026-09-29 | Keep dictionary entry recal: reca + l is Context / meaning | Real-word rule takes precedence over the originally requested Spelling example |
 | 2026-09-29 | Keep Cleared visible beyond the five-passage window until a new miss occurs | Preserve drill achievements without treating later misses as cleared |
+| 2026-09-30 | Add minimal single-instance hosting to v0.2 (scope item 7); monitoring, rate limiting, session storage and Replit cleanup deferred to v0.3 | Remote learners in Korea, Japan and Europe need an online link to run the 5-learner test |
+| 2026-10-09 | Host on Render, Singapore region: one Starter web service (Docker, serves site + API) and Render Postgres Basic, about US$13/month plus the domain; deploys are manual (see `docs/deploy.md`) | Simplest single-instance setup with managed Postgres and HTTPS; closest Render region to Seoul and Tokyo; manual deploys avoid restarts during learner sessions |
 
 ### Learner UI implementation notes (2026-09-28)
 
