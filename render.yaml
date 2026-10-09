@@ -9,7 +9,7 @@ services:
     numInstances: 1
     healthCheckPath: /api/healthz
     # Runs before each release starts; both commands are safe to repeat.
-    preDeployCommand: pnpm --filter @workspace/db run migrate && pnpm --filter @workspace/api-server run seed:questions
+    preDeployCommand: sh scripts/predeploy.sh
     # Deploy only on request, so a push never restarts the server during a learner session.
     autoDeploy: false
     envVars:
