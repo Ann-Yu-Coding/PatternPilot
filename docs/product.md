@@ -254,6 +254,7 @@ Order: summary â†’ Patterns & practice (table, then one drill-accuracy chart) â†
 | 2026-09-29 | Keep Cleared visible beyond the five-passage window until a new miss occurs | Preserve drill achievements without treating later misses as cleared |
 | 2026-09-30 | Add minimal single-instance hosting to v0.2 (scope item 7); monitoring, rate limiting, session storage and Replit cleanup deferred to v0.3 | Remote learners in Korea, Japan and Europe need an online link to run the 5-learner test |
 | 2026-10-09 | Host on Render, Singapore region: one Starter web service (Docker, serves site + API) and Render Postgres Basic, about US$13/month plus the domain; deploys are manual (see `docs/deploy.md`) | Simplest single-instance setup with managed Postgres and HTTPS; closest Render region to Seoul and Tokyo; manual deploys avoid restarts during learner sessions |
+| 2026-10-10 | Homepage redesigned for engagement: real diagnosis demo plus labelled example learners; no testimonials or numbers until real learners give permission. | Show who PatternPilot is for while keeping the pre-test landing page honest |
 
 ### Learner UI implementation notes (2026-09-28)
 

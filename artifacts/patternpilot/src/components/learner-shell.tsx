@@ -1,5 +1,4 @@
 import { Link } from "wouter";
-import { UserRound } from "lucide-react";
 import type { ReactNode } from "react";
 import "../practice.css";
 export function LearnerShell({
@@ -21,9 +20,6 @@ export function LearnerShell({
           </Link>
           <Link href="/dashboard" className={progress ? "active" : ""}>
             Progress
-          </Link>
-          <Link href="/login" className="learner-avatar" aria-label="Account">
-            <UserRound size={20} />
           </Link>
         </nav>
       </header>

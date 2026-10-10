@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "wouter";
-import { ArrowRight, Check, RotateCcw, UserRound } from "lucide-react";
+import { ArrowRight, Check, RotateCcw } from "lucide-react";
 import {
   useListPracticeSets,
   useStartPracticeSession,
@@ -442,9 +442,6 @@ export function LearnerFlow() {
             Practice
           </Link>
           <Link href="/dashboard">Progress</Link>
-          <Link href="/login" className="learner-avatar" aria-label="Account">
-            <UserRound size={20} />
-          </Link>
         </nav>
       </header>
       <main className="learner-main">
