@@ -6,4 +6,6 @@
 4. Never expose correct answers or diagnostic metadata through public APIs. Keep the existing tests passing.
 5. If a change involves a product decision, say so, so it can be recorded in the decision log (product.md §10).
 
+When writing passages, drills or diagnosis copy, use [`docs/research/complete-the-words-patterns.md`](docs/research/complete-the-words-patterns.md) as reference: it covers how blanks are placed and which answer patterns recur. It is research, not a product decision.
+
 For running, testing and database operations, see [`README.md`](README.md) and [`docs/step-3-postgres.md`](docs/step-3-postgres.md).

@@ -55,3 +55,6 @@ Thumbs.db
 
 # Local UI verification screenshots
 /screenshots/
+
+# Local analysis reports (may quote third-party source material)
+/outputs/
