@@ -135,25 +135,25 @@ pnpm --filter @workspace/db test:migrations
 
 ### Production image
 
-The live site runs the [`Dockerfile`](Dockerfile) image on Render (see [`docs/deploy.md`](docs/deploy.md)). To check a change to the Dockerfile, dependencies or build locally, build it for `linux/amd64`, the platform Render uses:
+The live site runs the [`Dockerfile`](Dockerfile) image on Render (see [`docs/deploy.md`](docs/deploy.md)). To check a change to the Dockerfile, dependencies or build locally, build the image:
 
 ```bash
-docker build --platform linux/amd64 -t patternpilot:local .
+docker build -t patternpilot:local .
 ```
 
-On an Apple Silicon Mac, a native ARM build fails, because `pnpm-workspace.yaml` strips the Linux ARM binaries. The amd64 build runs under emulation. With QEMU emulation, esbuild can crash with a Go `panic`; use Rosetta instead. With Colima, that's `colima start --vm-type vz --vz-rosetta`. With Docker Desktop, turn on "Use Rosetta for x86_64/amd64 emulation" in its settings.
+This builds for your machine's platform, so it runs natively on an Apple Silicon Mac too. Render uses `linux/amd64`. To build exactly that, add `--platform linux/amd64`. On Apple Silicon, that build runs under emulation, and with QEMU emulation esbuild can crash with a Go `panic`, so use Rosetta instead: with Colima, `colima start --vm-type vz --vz-rosetta`; with Docker Desktop, turn on "Use Rosetta for x86_64/amd64 emulation" in its settings.
 
 To run the image against the Docker Postgres from [Quick start](#quick-start), use Render's pre-deploy step first, then start the server. Port 5080 avoids the AirPlay clash on 5000:
 
 ```bash
-docker run --rm --platform linux/amd64 --network patternpilot_default -e DATABASE_URL='postgres://patternpilot:local-development-only@postgres:5432/patternpilot' patternpilot:local sh scripts/predeploy.sh
+docker run --rm --network patternpilot_default -e DATABASE_URL='postgres://patternpilot:local-development-only@postgres:5432/patternpilot' patternpilot:local sh scripts/predeploy.sh
 ```
 
 ```bash
-docker run --rm --platform linux/amd64 --network patternpilot_default -e DATABASE_URL='postgres://patternpilot:local-development-only@postgres:5432/patternpilot' -e ADMIN_SECRET='replace-with-a-long-random-string' -p 127.0.0.1:5080:5000 patternpilot:local
+docker run --rm --network patternpilot_default -e DATABASE_URL='postgres://patternpilot:local-development-only@postgres:5432/patternpilot' -e ADMIN_SECRET='replace-with-a-long-random-string' -p 127.0.0.1:5080:5000 patternpilot:local
 ```
 
-Then open http://localhost:5080. `patternpilot_default` assumes you cloned into a folder named `PatternPilot`, as in Quick start. Docker names the network after the folder, so check `docker network ls` if yours differs.
+Then open http://localhost:5080. `patternpilot_default` assumes you cloned into a folder named `PatternPilot`, as in Quick start. Docker names the network after the folder, so check `docker network ls` if yours differs. If you built with `--platform linux/amd64`, add the same flag to both `docker run` commands.
 
 ## Database changes
 
@@ -180,7 +180,6 @@ Review the generated SQL in `lib/db/drizzle/`, then run `pnpm --filter @workspac
 artifacts/
   patternpilot/     React + Vite learner app and the admin Question studio
   api-server/       Express 5 API: grading, diagnosis, drills, waitlist, seed script
-  mockup-sandbox/   Design mockup sandbox (not part of the learner app)
 lib/
   db/               Drizzle schema, SQL migrations (drizzle/), migration tests
   api-spec/         OpenAPI spec and Orval codegen config
@@ -206,8 +205,7 @@ Where to look first:
 - [`docs/deploy.md`](docs/deploy.md): how the live learner-test site runs on Render, plus redeploy, rollback and backups
 - [`docs/v0.2-report.md`](docs/v0.2-report.md): content audit and blank-by-blank coverage
 
-### Where older docs disagree with the code
+### Things older docs and scripts don't tell you
 
-- **Admin auth:** `docs/step-3-postgres.md` says admin endpoints have no authentication. That was fixed later. Every `/api/admin/*` route now requires `Authorization: Bearer <ADMIN_SECRET>`, and if `ADMIN_SECRET` is unset, admin access is turned off.
-- **Schema changes:** some older notes mention `db push`. For local and production databases, use migrations as shown above.
+- **Schema changes:** `lib/db` still has Drizzle's `push` and `push-force` scripts. Don't use them on local or production databases; use migrations as shown above.
 - **Hosting:** in production the API also serves the built website, when `STATIC_DIR` is set (the `Dockerfile` does this). For local development, run the API and Vite as two processes as shown above.

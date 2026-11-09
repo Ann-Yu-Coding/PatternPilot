@@ -87,9 +87,9 @@ Regenerate OpenAPI clients with `pnpm --filter @workspace/api-spec codegen` afte
 
 Supply DATABASE_URL as a server-side secret with the provider's required TLS settings. Use a persistent Postgres service with backups. Run migration once as a deployment job, then explicit seeding, before starting the new API. Pause admin writes during cutover and verify the question counts, IDs, and payloads. Do not roll back to an array-backed application after accepting durable writes: it would hide DB content. Keep the database and prefer a forward fix.
 
-Use a single API instance for this MVP. Sessions disappear on restart and cannot move across replicas. The existing Replit autoscale configuration must be constrained appropriately by the deployment operator; this step does not implement session sharing.
+Use a single API instance for this MVP. Sessions disappear on restart and cannot move across replicas. On Render, `render.yaml` pins the web service to one instance (`numInstances: 1`, see `docs/deploy.md`); this step does not implement session sharing.
 
-Admin endpoints still have their existing lack of authentication and expose full question records. Authentication is not part of Step 3. Arbitrary authored prose is not semantically redacted. There is no content-versioning protection against direct database edits while a learner is practicing. No update API, auth, payments, dashboard, session persistence, or diagnosis taxonomy work was added. Targeted learning content retains its prior DB/fallback behavior.
+Admin endpoints expose full question records. Step 3 did not add authentication; it was added afterwards in v0.2: every `/api/admin/*` route now requires `Authorization: Bearer <ADMIN_SECRET>`, and if `ADMIN_SECRET` is unset, admin access is turned off. Arbitrary authored prose is not semantically redacted. There is no content-versioning protection against direct database edits while a learner is practicing. No update API, auth, payments, dashboard, session persistence, or diagnosis taxonomy work was added. Targeted learning content retains its prior DB/fallback behavior.
 
 ## Implementation verification
 
@@ -127,6 +127,5 @@ Verified locally against isolated PostgreSQL 17: 30 API tests and four migration
 - `lib/db/src/index.ts`
 - `lib/db/src/schema/patternpilot.ts`
 - `lib/db/tests/migrations.test.mjs`
-- `replit.md`
 
 Changes are uncommitted. Existing untracked screenshots are untouched.

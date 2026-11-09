@@ -2,7 +2,7 @@
 
 This is the single source of truth for product decisions. Every tool (Codex, ChatGPT, Claude) and every contributor reads this before working. **Whenever a decision is made anywhere, update this file.**
 
-Last updated: 2026-09-30 (minimal hosting for the learner test added to v0.2)
+Last updated: 2026-11-09 (Replit removal pulled into v0.2)
 
 ---
 
@@ -53,7 +53,7 @@ A practice tool for the **"Complete the Words"** task in the new TOEFL format. L
 - Real payments (see §8). The paywall screen exists but its button goes to a waitlist or pre-order page.
 - User accounts, beyond what the learning loop needs (practice history and the free-passage count live in the browser for v0.2)
 - New backend features or infrastructure, except the minimal hosting in scope item 7
-- Deferred to v0.3: error monitoring, backups beyond the host's defaults, waitlist rate limiting, shared/persistent session storage, multiple instances, removing Replit dependencies (a repo review is planned)
+- Deferred to v0.3: error monitoring, backups beyond the host's defaults, waitlist rate limiting, shared/persistent session storage, multiple instances. (Removing Replit dependencies was also deferred here, then pulled into v0.2; see §10, 2026-11-09.)
 
 ### Definition of done
 - [x] Admin routes and page protected, and the link hidden from learners
@@ -255,6 +255,7 @@ Order: summary → Patterns & practice (table, then one drill-accuracy chart) �
 | 2026-09-30 | Add minimal single-instance hosting to v0.2 (scope item 7); monitoring, rate limiting, session storage and Replit cleanup deferred to v0.3 | Remote learners in Korea, Japan and Europe need an online link to run the 5-learner test |
 | 2026-10-09 | Host on Render, Singapore region: one Starter web service (Docker, serves site + API) and Render Postgres Basic, about US$13/month plus the domain; deploys are manual (see `docs/deploy.md`) | Simplest single-instance setup with managed Postgres and HTTPS; closest Render region to Seoul and Tokyo; manual deploys avoid restarts during learner sessions |
 | 2026-10-10 | Homepage redesigned for engagement: real diagnosis demo plus labelled example learners; no testimonials or numbers until real learners give permission. | Show who PatternPilot is for while keeping the pre-test landing page honest |
+| 2026-11-09 | Replit removal pulled forward from v0.3 into v0.2: delete the Replit config, plugins, platform overrides, mockup sandbox and unused template UI kit | The owner asked for it; Render is now the host, so the Replit pieces are unused and the platform overrides blocked native Apple Silicon builds |
 
 ### Learner UI implementation notes (2026-09-28)
 
