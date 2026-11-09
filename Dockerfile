@@ -1,6 +1,6 @@
 # Production image for Render (see docs/deploy.md).
 # One Node process serves the built website and the API from one origin.
-# Debian (glibc), not Alpine: pnpm-workspace.yaml excludes musl binaries.
+# Debian (glibc) base image; it builds natively on linux/amd64 and linux/arm64.
 FROM node:24-bookworm-slim
 
 ENV CI=true COREPACK_ENABLE_DOWNLOAD_PROMPT=0
