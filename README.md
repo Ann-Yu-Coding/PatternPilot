@@ -133,6 +133,28 @@ pnpm --filter @workspace/db test:migrations
 4. Never expose correct answers or diagnostic metadata through public `/api` responses. The API tests check this.
 5. If your change makes a product decision, add it to the decision log in `docs/product.md` §10.
 
+### Production image
+
+The live site runs the [`Dockerfile`](Dockerfile) image on Render (see [`docs/deploy.md`](docs/deploy.md)). To check a change to the Dockerfile, dependencies or build locally, build it for `linux/amd64`, the platform Render uses:
+
+```bash
+docker build --platform linux/amd64 -t patternpilot:local .
+```
+
+On an Apple Silicon Mac, a native ARM build fails, because `pnpm-workspace.yaml` strips the Linux ARM binaries. The amd64 build runs under emulation. With QEMU emulation, esbuild can crash with a Go `panic`; use Rosetta instead. With Colima, that's `colima start --vm-type vz --vz-rosetta`. With Docker Desktop, turn on "Use Rosetta for x86_64/amd64 emulation" in its settings.
+
+To run the image against the Docker Postgres from [Quick start](#quick-start), use Render's pre-deploy step first, then start the server. Port 5080 avoids the AirPlay clash on 5000:
+
+```bash
+docker run --rm --platform linux/amd64 --network patternpilot_default -e DATABASE_URL='postgres://patternpilot:local-development-only@postgres:5432/patternpilot' patternpilot:local sh scripts/predeploy.sh
+```
+
+```bash
+docker run --rm --platform linux/amd64 --network patternpilot_default -e DATABASE_URL='postgres://patternpilot:local-development-only@postgres:5432/patternpilot' -e ADMIN_SECRET='replace-with-a-long-random-string' -p 127.0.0.1:5080:5000 patternpilot:local
+```
+
+Then open http://localhost:5080. `patternpilot_default` assumes you cloned into a folder named `PatternPilot`, as in Quick start. Docker names the network after the folder, so check `docker network ls` if yours differs.
+
 ## Database changes
 
 Change the schema through migrations, not `push`:
