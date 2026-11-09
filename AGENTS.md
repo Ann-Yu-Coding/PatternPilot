@@ -6,4 +6,4 @@
 4. Never expose correct answers or diagnostic metadata through public APIs. Keep the existing tests passing.
 5. If a change involves a product decision, say so, so it can be recorded in the decision log (product.md §10).
 
-For running, testing and database operations, see [`replit.md`](replit.md) and [`docs/step-3-postgres.md`](docs/step-3-postgres.md).
+For running, testing and database operations, see [`README.md`](README.md) and [`docs/step-3-postgres.md`](docs/step-3-postgres.md).

@@ -634,15 +634,6 @@ importers:
         specifier: ^0.31.10
         version: 0.31.10
 
-  scripts:
-    devDependencies:
-      '@types/node':
-        specifier: 'catalog:'
-        version: 25.9.6
-      tsx:
-        specifier: 'catalog:'
-        version: 4.23.13
-
 packages:
 
   '@babel/code-frame@7.29.7':
