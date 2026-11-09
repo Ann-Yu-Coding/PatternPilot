@@ -13,7 +13,7 @@ Before changing anything, read [`docs/product.md`](docs/product.md). It is the s
 - **Node.js 24** (the version Replit uses)
 - **pnpm 10.** npm and yarn are blocked by a `preinstall` check. If you don't have pnpm, run `corepack enable`.
 - **PostgreSQL 17**, either through Docker (`compose.postgres.yaml`) or a native install such as Homebrew's `postgresql@17`
-- **macOS only:** one extra install step, described in [Quick start](#quick-start) step 2
+- **macOS or Linux x64.** macOS works with a plain `pnpm install`; no extra setup step is needed.
 
 ## Quick start
 
@@ -26,27 +26,7 @@ git clone <repo-url> PatternPilot && cd PatternPilot
 pnpm install
 ```
 
-### 2. macOS only: add the native build binaries
-
-`pnpm-workspace.yaml` strips the macOS builds of rollup, lightningcss and Tailwind's oxide engine, because Replit runs only on linux-x64. Without them the API still runs, but the frontend dev server and build fail with `Cannot find module @rollup/rollup-darwin-arm64`. This script installs the versions that match the lockfile into the gitignored `node_modules` folder without changing any tracked files:
-
-```bash
-ARCH=$(node -p process.arch)   # arm64 or x64
-ver() { node -p "require('./node_modules/.pnpm/node_modules/$1/package.json').version"; }
-NATIVE_DIR=$(mktemp -d)
-npm install --prefix "$NATIVE_DIR" --no-save --no-package-lock \
-  "@rollup/rollup-darwin-$ARCH@$(ver rollup)" \
-  "lightningcss-darwin-$ARCH@$(ver lightningcss)" \
-  "@tailwindcss/oxide-darwin-$ARCH@$(ver @tailwindcss/oxide)"
-mkdir -p node_modules/@rollup node_modules/@tailwindcss
-cp -R "$NATIVE_DIR/node_modules/@rollup/rollup-darwin-$ARCH" node_modules/@rollup/
-cp -R "$NATIVE_DIR/node_modules/lightningcss-darwin-$ARCH" node_modules/
-cp -R "$NATIVE_DIR/node_modules/@tailwindcss/oxide-darwin-$ARCH" node_modules/@tailwindcss/
-```
-
-Run it again if a later `pnpm install` brings the error back. On Linux x64, skip this step.
-
-### 3. Start Postgres
+### 2. Start Postgres
 
 **With Docker:**
 
@@ -62,7 +42,7 @@ This starts Postgres 17 on `127.0.0.1:5432` with user `patternpilot`, password `
 psql -d postgres -c "CREATE ROLE patternpilot LOGIN CREATEDB PASSWORD 'local-development-only';" -c "CREATE DATABASE patternpilot OWNER patternpilot;"
 ```
 
-### 4. Run migrations and seed the three passages
+### 3. Run migrations and seed the three passages
 
 ```bash
 export DATABASE_URL='postgres://patternpilot:local-development-only@127.0.0.1:5432/patternpilot'
@@ -72,7 +52,7 @@ pnpm --filter @workspace/api-server seed:questions
 
 The first seed prints `{ inserted: 3, existing: 0 }`. Both commands are safe to repeat: a second seed prints `{ inserted: 0, existing: 3 }` and doesn't overwrite anything.
 
-### 5. Start the API (terminal 1)
+### 4. Start the API (terminal 1)
 
 ```bash
 export DATABASE_URL='postgres://patternpilot:local-development-only@127.0.0.1:5432/patternpilot'
@@ -82,9 +62,9 @@ PORT=5059 pnpm --filter @workspace/api-server dev
 
 `dev` builds the API once and starts it. It does **not** watch for changes, so restart it after editing server code. `curl http://127.0.0.1:5059/api/healthz` should return `{"status":"ok"}`.
 
-We use port 5059 because macOS's AirPlay Receiver usually holds port 5000, the default in `.env.example` and `replit.md`. Any free port works if the proxy target in step 6 matches.
+We use port 5059 because macOS's AirPlay Receiver usually holds port 5000, the default in `.env.example` and `replit.md`. Any free port works if the proxy target in step 5 matches.
 
-### 6. Start the frontend (terminal 2)
+### 5. Start the frontend (terminal 2)
 
 ```bash
 PORT=5173 BASE_PATH=/ API_PROXY_TARGET=http://127.0.0.1:5059 pnpm --filter @workspace/patternpilot dev
@@ -92,7 +72,7 @@ PORT=5173 BASE_PATH=/ API_PROXY_TARGET=http://127.0.0.1:5059 pnpm --filter @work
 
 `PORT` and `BASE_PATH` are required. Vite proxies `/api` to `API_PROXY_TARGET`, which defaults to `http://127.0.0.1:5000`. Frontend changes reload automatically.
 
-### 7. Open the app
+### 6. Open the app
 
 Open **http://localhost:5173/practice**. You should see "Complete each word with the missing letters." with Practice 01, *How forests communicate*.
 
