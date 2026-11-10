@@ -197,13 +197,16 @@ export function LandingPage() {
         <section className="landing-hero">
           <div className="landing-hero-copy">
             <p className="learner-eyebrow">TOEFL · COMPLETE THE WORDS</p>
-            <h1>Find out why you miss words, not just how many.</h1>
+            <h1>
+              Find out why you miss words, not just{" "}
+              <span className="landing-scribble">how many.</span>
+            </h1>
             <p className="landing-lede">
               Complete a short academic passage, see the pattern behind your
               mistakes, then practise it in context.
             </p>
             <PracticeLink />
-            <p className="landing-note">
+            <p className="landing-note landing-margin-note">
               No account needed. Your practice history stays in this browser.
             </p>
           </div>

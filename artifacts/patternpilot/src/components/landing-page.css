@@ -616,3 +616,545 @@
     transition: transform 160ms ease;
   }
 }
+
+/* Academic workbook visual layer. Original CSS: no third-party code or art. */
+.landing-page {
+  --paper: #fffef9;
+  --paper-warm: #faf8ef;
+  --pencil: #23312c;
+  --rule: #ccd7d1;
+  background-color: var(--learner-ground);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cg fill='none' stroke='%2355605b' stroke-opacity='.045' stroke-width='.7'%3E%3Cpath d='M8 15c12-2 19 2 31-1M55 29c8 1 18-2 31 0M17 69c12 2 20-2 31 1M63 82c9-1 15 1 25-1'/%3E%3C/g%3E%3Cg fill='%232e6b55' fill-opacity='.035'%3E%3Ccircle cx='70' cy='11' r='.8'/%3E%3Ccircle cx='27' cy='44' r='.7'/%3E%3Ccircle cx='84' cy='61' r='.6'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.landing-nav {
+  position: relative;
+  z-index: 10;
+  border-bottom: 1px solid #cfd6d1;
+  background-color: rgba(255, 254, 249, 0.94);
+  box-shadow: 0 3px 0 rgba(23, 35, 31, 0.05);
+}
+
+.landing-nav::after {
+  content: "";
+  position: absolute;
+  right: 5%;
+  bottom: -3px;
+  left: 5%;
+  height: 2px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='3' viewBox='0 0 180 3'%3E%3Cpath d='M0 1.8C32 .4 59 2.7 91 1.4c31-1.2 54 1.4 89-.3' fill='none' stroke='%232e6b55' stroke-opacity='.22' stroke-width='1.2'/%3E%3C/svg%3E")
+    repeat-x center;
+}
+
+.landing-nav .learner-brand {
+  position: relative;
+  letter-spacing: -0.06em;
+}
+
+.landing-nav .learner-brand::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  bottom: -5px;
+  left: 2px;
+  height: 5px;
+  border-bottom: 2px solid var(--learner-green);
+  border-radius: 50%;
+  transform: rotate(-1deg);
+}
+
+.landing-page .learner-button {
+  border: 1.5px solid var(--learner-green-edge);
+  border-bottom-width: 4px;
+  border-radius: 9px 12px 8px 11px;
+  box-shadow: 2px 2px 0 rgba(31, 77, 60, 0.16);
+  transform: rotate(-0.25deg);
+}
+
+.landing-page .learner-button:hover {
+  transform: rotate(0) translateY(-1px);
+}
+
+.landing-hero {
+  position: relative;
+}
+
+.landing-hero::after {
+  content: "practice · notice · improve";
+  position: absolute;
+  right: 2px;
+  bottom: 42px;
+  color: var(--learner-green-dark);
+  font:
+    italic 14px/1.2 "Source Serif 4",
+    Georgia,
+    serif;
+  letter-spacing: 0.04em;
+  transform: rotate(-2deg);
+  opacity: 0.72;
+}
+
+.landing-scribble {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.landing-scribble::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  bottom: -7px;
+  left: -2px;
+  height: 10px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='10' viewBox='0 0 240 10'%3E%3Cpath d='M2 6.7c35-3.3 66 2 102-.5 39-2.8 77 1.8 134-1.4' fill='none' stroke='%233b7a63' stroke-width='3' stroke-linecap='round' stroke-opacity='.72'/%3E%3Cpath d='M6 8c42-1.6 83 .8 124-.9 37-1.5 70 1.2 105-.6' fill='none' stroke='%23b9d8c7' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E")
+    no-repeat center / 100% 100%;
+  pointer-events: none;
+}
+
+.landing-margin-note {
+  position: relative;
+  max-width: 430px;
+  padding-left: 30px;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-style: italic;
+}
+
+.landing-margin-note::before {
+  content: "↳";
+  position: absolute;
+  top: -5px;
+  left: 4px;
+  color: var(--learner-green);
+  font-size: 23px;
+  font-style: normal;
+  transform: rotate(8deg);
+}
+
+.landing-hero-preview {
+  padding: 24px 22px 22px;
+  border: 1.5px solid #aeb9b3;
+  border-radius: 4px 10px 6px 3px;
+  background: var(--paper);
+  box-shadow: 7px 8px 0 rgba(46, 107, 85, 0.11);
+  transform: rotate(1deg);
+}
+
+.landing-hero-preview::before {
+  inset: 10px -12px -12px 12px;
+  border: 1px solid #d6dad5;
+  border-radius: 3px 7px 5px 4px;
+  background: var(--paper-warm);
+  transform: rotate(-2deg);
+}
+
+.landing-hero-preview::after {
+  content: "";
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  width: 94px;
+  height: 28px;
+  border: 1px solid rgba(46, 107, 85, 0.16);
+  background: rgba(207, 227, 216, 0.78);
+  transform: translateX(-50%) rotate(-2deg);
+}
+
+.landing-preview-bar {
+  position: relative;
+  z-index: 1;
+  padding-bottom: 11px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.landing-preview-card {
+  position: relative;
+  border: 1.5px solid var(--learner-green-dark);
+  border-bottom-width: 3px;
+  border-radius: 5px 12px 7px 10px;
+  box-shadow: 3px 4px 0 var(--learner-mint-edge);
+  transform: rotate(-0.35deg);
+}
+
+.landing-preview-card::after {
+  content: "✓ worth practising";
+  position: absolute;
+  right: 18px;
+  bottom: -28px;
+  color: var(--learner-green-dark);
+  font:
+    italic 13px/1 "Source Serif 4",
+    Georgia,
+    serif;
+  transform: rotate(-3deg);
+}
+
+.landing-section {
+  position: relative;
+  border-top: 0;
+}
+
+.landing-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 5px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='5' viewBox='0 0 320 5'%3E%3Cpath d='M1 2.4c42-1.9 88 1.6 130-.2 55-2.4 108 2 188-.7' fill='none' stroke='%2355605b' stroke-opacity='.22' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E")
+    repeat-x center;
+}
+
+.landing-section-heading .learner-eyebrow,
+.landing-free .learner-eyebrow,
+.landing-closing .learner-eyebrow {
+  display: inline-block;
+  padding: 5px 9px 4px;
+  border: 1px solid var(--learner-green);
+  border-radius: 3px 5px 4px 2px;
+  background: var(--paper);
+  color: var(--learner-green-dark);
+  transform: rotate(-0.8deg);
+}
+
+.landing-demo-passage {
+  position: relative;
+  border: 1.5px solid #aeb9b3;
+  border-bottom-width: 3px;
+  border-radius: 4px 10px 6px 3px;
+  background-color: var(--paper);
+  box-shadow: 4px 5px 0 rgba(23, 35, 31, 0.08);
+  transform: rotate(-0.4deg);
+}
+
+.landing-demo-passage::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 34px;
+  width: 78px;
+  height: 24px;
+  border: 1px solid rgba(46, 107, 85, 0.14);
+  background: rgba(227, 239, 233, 0.88);
+  transform: rotate(2deg);
+}
+
+.landing-demo-label {
+  padding-bottom: 13px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.landing-mistake del {
+  text-decoration-thickness: 2px;
+  text-decoration-style: wavy;
+}
+
+.landing-mistake ins {
+  text-decoration-style: wavy;
+  text-decoration-thickness: 2px;
+}
+
+.landing-why {
+  position: relative;
+  border-top: 1px solid var(--rule);
+}
+
+.landing-why::after {
+  content: "teacher note";
+  position: absolute;
+  right: 0;
+  bottom: -10px;
+  color: var(--learner-green);
+  font:
+    italic 12px/1 "Source Serif 4",
+    Georgia,
+    serif;
+  transform: rotate(-2deg);
+}
+
+.landing-pattern-card.learner-pattern {
+  position: relative;
+  border: 1.5px solid var(--learner-green-dark);
+  border-bottom: 4px solid var(--learner-green-edge);
+  border-radius: 7px 18px 10px 14px;
+  box-shadow: 5px 6px 0 var(--learner-mint-edge);
+  transform: rotate(0.35deg);
+}
+
+.landing-pattern-card::before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  right: 54px;
+  width: 84px;
+  height: 27px;
+  border: 1px solid rgba(46, 107, 85, 0.14);
+  background: rgba(255, 254, 249, 0.72);
+  transform: rotate(-3deg);
+}
+
+.landing-pattern-card .learner-pattern-badge,
+.landing-preview-card .learner-pattern-badge {
+  border: 1px solid var(--learner-green-edge);
+  border-radius: 4px 6px 3px 5px;
+  box-shadow: 1px 2px 0 var(--learner-green-edge);
+  transform: rotate(-1deg);
+}
+
+.landing-preview-card mark,
+.landing-pattern-card mark {
+  box-shadow: inset 0 -0.42em rgba(185, 216, 199, 0.9);
+  text-decoration: underline;
+  text-decoration-color: var(--learner-green-line);
+  text-decoration-style: wavy;
+  text-underline-offset: 5px;
+}
+
+.landing-learner-grid {
+  gap: 24px;
+}
+
+.landing-learner-grid article {
+  position: relative;
+  padding: 30px 26px 24px;
+  border: 1.5px solid #aeb9b3;
+  border-top-width: 1.5px;
+  border-radius: 4px 9px 5px 7px;
+  background: var(--paper);
+  box-shadow: 3px 4px 0 rgba(23, 35, 31, 0.08);
+}
+
+.landing-learner-grid article::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 64px;
+  height: 20px;
+  border: 1px solid rgba(46, 107, 85, 0.12);
+  background: rgba(227, 239, 233, 0.82);
+  transform: translateX(-50%) rotate(-2deg);
+}
+
+.landing-learner-grid article:nth-child(1) {
+  transform: rotate(-0.45deg);
+}
+
+.landing-learner-grid article:nth-child(2) {
+  transform: rotate(0.35deg) translateY(8px);
+}
+
+.landing-learner-grid article:nth-child(3) {
+  transform: rotate(-0.2deg);
+}
+
+.landing-example-tag {
+  border: 1px solid var(--learner-mint-border);
+  border-radius: 2px 5px 3px 4px;
+  transform: rotate(-1deg);
+}
+
+.landing-learner-grid dl div {
+  border-top: 1px solid var(--rule);
+}
+
+.landing-step-number {
+  width: 34px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--learner-green);
+  border-radius: 50% 44% 51% 46%;
+  background: var(--paper);
+  transform: rotate(-7deg);
+}
+
+.landing-how-visual {
+  position: relative;
+  border: 1.5px solid #aeb9b3;
+  border-bottom-width: 3px;
+  border-radius: 4px 10px 6px 8px;
+  background: var(--paper);
+  box-shadow: 3px 4px 0 rgba(23, 35, 31, 0.08);
+}
+
+.landing-how-visual::before {
+  content: "";
+  position: absolute;
+  top: -9px;
+  right: 28px;
+  width: 54px;
+  height: 18px;
+  background: rgba(227, 239, 233, 0.86);
+  transform: rotate(3deg);
+}
+
+.landing-how-read b {
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  text-underline-offset: 5px;
+}
+
+.landing-how-pattern {
+  border-color: var(--learner-green-dark);
+  background: var(--learner-mint);
+  box-shadow: 3px 4px 0 var(--learner-mint-edge);
+}
+
+.landing-free ul {
+  position: relative;
+  padding: 28px 30px;
+  border: 1.5px solid #aeb9b3;
+  border-radius: 5px 11px 7px 3px;
+  background: var(--paper);
+  box-shadow: 4px 5px 0 rgba(23, 35, 31, 0.08);
+  transform: rotate(0.35deg);
+}
+
+.landing-free ul::before {
+  content: "included";
+  position: absolute;
+  top: -16px;
+  right: 28px;
+  padding: 5px 12px;
+  border: 1px solid var(--learner-green);
+  border-radius: 3px;
+  background: var(--learner-tint);
+  color: var(--learner-green-dark);
+  font:
+    italic 13px/1 "Source Serif 4",
+    Georgia,
+    serif;
+  transform: rotate(2deg);
+}
+
+.landing-free li svg {
+  padding: 2px;
+  border: 1.5px solid var(--learner-green);
+  border-radius: 50% 45% 52% 47%;
+  transform: rotate(-6deg);
+}
+
+.landing-free-action {
+  border-top-color: var(--rule);
+}
+
+.landing-faq details {
+  position: relative;
+  border-top: 1px solid var(--rule);
+}
+
+.landing-faq details:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+.landing-faq details[open] {
+  padding-inline: 18px;
+  border: 1px solid var(--learner-green);
+  border-radius: 4px 10px 6px 8px;
+  background: rgba(255, 254, 249, 0.72);
+  transform: rotate(-0.2deg);
+}
+
+.landing-faq summary span {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--learner-green);
+  border-radius: 50% 45% 52% 47%;
+  font-size: 19px;
+}
+
+.landing-closing {
+  position: relative;
+  border: 1.5px solid var(--learner-green-dark);
+  border-bottom: 4px solid var(--learner-green-edge);
+  border-radius: 6px 16px 8px 13px;
+  background: var(--learner-mint);
+  box-shadow: 7px 8px 0 var(--learner-mint-edge);
+  transform: rotate(-0.25deg);
+}
+
+.landing-closing::before,
+.landing-closing::after {
+  content: "";
+  position: absolute;
+  top: -15px;
+  width: 100px;
+  height: 29px;
+  border: 1px solid rgba(46, 107, 85, 0.14);
+  background: rgba(255, 254, 249, 0.76);
+}
+
+.landing-closing::before {
+  left: 9%;
+  transform: rotate(-3deg);
+}
+
+.landing-closing::after {
+  right: 9%;
+  transform: rotate(3deg);
+}
+
+.landing-footer {
+  border-top: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='4' viewBox='0 0 320 4'%3E%3Cpath d='M1 2c40-1.5 78 1.4 119-.1 59-2.1 115 1.5 199-.5' fill='none' stroke='%2355605b' stroke-opacity='.25' stroke-width='1.2'/%3E%3C/svg%3E")
+    repeat-x top;
+}
+
+@media (max-width: 900px) {
+  .landing-hero::after {
+    display: none;
+  }
+
+  .landing-learner-grid article,
+  .landing-learner-grid article:nth-child(1),
+  .landing-learner-grid article:nth-child(2),
+  .landing-learner-grid article:nth-child(3) {
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .landing-page .learner-button {
+    transform: none;
+  }
+
+  .landing-scribble {
+    white-space: normal;
+  }
+
+  .landing-hero-preview,
+  .landing-demo-passage,
+  .landing-pattern-card.learner-pattern,
+  .landing-free ul,
+  .landing-closing {
+    transform: none;
+  }
+
+  .landing-learner-grid article {
+    padding: 28px 20px 22px;
+  }
+
+  .landing-free ul {
+    padding: 27px 20px 22px;
+  }
+
+  .landing-closing::before {
+    left: 8%;
+    width: 72px;
+  }
+
+  .landing-closing::after {
+    right: 8%;
+    width: 72px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-page .learner-button,
+  .landing-faq summary span {
+    transition: none;
+  }
+}

@@ -256,6 +256,7 @@ Order: summary → Patterns & practice (table, then one drill-accuracy chart) �
 | 2026-10-09 | Host on Render, Singapore region: one Starter web service (Docker, serves site + API) and Render Postgres Basic, about US$13/month plus the domain; deploys are manual (see `docs/deploy.md`) | Simplest single-instance setup with managed Postgres and HTTPS; closest Render region to Seoul and Tokyo; manual deploys avoid restarts during learner sessions |
 | 2026-10-10 | Homepage redesigned for engagement: real diagnosis demo plus labelled example learners; no testimonials or numbers until real learners give permission. | Show who PatternPilot is for while keeping the pre-test landing page honest |
 | 2026-11-09 | Replit removal pulled forward from v0.3 into v0.2: delete the Replit config, plugins, platform overrides, mockup sandbox and unused template UI kit | The owner asked for it; Render is now the host, so the Replit pieces are unused and the platform overrides blocked native Apple Silicon builds |
+| 2026-11-10 | Homepage adopts an original academic-workbook visual layer: paper texture, pen-like borders and teacher annotations, without Looseleaf code or assets | Add warmth and personality while preserving PatternPilot’s green editorial system, readability and honest claims |
 
 ### Learner UI implementation notes (2026-09-28)
 
