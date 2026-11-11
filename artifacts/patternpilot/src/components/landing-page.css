@@ -1555,3 +1555,209 @@
 .landing-nowrap {
   white-space: nowrap;
 }
+
+/* Hand-drawn buttons: wobbly outline in ink, a hard offset shadow like a
+   cut-out card, and the same face as the headings. */
+.landing-page .learner-button {
+  border: 2px solid var(--learner-ink);
+  border-radius: 255px 18px 225px 16px / 16px 225px 18px 255px;
+  box-shadow: 3px 4px 0 var(--learner-ink);
+  font-family: "Short Stack", "Geist", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0;
+  transform: rotate(-0.6deg);
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+.landing-page .learner-button:hover {
+  background: var(--learner-green-dark);
+  transform: rotate(0) translate(-1px, -1px);
+  box-shadow: 4px 5px 0 var(--learner-ink);
+}
+.landing-page .learner-button:active {
+  transform: translate(2px, 3px);
+  box-shadow: 1px 1px 0 var(--learner-ink);
+}
+.landing-page .learner-button:focus-visible {
+  outline: 2px dashed var(--learner-green);
+  outline-offset: 4px;
+}
+.landing-page .learner-button.retry,
+.landing-page .landing-try-next .learner-button.retry {
+  border: 2px solid var(--learner-ink);
+  box-shadow: 2px 3px 0 var(--learner-ink);
+  background: var(--learner-tint);
+  color: var(--learner-ink);
+}
+.landing-page .learner-button.retry:hover {
+  background: var(--learner-mint-border);
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing-page .learner-button {
+    transition: none;
+  }
+}
+
+/* Pencil-outline buttons and tabs (replaces the green filled button on the
+   homepage): paper fill, a slightly uneven ink outline with a faint second
+   pencil pass, dark hand-drawn text. */
+.landing-page .learner-button,
+.landing-nav nav > a:not(.learner-avatar) {
+  background: #fffef9;
+  color: var(--learner-ink);
+  border: 1.6px solid #2b2f2c;
+  border-radius: 7px 9px 6px 10px / 9px 6px 10px 7px;
+  box-shadow:
+    1px 1.5px 0 -0.3px rgba(23, 35, 31, 0.55),
+    inset 0 0 0 0.6px rgba(23, 35, 31, 0.18);
+  font-family: "Short Stack", "Geist", Arial, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  transform: none;
+}
+.landing-page .learner-button {
+  min-height: 48px;
+  padding: 11px 22px;
+  font-size: 17px;
+}
+.landing-page .learner-button:hover,
+.landing-nav nav > a:not(.learner-avatar):hover {
+  background: var(--learner-tint);
+  color: var(--learner-ink);
+  transform: translateY(-1px);
+  box-shadow:
+    1.5px 2.5px 0 -0.3px rgba(23, 35, 31, 0.6),
+    inset 0 0 0 0.6px rgba(23, 35, 31, 0.18);
+}
+.landing-page .learner-button:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 0 0 0.6px rgba(23, 35, 31, 0.18);
+}
+.landing-page .learner-button.retry,
+.landing-page .landing-try-next .learner-button.retry {
+  background: #fffef9;
+  border: 1.6px solid #2b2f2c;
+  box-shadow:
+    1px 1.5px 0 -0.3px rgba(23, 35, 31, 0.55),
+    inset 0 0 0 0.6px rgba(23, 35, 31, 0.18);
+  color: var(--learner-ink);
+}
+
+.landing-nav nav {
+  gap: 14px;
+}
+.landing-nav nav > a:not(.learner-avatar) {
+  height: auto;
+  min-height: 40px;
+  padding: 6px 16px;
+  font-size: 16px;
+  text-decoration: none;
+}
+.landing-nav nav > a:not(.learner-avatar):focus-visible {
+  outline: 2px dashed var(--learner-green);
+  outline-offset: 3px;
+}
+@media (max-width: 640px) {
+  .landing-nav nav {
+    gap: 8px;
+  }
+  .landing-nav nav > a:not(.learner-avatar) {
+    min-height: 36px;
+    padding: 4px 11px;
+    font-size: 15px;
+  }
+}
+.landing-nav .learner-brand {
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .landing-nav .learner-brand {
+    font-size: 17px;
+  }
+  .landing-nav nav {
+    gap: 6px;
+  }
+  .landing-nav nav > a:not(.learner-avatar) {
+    padding: 4px 9px;
+    font-size: 14px;
+  }
+}
+
+/* Hero order: the demo leads (left, larger), the headline follows, and a
+   quiet link leads down into "Why you lose points" instead of a button. */
+.landing-hero {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(40px, 5vw, 72px);
+}
+.landing-hero .landing-try {
+  order: -1;
+  padding: 30px 30px 28px;
+  transform: rotate(-0.6deg);
+}
+.landing-hero .landing-preview-bar {
+  font-size: 13px;
+}
+.landing-try-sentence {
+  font-size: 26px;
+  line-height: 1.9;
+}
+.landing-try-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+.landing-page .landing-try-actions .learner-button {
+  min-height: 48px;
+  padding: 10px 26px;
+  font-size: 18px;
+}
+.landing-try-actions {
+  margin-top: 22px;
+  font-size: 13px;
+}
+.landing-hero h1 {
+  font-size: clamp(30px, 2.9vw, 40px);
+}
+.landing-lede {
+  font-size: 18px;
+}
+.landing-hero-next {
+  display: inline-block;
+  color: var(--learner-green-dark);
+  font: 17px "Short Stack", "Geist", Arial, sans-serif;
+  text-decoration: underline;
+  text-decoration-color: var(--learner-mint-edge);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+.landing-hero-next:hover {
+  text-decoration-color: var(--learner-green);
+}
+.landing-hero .landing-margin-note {
+  margin-top: 18px;
+}
+@media (max-width: 900px) {
+  .landing-hero {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .landing-hero .landing-try {
+    transform: none;
+  }
+}
+@media (max-width: 640px) {
+  .landing-hero {
+    padding-top: 32px;
+  }
+  .landing-hero .landing-try {
+    padding: 22px 18px 20px;
+  }
+  .landing-try-sentence {
+    font-size: 21px;
+  }
+  .landing-hero h1 {
+    font-size: 32px;
+  }
+}
+

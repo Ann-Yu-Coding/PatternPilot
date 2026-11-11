@@ -6,12 +6,12 @@ import { FREE_PASSAGE_LIMIT, MONTHLY_PRICE_USD } from "../lib/product-config";
 import "../practice.css";
 import "./landing-page.css";
 
-const freeCopy = `Try ${FREE_PASSAGE_LIMIT === 2 ? "two" : FREE_PASSAGE_LIMIT} passages free`;
+const practiceCopy = "Do a full passage";
 
 function PracticeLink({ className = "" }: { className?: string }) {
   return (
     <Link className={`learner-button ${className}`.trim()} href="/practice">
-      {freeCopy} <ArrowRight size={16} aria-hidden="true" />
+      {practiceCopy} <ArrowRight size={16} aria-hidden="true" />
     </Link>
   );
 }
@@ -401,7 +401,9 @@ export function LandingPage() {
               another. Pattern Study shows which trap is yours, and how to fix
               it.
             </p>
-            <PracticeLink />
+            <a className="landing-hero-next" href="#traps-heading">
+              Why the blanks cost you points ↓
+            </a>
             <p className="landing-note landing-margin-note">
               No account needed. Your practice history stays in this browser.
             </p>
