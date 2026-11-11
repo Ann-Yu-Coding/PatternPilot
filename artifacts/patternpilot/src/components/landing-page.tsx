@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link } from "wouter";
 import { ArrowRight, Check, RotateCcw } from "lucide-react";
 import { ProgressPreview } from "./progress-preview";
@@ -100,6 +100,15 @@ function TryOneWord() {
   const [value, setValue] = useState("");
   const [result, setResult] = useState<TryResult | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // On computers (mouse or trackpad), put the cursor in the blank on load so
+  // visitors can type straight away. Skipped on touch screens, where it would
+  // pop the keyboard up, and when the page opens at an anchor further down.
+  useEffect(() => {
+    if (window.location.hash) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    inputRef.current?.focus({ preventScroll: true });
+  }, []);
 
   function check(event: FormEvent) {
     event.preventDefault();
