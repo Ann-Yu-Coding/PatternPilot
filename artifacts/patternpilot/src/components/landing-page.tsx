@@ -329,41 +329,37 @@ const formRules = [
   {
     kind: "Noun → adjective",
     endings: "-ance / -ence → -ant / -ent",
-    examples:
-      "significance → significant · independence → independent · abundance → abundant",
+    examples: "significance → significant",
     note: "Most -ance/-ence nouns have a matching -ant/-ent adjective.",
   },
   {
     kind: "Noun → adjective",
     endings: "-ity → drop -ity",
-    examples: "scarcity → scarce · complexity → complex · curiosity → curious",
+    examples: "scarcity → scarce",
     note: "The adjective sometimes adds -e or -ous back.",
   },
   {
     kind: "Noun → verb",
     endings: "-tion / -sion → -ate / -e",
-    examples:
-      "consolidation → consolidate · production → produce, productive · expansion → expand, expansive",
+    examples: "production → produce, productive",
     note: "Check the sentence: does it need an action or a description?",
   },
   {
     kind: "Field → person",
     endings: "-ology → -ologist / -ological",
-    examples:
-      "biology → biologist → biological · geology → geologist → geological",
+    examples: "biology → biologist → biological",
     note: "“Biolo___ have shown…” needs a person: biologists.",
   },
   {
     kind: "Noun → adjective",
     endings: "-ment → -mental",
-    examples: "environment → environmental · development → developmental",
+    examples: "environment → environmental",
     note: "The verb is usually the noun without -ment: develop.",
   },
   {
     kind: "Adjective → adverb",
     endings: "-ly (-al → -ally, -ic → -ically)",
-    examples:
-      "rapid → rapidly · environmental → environmentally · dramatic → dramatically",
+    examples: "rapid → rapidly",
     note: "Use the adverb when the word describes a verb or another adjective.",
   },
 ];
