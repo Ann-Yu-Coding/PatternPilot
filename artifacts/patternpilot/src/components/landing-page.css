@@ -2166,3 +2166,34 @@
     margin-top: 6px;
   }
 }
+
+/* A blinking caret at the start of the empty demo blank, inviting a first
+   keystroke. Hidden once the field has focus (the real caret takes over). */
+.landing-try-slot {
+  position: relative;
+  display: inline-block;
+}
+.landing-try-caret {
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  width: 2.5px;
+  height: 1.1em;
+  border-radius: 2px;
+  background: var(--learner-green-dark);
+  transform: translateY(-50%);
+  pointer-events: none;
+  animation: landing-caret-blink 1.05s steps(1, end) infinite;
+}
+.landing-try-word input:focus ~ .landing-try-caret {
+  display: none;
+}
+@keyframes landing-caret-blink {
+  0%, 55% { opacity: 1; }
+  56%, 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing-try-caret {
+    animation: none;
+  }
+}

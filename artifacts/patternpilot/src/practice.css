@@ -1571,3 +1571,17 @@
 .learner-mistake-words {
   align-self: center;
 }
+
+/* Results mistake cards: below ~1100px the main column is too narrow for
+   words and explanation side by side, so stack them. */
+@media (max-width: 1100px) {
+  .learner-mistake {
+    grid-template-columns: 1fr !important;
+    grid-template-areas: "tag" "words" "why";
+  }
+  .learner-mistake-why {
+    padding: 14px 0 0;
+    border-left: 0;
+    border-top: 1.5px solid #ccd7d1;
+  }
+}

@@ -118,10 +118,14 @@ function TryOneWord() {
   }
 
   const typed = value.trim().toLowerCase();
-  const card = result === "form" || result === "spelling" ? demoCards[result] : null;
+  const card =
+    result === "form" || result === "spelling" ? demoCards[result] : null;
 
   return (
-    <aside className="landing-hero-preview landing-try" aria-label="Try one word">
+    <aside
+      className="landing-hero-preview landing-try"
+      aria-label="Try one word"
+    >
       <div className="landing-preview-bar">
         <span>Try one word</span>
         <span>Ecology · harder than it looks</span>
@@ -132,17 +136,22 @@ function TryOneWord() {
           {result === null ? (
             <span className="landing-try-word">
               {DEMO_PREFIX}
-              <input
-                ref={inputRef}
-                value={value}
-                onChange={(event) => setValue(event.target.value)}
-                maxLength={9}
-                autoComplete="off"
-                autoCapitalize="off"
-                spellCheck={false}
-                aria-label={`Missing letters after ${DEMO_PREFIX}`}
-                placeholder="_ _ _ _ _ _"
-              />
+              <span className="landing-try-slot">
+                <input
+                  ref={inputRef}
+                  value={value}
+                  onChange={(event) => setValue(event.target.value)}
+                  maxLength={9}
+                  autoComplete="off"
+                  autoCapitalize="off"
+                  spellCheck={false}
+                  aria-label={`Missing letters after ${DEMO_PREFIX}`}
+                  placeholder="_ _ _ _ _ _"
+                />
+                {!value && (
+                  <span className="landing-try-caret" aria-hidden="true" />
+                )}
+              </span>
             </span>
           ) : result === "correct" ? (
             <span className="landing-try-correct">{DEMO_WORD}</span>
@@ -168,7 +177,10 @@ function TryOneWord() {
       </form>
 
       {result !== null && (
-        <div className="landing-preview-card landing-try-result" aria-live="polite">
+        <div
+          className="landing-preview-card landing-try-result"
+          aria-live="polite"
+        >
           {card ? (
             <>
               <span className="learner-pattern-badge is-possible">
@@ -192,7 +204,11 @@ function TryOneWord() {
             <b>Rule</b> -ent adjective → -ence noun: resilient → resilience.
           </p>
           <div className="landing-try-next">
-            <button type="button" className="learner-button retry" onClick={reset}>
+            <button
+              type="button"
+              className="learner-button retry"
+              onClick={reset}
+            >
               <RotateCcw size={15} aria-hidden="true" /> Try again
             </button>
             <Link href="/practice" className="landing-try-link">
@@ -242,7 +258,10 @@ function DiagnosisPreview({ compact = false }: { compact?: boolean }) {
               The finding was highly{" "}
               <span className="landing-nowrap">
                 signif
-                <span className="landing-slots" aria-label="four missing letters">
+                <span
+                  className="landing-slots"
+                  aria-label="four missing letters"
+                >
                   ____
                 </span>
                 .
@@ -260,7 +279,8 @@ const formRules = [
   {
     kind: "Noun → adjective",
     endings: "-ance / -ence → -ant / -ent",
-    examples: "significance → significant · independence → independent · abundance → abundant",
+    examples:
+      "significance → significant · independence → independent · abundance → abundant",
     note: "Most -ance/-ence nouns have a matching -ant/-ent adjective.",
   },
   {
@@ -272,13 +292,15 @@ const formRules = [
   {
     kind: "Noun → verb",
     endings: "-tion / -sion → -ate / -e",
-    examples: "consolidation → consolidate · production → produce, productive · expansion → expand, expansive",
+    examples:
+      "consolidation → consolidate · production → produce, productive · expansion → expand, expansive",
     note: "Check the sentence: does it need an action or a description?",
   },
   {
     kind: "Field → person",
     endings: "-ology → -ologist / -ological",
-    examples: "biology → biologist → biological · geology → geologist → geological",
+    examples:
+      "biology → biologist → biological · geology → geologist → geological",
     note: "“Biolo___ have shown…” needs a person: biologists.",
   },
   {
@@ -290,7 +312,8 @@ const formRules = [
   {
     kind: "Adjective → adverb",
     endings: "-ly (-al → -ally, -ic → -ically)",
-    examples: "rapid → rapidly · environmental → environmentally · dramatic → dramatically",
+    examples:
+      "rapid → rapidly · environmental → environmentally · dramatic → dramatically",
     note: "Use the adverb when the word describes a verb or another adjective.",
   },
 ];
@@ -410,11 +433,9 @@ export function LandingPage() {
               <span className="landing-scribble">Complete the Words?</span>
             </h1>
             <p className="landing-lede">
-              You’ve memorised word lists and read hard articles, yet the blanks
-              still cost you points. Usually it’s one of two traps: a topic
-              you rarely read about, or a word you know in one form but not
-              another. Pattern Study shows which trap is yours, and how to fix
-              it.
+              It’s usually because you’re unfamiliar with the topic, or with
+              that particular form of the word. Practise with Pattern Study’s
+              method, track your patterns, and watch your score climb.
             </p>
             <a className="landing-hero-next" href="#traps-heading">
               Why the blanks cost you points ↓
@@ -436,9 +457,9 @@ export function LandingPage() {
               Knowing many words isn’t the same as finding them in a blank.
             </h2>
             <p>
-              Complete the Words gives you only the first letters. You have
-              to recall the rest quickly, in the right form, inside a topic
-              that may be new to you.
+              Complete the Words gives you only the first letters. You have to
+              recall the rest quickly, in the right form, inside a topic that
+              may be new to you.
             </p>
           </div>
           <div className="landing-trap-grid">
@@ -567,8 +588,8 @@ export function LandingPage() {
               ))}
             </ul>
             <p className="landing-rule-footnote">
-              There are exceptions, but these rules work most of the time.
-              If you can’t recall a word’s other form, try the rule first.
+              There are exceptions, but these rules work most of the time. If
+              you can’t recall a word’s other form, try the rule first.
             </p>
           </div>
         </section>
@@ -666,10 +687,10 @@ export function LandingPage() {
               See what repeats, and what you’ve cleared.
             </h2>
             <p>
-              Every passage and drill adds to one view: which patterns are
-              still active, how your drills are going, and what to practise
-              next. A 100% drill clears a pattern until the same kind of miss
-              comes back.
+              Every passage and drill adds to one view: which patterns are still
+              active, how your drills are going, and what to practise next. A
+              100% drill clears a pattern until the same kind of miss comes
+              back.
             </p>
           </div>
           <ProgressPreview />
