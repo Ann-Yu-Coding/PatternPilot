@@ -43,7 +43,7 @@ function DiagnosisPreview({ compact = false }: { compact?: boolean }) {
     return (
       <aside
         className="landing-hero-preview"
-        aria-label="A preview of PatternPilot feedback"
+        aria-label="A preview of Pattern Study feedback"
       >
         <div className="landing-preview-bar">
           <span>After checking</span>
@@ -172,11 +172,11 @@ const faqs = [
   ],
   [
     "Is this the official TOEFL?",
-    "No. PatternPilot uses original practice passages and is not affiliated with or endorsed by ETS.",
+    "No. Pattern Study uses original practice passages and is not affiliated with or endorsed by ETS.",
   ],
   [
     "Which devices work?",
-    "PatternPilot is designed phone-first and also works in current tablet and desktop browsers. Your history stays with the browser and device you used.",
+    "Pattern Study is designed phone-first and also works in current tablet and desktop browsers. Your history stays with the browser and device you used.",
   ],
 ];
 
@@ -185,7 +185,7 @@ export function LandingPage() {
     <div className="learner-page landing-page">
       <header className="learner-nav landing-nav">
         <Link href="/" className="learner-brand">
-          patternpilot
+          pattern study
         </Link>
         <nav aria-label="Main navigation">
           <Link href="/practice">Practice</Link>
@@ -222,7 +222,7 @@ export function LandingPage() {
             <h2 id="proof-heading">One mistake becomes a clear next step.</h2>
             <p>
               This static example uses a sentence, explanation, pattern rule,
-              and drill from PatternPilot’s real practice content.
+              and drill from Pattern Study’s real practice content.
             </p>
           </div>
           <DiagnosisPreview />
@@ -361,7 +361,7 @@ export function LandingPage() {
       </main>
 
       <footer className="landing-footer">
-        PatternPilot · Independent practice material · Not affiliated with ETS.
+        Pattern Study · Independent practice material · Not affiliated with ETS.
       </footer>
     </div>
   );

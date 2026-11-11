@@ -124,7 +124,7 @@ export function Waitlist() {
                 {status === "saving" ? "Saving…" : "Join the waitlist"}
               </button>
               <p className="paywall-note">
-                We’ll use your email to contact you about PatternPilot access.
+                We’ll use your email to contact you about Pattern Study access.
               </p>
             </form>
           </>

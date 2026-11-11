@@ -435,7 +435,7 @@ export function LearnerFlow() {
     <div className="learner-page">
       <header className="learner-nav">
         <Link href="/" className="learner-brand">
-          patternpilot
+          pattern study
         </Link>
         <nav aria-label="Main navigation">
           <Link href="/practice" className="active" aria-current="page">

@@ -32,7 +32,7 @@ function AppButton({ children, onClick, href, kind = "dark", disabled = false, c
 }
 
 function Brand({ light = false }: { light?: boolean }) {
-  return <Link href="/" className="flex items-center gap-2" data-testid="link-brand"><span className={`grid h-8 w-8 place-items-center rounded-sm ${light ? "bg-[#f7c948]" : "bg-[#252a40]"}`}><span className={`h-3 w-3 rotate-45 rounded-[2px] ${light ? "bg-[#252a40]" : "bg-[#f7c948]"}`} /></span><span className={`font-semibold tracking-[-.03em] ${light ? "text-[#fffaf0]" : "text-[#252a40]"}`}>pattern<span className={light ? "text-[#f7c948]" : "text-[#ad762c]"}>pilot</span></span></Link>;
+  return <Link href="/" className="flex items-center gap-2" data-testid="link-brand"><span className={`grid h-8 w-8 place-items-center rounded-sm ${light ? "bg-[#f7c948]" : "bg-[#252a40]"}`}><span className={`h-3 w-3 rotate-45 rounded-[2px] ${light ? "bg-[#252a40]" : "bg-[#f7c948]"}`} /></span><span className={`font-semibold tracking-[-.03em] ${light ? "text-[#fffaf0]" : "text-[#252a40]"}`}>pattern<span className={light ? "text-[#f7c948]" : "text-[#ad762c]"}> study</span></span></Link>;
 }
 
 function MarketingHeader() {
