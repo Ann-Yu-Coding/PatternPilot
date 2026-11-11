@@ -128,86 +128,152 @@ function MarkedWord({
   );
 }
 
-function AnswerTable({
+// A few words either side of one blank, with every blank filled in with its
+// correct word, e.g. "…the growth and [survival] of entire forests." Built
+// only from data already on the page.
+function contextSnippet(set: PracticeSet, items: ResultItem[], blankId: string) {
+  const fill = (text: string) =>
+    text.replace(/(\S*)\{\{([^}]+)\}\}/g, (_, lead: string, id: string) => {
+      const prefix = set.blanks.find((blank) => blank.id === id)?.prefix || "";
+      const word = items.find((item) => item.blankId === id)?.fullWord || "";
+      return (lead.endsWith(prefix) ? lead.slice(0, lead.length - prefix.length) : lead) + word;
+    });
+  const token = `{{${blankId}}}`;
+  const at = set.passage.indexOf(token);
+  if (at < 0) return null;
+  const prefix = set.blanks.find((blank) => blank.id === blankId)?.prefix || "";
+  const sentenceStart = Math.max(
+    set.passage.lastIndexOf(". ", at),
+    set.passage.lastIndexOf("? ", at),
+    set.passage.lastIndexOf("! ", at),
+  );
+  const rest = set.passage.slice(at + token.length);
+  const end = rest.search(/[.?!](\s|$)/);
+  const beforeWords = fill(
+    set.passage.slice(sentenceStart < 0 ? 0 : sentenceStart + 2, at - prefix.length),
+  ).split(/\s+/).filter(Boolean);
+  const afterWords = fill(end < 0 ? rest : rest.slice(0, end + 1))
+    .split(/\s+/).filter(Boolean);
+  const keep = 5;
+  const word = items.find((item) => item.blankId === blankId)?.fullWord || "";
+  return (
+    <>
+      {beforeWords.length > keep ? "…" : ""}
+      {beforeWords.slice(-keep).join(" ")}
+      {beforeWords.length ? " " : ""}
+      <mark>{word}</mark>
+      {afterWords.length && !/^[.,;:?!]/.test(afterWords[0]) ? " " : ""}
+      {afterWords.slice(0, keep).join(" ").replace(/^\s+/, "")}
+      {afterWords.length > keep ? "…" : ""}
+    </>
+  );
+}
+
+function AnswerReview({
   result,
   set,
-  patternCategories,
 }: {
   result: PracticeResult;
   set: PracticeSet;
-  patternCategories: string[];
 }) {
   const mistakes = result.items.filter((item) => !item.isCorrect);
   const correct = result.items.filter((item) => item.isCorrect);
-  const highlightedCategories = new Set(patternCategories);
-  const row = (item: ResultItem) => {
-    const prefix =
-      set.blanks.find((blank) => blank.id === item.blankId)?.prefix || "";
-    return (
-      <tr key={item.blankId}>
-        <td data-label="Your answer" className="learner-answer-word">
-          {item.isCorrect ? (
-            item.fullWord
-          ) : (
-            <MarkedWord item={item} prefix={prefix} correction={false} />
-          )}
-        </td>
-        <td data-label="Correct">
-          {item.isCorrect ? (
-            <Check className="learner-check" size={21} aria-label="Correct" />
-          ) : (
-            <span className="learner-answer-word learner-correct-word">
-              {item.fullWord}
-            </span>
-          )}
-        </td>
-        <td data-label="Type">
-          {!item.isCorrect && item.missCategory && (
-            <span
-              className={`learner-tag ${highlightedCategories.has(item.missCategory) ? "is-pattern" : ""}`}
-            >
-              {item.missCategory}
-            </span>
-          )}
-        </td>
-        <td data-label="Why this answer" className="learner-explanation">
-          <p>{item.explanation}</p>
-        </td>
-      </tr>
-    );
-  };
+  const prefixOf = (item: ResultItem) =>
+    set.blanks.find((blank) => blank.id === item.blankId)?.prefix || "";
   return (
     <section className="learner-answers" aria-labelledby="answers-title">
-      <div className="learner-section-heading">
-        <h2 id="answers-title">All answers</h2>
-        <span>
-          {mistakes.length} mistakes · {correct.length} correct
-        </span>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Your answer</th>
-            <th scope="col">Correct</th>
-            <th scope="col">Type</th>
-            <th scope="col">Why this answer</th>
-          </tr>
-        </thead>
-        <tbody>
-          {mistakes.map(row)}
-          {correct.length > 0 && (
-            <tr className="learner-correct-divider">
-              <th colSpan={4} scope="rowgroup">
-                Correct · {correct.length}
-              </th>
-            </tr>
-          )}
-          {correct.map(row)}
-        </tbody>
-      </table>
+      {mistakes.length > 0 && (
+        <>
+          <div className="learner-section-heading">
+            <h2 id="answers-title">
+              Review your {mistakes.length}{" "}
+              {mistakes.length === 1 ? "mistake" : "mistakes"}
+            </h2>
+            <p>From this passage</p>
+          </div>
+          <ol className="learner-mistakes">
+            {mistakes.map((item, index) => (
+              <li key={item.blankId} className="learner-mistake">
+                <span className="learner-mistake-tag">
+                  {String(index + 1).padStart(2, "0")}
+                  {item.missCategory && (
+                    <>
+                      {" · "}
+                      <span title={item.missCategory}>
+                        <span aria-hidden="true">
+                          {typeChipLabel[item.missCategory] ?? item.missCategory}
+                        </span>
+                        <span className="sr-only">{item.missCategory}</span>
+                      </span>
+                    </>
+                  )}
+                </span>
+                <div className="learner-mistake-words">
+                  <div>
+                    <small>Your answer</small>
+                    <span className="learner-answer-word">
+                      <MarkedWord item={item} prefix={prefixOf(item)} correction={false} />
+                    </span>
+                  </div>
+                  <ArrowRight size={20} aria-hidden="true" />
+                  <div>
+                    <small>Correct answer</small>
+                    <span className="learner-answer-word learner-correct-word">
+                      {item.fullWord}
+                    </span>
+                  </div>
+                </div>
+                <div className="learner-mistake-why">
+                  <p className="learner-mistake-context">
+                    <b>Context</b>
+                    <span>{contextSnippet(set, result.items, item.blankId)}</span>
+                  </p>
+                  <p>
+                    <b>Why</b>
+                    <span>{item.explanation}</span>
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </>
+      )}
+      {correct.length > 0 && (
+        <details className="learner-correct-list" open={mistakes.length === 0}>
+          <summary>
+            <Check size={20} aria-hidden="true" />
+            <span>
+              {mistakes.length === 0 ? (
+                <span id="answers-title">All {correct.length} answers correct</span>
+              ) : (
+                `${correct.length} correct ${correct.length === 1 ? "answer" : "answers"}`
+              )}
+            </span>
+            <small>Show answers and explanations</small>
+          </summary>
+          <ul>
+            {correct.map((item) => (
+              <li key={item.blankId}>
+                <span className="learner-answer-word">{item.fullWord}</span>
+                <p>{item.explanation}</p>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
     </section>
   );
 }
+
+// One-word chip for the "Type" column; the full category stays in the
+// tooltip and for screen readers.
+const typeChipLabel: Record<string, string> = {
+  "Grammar ending": "Grammar",
+  "Word form": "Form",
+  Spelling: "Spelling",
+  "Word retrieval": "Recall",
+  "Context / meaning": "Context",
+};
 
 export function LearnerFlow() {
   const [,navigate] = useLocation();
@@ -474,6 +540,56 @@ export function LearnerFlow() {
                 </p>
               </header>
             )}
+            {result && review && (
+              <section
+                className="learner-results"
+                ref={resultsRef}
+                tabIndex={-1}
+                aria-labelledby="results-title"
+              >
+                <p className="learner-eyebrow">Results</p>
+                <h1 id="results-title">Your passage review</h1>
+                <div className="learner-score">
+                  <h2>
+                    {result.score} / {result.total} <span>correct</span>
+                  </h2>
+                  <p>
+                    {mistakes} {mistakes === 1 ? "mistake" : "mistakes"} · Time
+                    taken {timeLabel(review.elapsed)}
+                  </p>
+                </div>
+                {patterns.length ? (
+                  <div className="pattern-observations">
+                    {patterns.map((pattern) => (
+                      <PatternCard
+                        key={pattern.category}
+                        pattern={pattern}
+                        sessionId={result.sessionId}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <section className="learner-no-pattern">
+                    <p>
+                      {mistakes === 0
+                        ? "Nice work — no repeated pattern showed up here."
+                        : "No active pattern to check. Review the answers below."}
+                    </p>
+                    {mistakes === 0 && (
+                      <p>Try one more passage to check for smaller gaps that didn’t appear in this one.</p>
+                    )}
+                  </section>
+                )}
+                <AnswerReview result={result} set={current} />
+                <nav className="learner-results-links" aria-label="After this passage">
+                  <a href="#passage-title">Review passage</a>
+                  <Link href="/dashboard">
+                    View progress <ArrowRight size={16} aria-hidden="true" />
+                  </Link>
+                </nav>
+                <NextPassage allCorrect={mistakes === 0} history={history} next={sets.find(s=>s.id===nextPassageId(history,sets.map(s=>s.id)))} onRetry={()=>reset()} onNext={()=>{const id=nextPassageId(readHistory(),sets.map(s=>s.id)); if(id)reset(id);}}/>
+              </section>
+            )}
             <section
               aria-labelledby="passage-title"
               className="learner-passage-section"
@@ -549,46 +665,6 @@ export function LearnerFlow() {
                 </p>
               )}
             </section>
-            {result && review && (
-              <section
-                className="learner-results"
-                ref={resultsRef}
-                tabIndex={-1}
-                aria-label="Your results"
-              >
-                <p className="learner-eyebrow">Results</p>
-                <div className="learner-score">
-                  <h2>
-                    {result.score} / {result.total}
-                  </h2>
-                  <span>correct · {timeLabel(review.elapsed)}</span>
-                </div>
-                {patterns.length ? (
-                  <div className="pattern-observations">
-                    {patterns.map((pattern) => (
-                      <PatternCard
-                        key={pattern.category}
-                        pattern={pattern}
-                        sessionId={result.sessionId}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <section className="learner-no-pattern">
-                    <p>
-                      {mistakes === 0
-                        ? "Nice work — no repeated pattern showed up here."
-                        : "No active pattern to check. Review the answers below."}
-                    </p>
-                    {mistakes === 0 && (
-                      <p>Try one more passage to check for smaller gaps that didn’t appear in this one.</p>
-                    )}
-                  </section>
-                )}
-                <AnswerTable result={result} set={current} patternCategories={patterns.map(pattern => pattern.category)} />
-                <NextPassage allCorrect={mistakes === 0} history={history} next={sets.find(s=>s.id===nextPassageId(history,sets.map(s=>s.id)))} onRetry={()=>reset()} onNext={()=>{const id=nextPassageId(readHistory(),sets.map(s=>s.id)); if(id)reset(id);}}/>
-              </section>
-            )}
           </>
         )}
       </main>

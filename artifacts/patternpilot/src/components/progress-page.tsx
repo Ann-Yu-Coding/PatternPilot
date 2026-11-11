@@ -82,7 +82,10 @@ function DrillChart({ drills, main }: { drills: DrillLog[]; main?: string }) {
   return (
     <section className="progress-chart">
       <header>
-        <h3>Drill accuracy over time</h3>
+        <div>
+          <h3>Recent drill results</h3>
+          <p>Each point is one completed drill.</p>
+        </div>
         <ul className="chart-legend">
           {categories.map((category) => (
             <li key={category}>
@@ -90,6 +93,10 @@ function DrillChart({ drills, main }: { drills: DrillLog[]; main?: string }) {
               {category}
             </li>
           ))}
+          <li className="chart-clear-key">
+            <i aria-hidden="true" />
+            100% clears the pattern
+          </li>
         </ul>
       </header>
       <div
@@ -118,8 +125,8 @@ function DrillChart({ drills, main }: { drills: DrillLog[]; main?: string }) {
                 x2={chartWidth - 8}
                 y1={66 + (100 - value) * 1.6}
                 y2={66 + (100 - value) * 1.6}
-                stroke={value === 100 ? "#B9D8C7" : "#E3E4E0"}
-                strokeDasharray={value === 100 ? "4 4" : undefined}
+                stroke={value === 100 ? "#7F948A" : "#E3E4E0"}
+                strokeDasharray={value === 100 ? "2 4" : undefined}
               />
             </g>
           ))}
@@ -134,6 +141,9 @@ function DrillChart({ drills, main }: { drills: DrillLog[]; main?: string }) {
               fill="none"
               stroke={color(category)}
               strokeWidth={2.5}
+              strokeDasharray={
+                category === (main || categories[0]) ? undefined : "6 5"
+              }
             />
           ))}
           {ordered.map((d, i) => (
@@ -197,6 +207,9 @@ export function ProgressPage() {
         <header className="learner-intro">
           <p className="learner-eyebrow">Progress</p>
           <h1>Your practice so far</h1>
+          <p className="progress-subtitle">
+            See what needs practice and what you’ve cleared.
+          </p>
         </header>
         {!summary.passages.length ? (
           <section className="progress-empty">
@@ -238,7 +251,7 @@ export function ProgressPage() {
                     className="progress-link"
                     href={drillHref(nextPattern.category)}
                   >
-                    Practice {nextPattern.category.toLowerCase()} · 5
+                    Practise {nextPattern.category.toLowerCase()} · 5
                     sentences →
                   </Link>
                 </>
@@ -261,11 +274,10 @@ export function ProgressPage() {
                   <thead>
                     <tr>
                       {[
-                        "Pattern",
+                        "Pattern & evidence",
                         "Status",
-                        "Evidence",
-                        "Practice",
-                        "Action",
+                        "Latest drill",
+                        "Next step",
                       ].map((h) => (
                         <th key={h}>{h}</th>
                       ))}
@@ -279,60 +291,68 @@ export function ProgressPage() {
                         latest && previous
                           ? drillPercent(latest) - drillPercent(previous)
                           : null;
-                      const href = drillHref(p.category);
+                      const cleared = p.status === "Cleared";
+                      const evidence = `${p.count} ${p.count === 1 ? "miss" : "misses"} ${p.passages === 1 ? "in" : "across"} ${p.passages} ${p.passages === 1 ? "passage" : "passages"}`;
                       return (
                         <tr
                           key={p.category}
-                          className={p.status === "Cleared" ? "is-cleared" : ""}
+                          className={
+                            cleared
+                              ? "is-cleared"
+                              : p.status === "Pattern"
+                                ? "is-pattern"
+                                : ""
+                          }
                         >
-                          <th scope="row">{p.category}</th>
+                          <th scope="row">
+                            {p.category}
+                            <small>
+                              {cleared ? `Previously: ${evidence}` : evidence}
+                            </small>
+                          </th>
                           <td data-label="Status">
                             <span className="progress-status">
                               <i
                                 aria-hidden="true"
                                 className={
-                                  p.status === "Cleared"
+                                  cleared
                                     ? "status-cleared"
                                     : p.status === "Pattern"
                                       ? "status-pattern"
                                       : "status-possible"
                                 }
                               >
-                                {p.status === "Cleared" ? "✓" : ""}
+                                {cleared ? "✓" : ""}
                               </i>
                               {p.status}
                             </span>
                           </td>
-                          <td data-label="Evidence">
-                            {p.count} {p.count === 1 ? "miss" : "misses"} ·{" "}
-                            {p.passages}{" "}
-                            {p.passages === 1 ? "passage" : "passages"}
-                            {p.status === "Cleared" && (
-                              <small>cleared by a 100% drill</small>
-                            )}
-                          </td>
-                          <td data-label="Practice">
+                          <td data-label="Latest drill">
                             {latest ? (
                               <>
                                 <strong>{drillPercent(latest)}%</strong>
-                                {difference !== null && (
-                                  <small>
-                                    {difference >= 0 ? "+" : ""}
-                                    {difference}% since last
-                                  </small>
-                                )}
+                                <small>
+                                  {latest.score}/{latest.total} correct
+                                  {difference !== null &&
+                                    ` · ${difference >= 0 ? "+" : ""}${difference} points`}
+                                </small>
                               </>
                             ) : (
                               <span className="progress-muted">
-                                Not practiced
+                                Not practised yet
                               </span>
                             )}
                           </td>
                           <td>
-                            <Link className="progress-link" href={href}>
-                              {p.status === "Possible pattern"
-                                ? "Go practice"
-                                : "Practice again"}{" "}
+                            <Link
+                              className={`progress-link${cleared ? " is-quiet" : ""}`}
+                              href={drillHref(p.category)}
+                            >
+                              {cleared
+                                ? "Review"
+                                : latest
+                                  ? "Practise"
+                                  : "Start drill"}{" "}
                               →<span className="sr-only"> {p.category}</span>
                             </Link>
                           </td>

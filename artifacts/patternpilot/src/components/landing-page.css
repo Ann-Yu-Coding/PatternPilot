@@ -39,13 +39,12 @@
   margin: 0 0 28px;
   color: var(--learner-secondary);
   font:
-    20px/1.55 "Source Sans 3",
-    sans-serif;
+    20px/1.55 var(--font-hand);
 }
 .landing-note {
   margin: 14px 0 0;
   color: var(--learner-muted);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.55;
 }
 .landing-hero-preview {
@@ -67,7 +66,7 @@
   gap: 16px;
   margin-bottom: 12px;
   color: var(--learner-muted);
-  font-size: 12px;
+  font-size: 14px;
 }
 .landing-preview-bar b {
   color: var(--learner-mistake);
@@ -98,8 +97,7 @@
   margin: 0 0 20px;
   color: var(--learner-secondary);
   font:
-    16px/1.55 "Source Sans 3",
-    sans-serif;
+    16px/1.55 var(--font-hand);
 }
 .landing-section {
   padding-block: 96px;
@@ -122,8 +120,7 @@
   margin: 16px 0 0;
   color: var(--learner-secondary);
   font:
-    17px/1.6 "Source Sans 3",
-    sans-serif;
+    17px/1.6 var(--font-hand);
 }
 .landing-diagnosis-demo {
   display: grid;
@@ -141,17 +138,16 @@
 .landing-demo-label {
   margin: 0 0 18px;
   color: var(--learner-muted);
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  font-family: var(--font-type);
 }
 .landing-demo-sentence {
   margin: 0;
   color: var(--learner-ink);
   font:
-    24px/1.75 "Source Serif 4",
-    Georgia,
-    serif;
+    24px/1.75 var(--font-question);
 }
 .landing-mistake {
   display: inline;
@@ -180,17 +176,17 @@
 }
 .landing-why span {
   color: var(--learner-green-dark);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  font-family: var(--font-type);
 }
 .landing-why p {
   margin: 0;
   color: var(--learner-secondary);
   font:
-    16px/1.5 "Source Sans 3",
-    sans-serif;
+    16px/1.5 var(--font-hand);
 }
 .landing-pattern-card.learner-pattern {
   padding: 32px;
@@ -200,7 +196,7 @@
 }
 .landing-pattern-card .pattern-evidence {
   color: var(--learner-green-dark);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
 }
 .landing-drill-preview {
@@ -210,16 +206,15 @@
 }
 .landing-drill-preview > span {
   color: var(--learner-muted);
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  font-family: var(--font-type);
 }
 .landing-drill-preview p {
   margin: 10px 0 0;
   font:
-    20px/1.55 "Source Serif 4",
-    Georgia,
-    serif;
+    20px/1.55 var(--font-question);
 }
 .landing-slots {
   color: var(--learner-green-dark);
@@ -248,7 +243,7 @@
   display: block;
   margin-top: 9px;
   color: var(--learner-muted);
-  font-size: 11px;
+  font-size: 14px;
   line-height: 1.35;
 }
 .landing-seen.is-compact {
@@ -279,10 +274,11 @@
   border-radius: 4px;
   background: var(--learner-tint);
   color: var(--learner-green-dark);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  font-family: var(--font-type);
 }
 .landing-learner-grid h3,
 .landing-steps h3 {
@@ -295,8 +291,7 @@
   margin: 0;
   color: var(--learner-secondary);
   font:
-    16px/1.58 "Source Sans 3",
-    sans-serif;
+    16px/1.58 var(--font-hand);
 }
 .landing-learner-grid dl {
   margin: 24px 0 0;
@@ -308,20 +303,20 @@
 .landing-learner-grid dt {
   margin-bottom: 5px;
   color: var(--learner-muted);
-  font-size: 12px;
+  font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
+  font-family: var(--font-type);
 }
 .landing-learner-grid dd {
   margin: 0;
   color: var(--learner-secondary);
   font:
-    15px/1.5 "Source Sans 3",
-    sans-serif;
+    15px/1.5 var(--font-hand);
 }
 .landing-learner-grid dl div:first-child dd {
   color: var(--learner-green-dark);
-  font-family: "Geist", sans-serif;
+  font-family: var(--font-hand);
   font-weight: 600;
 }
 .landing-steps article {
@@ -334,7 +329,7 @@
   top: 0;
   left: 0;
   color: var(--learner-green);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
 }
 .landing-how-visual {
@@ -349,9 +344,7 @@
   display: block;
   color: var(--learner-ink);
   font:
-    20px/1.8 "Source Serif 4",
-    Georgia,
-    serif;
+    20px/1.8 var(--font-question);
 }
 .landing-how-read b {
   color: var(--learner-green);
@@ -363,39 +356,18 @@
   flex-direction: column;
   justify-content: center;
   gap: 18px;
-  font-family: "Source Serif 4", Georgia, serif;
+  font-family: var(--font-question);
   font-size: 20px;
 }
 .landing-how-review small {
   color: var(--learner-secondary);
   font:
-    13px/1.45 "Source Sans 3",
-    sans-serif;
+    14px/1.45 var(--font-hand);
 }
 .landing-how-pattern {
   border-color: var(--learner-mint-border);
   border-bottom-color: var(--learner-mint-edge);
   background: var(--learner-mint);
-}
-.landing-how-pattern span {
-  display: block;
-  margin-bottom: 22px;
-  font-size: 18px;
-  font-weight: 600;
-}
-.landing-how-pattern i {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  margin-right: 7px;
-  border: 3px solid white;
-  border-radius: 50%;
-  background: var(--learner-green);
-}
-.landing-how-pattern small {
-  display: block;
-  margin-top: 17px;
-  color: var(--learner-muted);
 }
 .landing-free {
   display: grid;
@@ -415,8 +387,7 @@
   align-items: center;
   gap: 12px;
   font:
-    17px/1.45 "Source Sans 3",
-    sans-serif;
+    17px/1.45 var(--font-hand);
 }
 .landing-free li svg {
   flex: 0 0 auto;
@@ -435,8 +406,7 @@
   margin: 0;
   color: var(--learner-muted);
   font:
-    14px/1.55 "Source Sans 3",
-    sans-serif;
+    14px/1.55 var(--font-hand);
 }
 .landing-free-action p a {
   color: var(--learner-green-dark);
@@ -484,8 +454,7 @@
   margin: -6px 40px 22px 0;
   color: var(--learner-secondary);
   font:
-    16px/1.6 "Source Sans 3",
-    sans-serif;
+    16px/1.6 var(--font-hand);
 }
 .landing-closing {
   margin-bottom: 72px;
@@ -506,7 +475,7 @@
   padding: 26px 0;
   border-top: 1px solid var(--learner-line);
   color: var(--learner-muted);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 @media (max-width: 900px) {
@@ -687,9 +656,7 @@
   bottom: 42px;
   color: var(--learner-green-dark);
   font:
-    italic 14px/1.2 "Source Serif 4",
-    Georgia,
-    serif;
+    italic 14px/1.2 var(--font-hand);
   letter-spacing: 0.04em;
   transform: rotate(-2deg);
   opacity: 0.72;
@@ -717,7 +684,7 @@
   position: relative;
   max-width: 430px;
   padding-left: 30px;
-  font-family: "Source Serif 4", Georgia, serif;
+  font-family: var(--font-hand);
   font-style: italic;
 }
 
@@ -784,9 +751,7 @@
   bottom: -28px;
   color: var(--learner-green-dark);
   font:
-    italic 13px/1 "Source Serif 4",
-    Georgia,
-    serif;
+    italic 14px/1 var(--font-hand);
   transform: rotate(-3deg);
 }
 
@@ -816,6 +781,7 @@
   background: var(--paper);
   color: var(--learner-green-dark);
   transform: rotate(-0.8deg);
+  font-family: var(--font-type);
 }
 
 .landing-demo-passage {
@@ -867,9 +833,7 @@
   bottom: -10px;
   color: var(--learner-green);
   font:
-    italic 12px/1 "Source Serif 4",
-    Georgia,
-    serif;
+    italic 14px/1 var(--font-hand);
   transform: rotate(-2deg);
 }
 
@@ -900,6 +864,7 @@
   border-radius: 4px 6px 3px 5px;
   box-shadow: 1px 2px 0 var(--learner-green-edge);
   transform: rotate(-1deg);
+  font-family: var(--font-type);
 }
 
 .landing-preview-card mark,
@@ -953,6 +918,7 @@
   border: 1px solid var(--learner-mint-border);
   border-radius: 2px 5px 3px 4px;
   transform: rotate(-1deg);
+  font-family: var(--font-type);
 }
 
 .landing-learner-grid dl div {
@@ -1023,9 +989,7 @@
   background: var(--learner-tint);
   color: var(--learner-green-dark);
   font:
-    italic 13px/1 "Source Serif 4",
-    Georgia,
-    serif;
+    italic 14px/1 var(--font-hand);
   transform: rotate(2deg);
 }
 
@@ -1170,9 +1134,7 @@
   margin: 18px 0 0;
   color: var(--learner-ink);
   font:
-    21px/1.85 "Source Serif 4",
-    Georgia,
-    serif;
+    21px/1.85 var(--font-question);
 }
 .landing-try-word {
   white-space: nowrap;
@@ -1208,7 +1170,7 @@
   gap: 16px;
   margin-top: 18px;
   color: var(--learner-muted);
-  font-size: 12px;
+  font-size: 14px;
 }
 .landing-page .landing-try-actions .learner-button {
   width: auto;
@@ -1236,7 +1198,7 @@
 .landing-try-why b {
   margin-right: 8px;
   color: var(--learner-green-dark);
-  font: 600 12px "Geist", Arial, sans-serif;
+  font: 600 13px var(--font-type);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1244,6 +1206,7 @@
   background: white;
   color: var(--learner-green-dark);
   border: 1.5px dashed var(--learner-green);
+  font-family: var(--font-type);
 }
 .landing-try-next {
   display: flex;
@@ -1272,7 +1235,7 @@
   display: block;
   margin-top: 14px;
   color: var(--learner-muted);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -1325,9 +1288,10 @@
   border: 1px solid var(--learner-line);
   border-radius: 4px;
   color: var(--learner-muted);
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  font-family: var(--font-type);
 }
 .landing-trap-grid h3 {
   margin: 16px 0 10px;
@@ -1339,8 +1303,7 @@
   margin: 0;
   color: var(--learner-secondary);
   font:
-    17px/1.6 "Source Sans 3",
-    sans-serif;
+    17px/1.6 var(--font-hand);
 }
 .landing-trap-example {
   margin: 22px 0 18px;
@@ -1350,16 +1313,15 @@
 }
 .landing-trap-example > span {
   color: var(--learner-muted);
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  font-family: var(--font-type);
 }
 .landing-trap-example p {
   margin: 6px 0 0;
   font:
-    20px/1.7 "Source Serif 4",
-    Georgia,
-    serif;
+    20px/1.7 var(--font-question);
 }
 .landing-trap-blank b {
   font-weight: 400;
@@ -1378,7 +1340,7 @@
   border-radius: 4px;
   background: var(--learner-tint);
   color: var(--learner-green-dark);
-  font: 600 13px "Geist", Arial, sans-serif;
+  font: 600 14px var(--font-hand);
 }
 
 /* Word-form rules */
@@ -1412,16 +1374,13 @@
   margin: 10px 0 6px;
   color: var(--learner-ink);
   font:
-    18px/1.6 "Source Serif 4",
-    Georgia,
-    serif;
+    18px/1.6 var(--font-question);
 }
 .landing-rule-note {
   margin: 0;
   color: var(--learner-muted);
   font:
-    15px/1.5 "Source Sans 3",
-    sans-serif;
+    15px/1.5 var(--font-hand);
 }
 .landing-rule-tip {
   margin: 12px 0 0;
@@ -1431,13 +1390,12 @@
   background: var(--learner-mint);
   color: var(--learner-secondary);
   font:
-    16px/1.6 "Source Sans 3",
-    sans-serif;
+    16px/1.6 var(--font-hand);
 }
 .landing-rule-tip b {
   margin-right: 8px;
   color: var(--learner-green-dark);
-  font: 600 12px "Geist", Arial, sans-serif;
+  font: 600 13px var(--font-type);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1492,7 +1450,7 @@
 }
 
 /* Hand-drawn headings: Short Stack (Google Fonts, OFL). Reading text keeps
-   Source Sans 3 and Source Serif 4. */
+   the type roles in practice.css. */
 .landing-nav .learner-brand,
 .landing-hero h1,
 .landing-section-heading h2,
@@ -1501,7 +1459,7 @@
 .landing-trap-grid h3,
 .landing-learner-grid h3,
 .landing-steps h3 {
-  font-family: "Short Stack", "Geist", Arial, sans-serif;
+  font-family: var(--font-script);
   font-weight: 400;
   letter-spacing: 0;
 }
@@ -1541,11 +1499,6 @@
 .landing-pattern-card.learner-pattern h2,
 .landing-preview-card h2,
 .landing-try-result h2,
-.landing-how-pattern span {
-  font-family: "Short Stack", "Geist", Arial, sans-serif;
-  font-weight: 400;
-  letter-spacing: 0;
-}
 .landing-pattern-card.learner-pattern h2 {
   font-size: 40px;
 }
@@ -1562,7 +1515,7 @@
   border: 2px solid var(--learner-ink);
   border-radius: 255px 18px 225px 16px / 16px 225px 18px 255px;
   box-shadow: 3px 4px 0 var(--learner-ink);
-  font-family: "Short Stack", "Geist", Arial, sans-serif;
+  font-family: var(--font-script);
   font-size: 16px;
   font-weight: 400;
   letter-spacing: 0;
@@ -1612,7 +1565,7 @@
   box-shadow:
     1px 1.5px 0 -0.3px rgba(23, 35, 31, 0.55),
     inset 0 0 0 0.6px rgba(23, 35, 31, 0.18);
-  font-family: "Short Stack", "Geist", Arial, sans-serif;
+  font-family: var(--font-script);
   font-weight: 400;
   letter-spacing: 0.02em;
   transform: none;
@@ -1697,7 +1650,7 @@
   transform: rotate(-0.6deg);
 }
 .landing-hero .landing-preview-bar {
-  font-size: 13px;
+  font-size: 14px;
 }
 .landing-try-sentence {
   font-size: 26px;
@@ -1714,10 +1667,10 @@
 }
 .landing-try-actions {
   margin-top: 22px;
-  font-size: 13px;
+  font-size: 14px;
 }
 .landing-hero h1 {
-  font-size: clamp(30px, 2.9vw, 40px);
+  font-size: clamp(28px, 2.6vw, 36px);
 }
 .landing-lede {
   font-size: 18px;
@@ -1725,7 +1678,7 @@
 .landing-hero-next {
   display: inline-block;
   color: var(--learner-green-dark);
-  font: 17px "Short Stack", "Geist", Arial, sans-serif;
+  font: 17px var(--font-script);
   text-decoration: underline;
   text-decoration-color: var(--learner-mint-edge);
   text-decoration-thickness: 2px;
@@ -1761,3 +1714,455 @@
   }
 }
 
+
+/* How it works: numbered circles above tall taped cards (structure from the
+   owner's reference, not a copy). */
+.landing-method .landing-section-heading,
+.landing-method .landing-section-heading h2 {
+  max-width: none;
+}
+.landing-how-read p {
+  margin: 0;
+}
+.landing-steps {
+  gap: 28px;
+}
+.landing-steps article {
+  display: flex;
+  flex-direction: column;
+  padding-top: 62px;
+}
+.landing-step-number {
+  width: 46px;
+  height: 46px;
+  font-family: var(--font-script);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--learner-green-dark);
+  border-width: 1.6px;
+  border-color: var(--learner-green-dark);
+  border-radius: 50% 47% 52% 48%;
+  transform: none;
+}
+.landing-how-visual {
+  min-height: 340px;
+  padding: 30px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-width: 1.5px;
+  border-radius: 6px 9px 7px 10px;
+}
+.landing-how-visual::before {
+  top: -12px;
+  right: 40px;
+  width: 80px;
+  height: 24px;
+}
+.landing-how-read {
+  font-size: 22px;
+  line-height: 1.9;
+}
+.landing-how-review {
+  justify-content: center;
+  font-size: 24px;
+}
+.landing-how-review ins {
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+.landing-how-review small {
+  font: 16px/1.5 var(--font-hand);
+}
+.landing-how-pattern {
+  justify-content: flex-start;
+  padding: 22px 20px 20px;
+}
+.landing-how-pattern > strong {
+  margin: 12px 0 4px;
+  font: 400 26px/1.2 var(--font-script);
+  color: var(--learner-ink);
+}
+.landing-how-pattern > small {
+  color: var(--learner-secondary);
+  font: 15px/1.4 var(--font-hand);
+}
+.landing-how-tag {
+  align-self: flex-start;
+  display: inline-block;
+  margin: 0;
+  padding: 4px 10px;
+  border: 1.4px solid var(--learner-green-dark);
+  border-radius: 5px 7px 4px 6px;
+  background: #fffef9;
+  color: var(--learner-green-dark);
+  font: 600 13px/1.3 var(--font-type);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.landing-how-arrow {
+  align-self: center;
+  margin: 6px 0;
+  color: var(--learner-green-dark);
+  font-size: 22px;
+  font-weight: 400;
+}
+.landing-how-drill {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1.4px solid #aeb9b3;
+  border-radius: 6px 8px 5px 9px;
+  background: #fffef9;
+}
+.landing-how-drill .landing-how-tag {
+  font-size: 13px;
+  font-family: var(--font-type);
+}
+.landing-how-drill p {
+  margin: 0;
+  color: var(--learner-ink);
+  font: 17px/1.5 var(--font-question);
+}
+.landing-how-drill b {
+  color: var(--learner-green);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-decoration: underline wavy;
+  text-underline-offset: 4px;
+}
+.landing-how-drill em {
+  align-self: flex-end;
+  color: var(--learner-green-dark);
+  font: italic 15px var(--font-hand);
+}
+.landing-steps h3 {
+  margin-top: 26px;
+  font-size: 23px;
+}
+.landing-steps article > p {
+  font: 17px/1.55 var(--font-hand);
+}
+@media (max-width: 900px) {
+  .landing-how-visual {
+    min-height: 0;
+  }
+}
+
+/* At 14px the demo card's two labels need room: keep each on one line and
+   let the second drop below the first on narrow screens. */
+.landing-preview-bar {
+  flex-wrap: wrap;
+  row-gap: 2px;
+}
+.landing-preview-bar span {
+  white-space: nowrap;
+}
+
+/* Word-form patterns: one worked example (notice the change, then use the
+   sentence clue), then an expandable list of patterns. */
+.landing-worked {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+  padding: 30px 0;
+  border: 1.5px solid #aeb9b3;
+  border-radius: 6px 10px 7px 9px;
+  background: #fffef9;
+  box-shadow: 4px 5px 0 rgba(23, 35, 31, 0.07);
+}
+.landing-worked::before,
+.landing-worked::after {
+  content: "";
+  position: absolute;
+  width: 74px;
+  height: 22px;
+  background: rgba(207, 227, 216, 0.8);
+}
+.landing-worked::before {
+  top: -8px;
+  left: 14px;
+  transform: rotate(-24deg);
+}
+.landing-worked::after {
+  right: 10px;
+  bottom: -9px;
+  transform: rotate(-20deg);
+}
+.landing-worked-tag {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--learner-tint);
+  color: var(--learner-green-dark);
+  font: italic 15px var(--font-hand);
+}
+.landing-worked-step {
+  min-width: 0;
+  padding: 0 36px;
+}
+.landing-worked-step + .landing-worked-step {
+  border-left: 1.5px solid #ccd7d1;
+}
+.landing-worked-step h3 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 26px;
+  color: var(--learner-ink);
+  font: 700 15px var(--font-type);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.landing-worked-step h3 span {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1.5px solid var(--learner-green-dark);
+  border-radius: 50% 46% 52% 48%;
+  color: var(--learner-green-dark);
+  font: 15px var(--font-script);
+  letter-spacing: 0;
+}
+.landing-worked-pair {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px 14px;
+  margin: 0 0 22px;
+}
+.landing-worked-pair > span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.landing-worked-pair > svg {
+  margin-top: 14px;
+  color: var(--learner-green-dark);
+}
+.landing-worked-word {
+  color: var(--learner-ink);
+  font: 38px/1.2 var(--font-question);
+}
+.landing-worked-word mark {
+  padding: 0 3px;
+  border-radius: 6px;
+  background: #dcece3;
+  color: inherit;
+}
+.landing-worked-pair small {
+  padding: 2px 14px;
+  border-radius: 999px;
+  background: var(--learner-tint);
+  color: var(--learner-green-dark);
+  font: 13px var(--font-type);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.landing-worked-rule {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin: 0;
+  color: var(--learner-secondary);
+  font: italic 17px var(--font-hand);
+}
+.landing-worked-rule b {
+  padding: 4px 16px;
+  border-radius: 999px;
+  background: var(--learner-tint);
+  color: var(--learner-ink);
+  font: italic 700 18px var(--font-question);
+}
+.landing-worked-sentence {
+  margin: 0 0 18px;
+  color: var(--learner-ink);
+  font: 25px/2.6 var(--font-question);
+}
+.landing-worked-clue {
+  position: relative;
+  display: inline-block;
+  line-height: 1.2;
+  border-bottom: 2.5px solid var(--learner-green-dark);
+}
+.landing-worked-clue::after {
+  content: "↑ " attr(data-role);
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--learner-green-dark);
+  font: italic 15px/1.2 var(--font-hand);
+  white-space: nowrap;
+}
+.landing-worked-why {
+  margin: 0;
+  color: var(--learner-secondary);
+  font: 17px/1.5 var(--font-hand);
+}
+.landing-worked-why b {
+  color: var(--learner-ink);
+  font-style: italic;
+}
+
+.landing-explore {
+  margin-top: 56px;
+}
+.landing-explore > h3 {
+  margin: 0;
+  font: 400 clamp(26px, 2.8vw, 34px) / 1.2 var(--font-script);
+}
+.landing-explore > p {
+  margin: 6px 0 20px;
+  color: var(--learner-muted);
+  font: italic 17px var(--font-hand);
+}
+.landing-explore .landing-rule-list {
+  display: block;
+  border-bottom: 1.5px solid #ccd7d1;
+}
+.landing-explore .landing-rule-list li {
+  padding: 0;
+  border-top: 1.5px solid #ccd7d1;
+}
+.landing-explore summary {
+  display: grid;
+  grid-template-columns: minmax(170px, 0.9fr) minmax(0, 2fr) 24px;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 24px;
+  cursor: pointer;
+  list-style: none;
+}
+.landing-explore summary::-webkit-details-marker {
+  display: none;
+}
+.landing-explore summary:hover {
+  background: rgba(227, 239, 233, 0.5);
+}
+.landing-explore summary:focus-visible {
+  outline: 2px solid var(--learner-green);
+  outline-offset: -2px;
+}
+.landing-rule-kind {
+  color: var(--learner-ink);
+  font: 600 17px var(--font-hand);
+}
+.landing-rule-endings {
+  color: var(--learner-ink);
+  font: italic 18px var(--font-question);
+}
+.landing-explore summary i {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  justify-self: end;
+}
+.landing-explore summary i::before,
+.landing-explore summary i::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 0;
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--learner-green-dark);
+  transition: transform 0.15s ease;
+}
+.landing-explore summary i::after {
+  transform: rotate(90deg);
+}
+.landing-explore details[open] summary i::after {
+  transform: rotate(0deg);
+}
+.landing-explore details > p {
+  margin-left: 24px;
+  margin-right: 24px;
+}
+.landing-explore details > .landing-rule-examples {
+  margin-top: 2px;
+}
+.landing-explore details > .landing-rule-note {
+  margin-bottom: 18px;
+}
+.landing-rule-footnote {
+  margin: 14px 0 0;
+  color: var(--learner-muted);
+  font: italic 15px var(--font-hand);
+}
+@media (max-width: 900px) {
+  .landing-worked {
+    grid-template-columns: 1fr;
+    padding: 26px 0;
+  }
+  .landing-worked-step {
+    padding: 0 22px;
+  }
+  .landing-worked-step + .landing-worked-step {
+    margin-top: 26px;
+    padding-top: 26px;
+    border-left: 0;
+    border-top: 1.5px solid #ccd7d1;
+  }
+  .landing-worked-tag {
+    position: static;
+    justify-self: start;
+    margin: 0 22px 18px;
+  }
+}
+@media (max-width: 640px) {
+  .landing-worked-word {
+    font-size: 30px;
+  }
+  .landing-worked-sentence {
+    font-size: 21px;
+  }
+  .landing-explore summary {
+    grid-template-columns: minmax(0, 1fr) 20px;
+    gap: 4px 12px;
+    padding: 14px 4px;
+  }
+  .landing-rule-endings {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .landing-explore summary i {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+  .landing-explore details > p {
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing-explore summary i::after {
+    transition: none;
+  }
+}
+.landing-worked-word mark {
+  padding: 0;
+  border-radius: 4px;
+  box-shadow: 3px 0 0 #dcece3;
+}
+@media (max-width: 640px) {
+  .landing-worked-pair {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+  .landing-worked-word {
+    font-size: 25px;
+  }
+  .landing-worked-pair > svg {
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+}

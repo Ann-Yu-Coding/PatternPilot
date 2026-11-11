@@ -258,38 +258,38 @@ function DiagnosisPreview({ compact = false }: { compact?: boolean }) {
 
 const formRules = [
   {
-    from: "noun in -ance / -ence",
-    to: "adjective in -ant / -ent",
+    kind: "Noun → adjective",
+    endings: "-ance / -ence → -ant / -ent",
     examples: "significance → significant · independence → independent · abundance → abundant",
     note: "Most -ance/-ence nouns have a matching -ant/-ent adjective.",
   },
   {
-    from: "noun in -ity",
-    to: "adjective without -ity",
+    kind: "Noun → adjective",
+    endings: "-ity → drop -ity",
     examples: "scarcity → scarce · complexity → complex · curiosity → curious",
     note: "The adjective sometimes adds -e or -ous back.",
   },
   {
-    from: "noun in -tion / -sion",
-    to: "verb in -ate / -e, adjective in -tive / -sive",
+    kind: "Noun → verb",
+    endings: "-tion / -sion → -ate / -e",
     examples: "consolidation → consolidate · production → produce, productive · expansion → expand, expansive",
     note: "Check the sentence: does it need an action or a description?",
   },
   {
-    from: "field in -ology",
-    to: "person in -ologist, adjective in -ological",
+    kind: "Field → person",
+    endings: "-ology → -ologist / -ological",
     examples: "biology → biologist → biological · geology → geologist → geological",
     note: "“Biolo___ have shown…” needs a person: biologists.",
   },
   {
-    from: "noun in -ment",
-    to: "adjective in -mental",
+    kind: "Noun → adjective",
+    endings: "-ment → -mental",
     examples: "environment → environmental · development → developmental",
     note: "The verb is usually the noun without -ment: develop.",
   },
   {
-    from: "adjective",
-    to: "adverb in -ly (-al → -ally, -ic → -ically)",
+    kind: "Adjective → adverb",
+    endings: "-ly (-al → -ally, -ic → -ically)",
     examples: "rapid → rapidly · environmental → environmentally · dramatic → dramatically",
     note: "Use the adverb when the word describes a verb or another adjective.",
   },
@@ -325,9 +325,13 @@ function HowVisual({ step }: { step: number }) {
   if (step === 1) {
     return (
       <div className="landing-how-visual landing-how-read" aria-hidden="true">
-        <span>It increases the resi</span>
-        <b>_ _ _ _ _ _</b>
-        <span> of an ecosystem.</span>
+        <p>
+          It increases the{" "}
+          <span className="landing-nowrap">
+            resi<b>_ _ _ _ _ _</b>
+          </span>{" "}
+          of an ecosystem.
+        </p>
       </div>
     );
   }
@@ -343,10 +347,21 @@ function HowVisual({ step }: { step: number }) {
   }
   return (
     <div className="landing-how-visual landing-how-pattern" aria-hidden="true">
-      <span>Word form</span>
-      <i />
-      <i />
-      <small>5 focused sentences</small>
+      <span className="landing-how-tag">When mistakes repeat</span>
+      <strong>Word form</strong>
+      <small>A repeated word-form mix-up.</small>
+      <b className="landing-how-arrow">↓</b>
+      <div className="landing-how-drill">
+        <span className="landing-how-tag">Targeted drill · 1 of 5</span>
+        <p>
+          Seasonal{" "}
+          <span className="landing-nowrap">
+            adapta<b>_ _ _ _ _</b>
+          </span>{" "}
+          helps animals survive the winter.
+        </p>
+        <em>Practise word forms →</em>
+      </div>
     </div>
   );
 }
@@ -480,35 +495,82 @@ export function LandingPage() {
           aria-labelledby="rules-heading"
         >
           <div className="landing-section-heading">
-            <p className="learner-eyebrow">Word-form rules</p>
+            <p className="learner-eyebrow">Word-form patterns</p>
             <h2 id="rules-heading">
-              Learn one word, unlock its whole family.
+              Learn one word,{" "}
+              <span className="landing-nowrap">recognise its family.</span>
             </h2>
-            <p>
-              English word endings follow patterns. Learn these and one noun
-              from your word list gives you its adjective, verb and adverb
-              too. They describe what usually happens, so watch for
-              exceptions.
+            <p>See how sentence clues help you choose the right form.</p>
+          </div>
+          <figure className="landing-worked" aria-label="Worked example">
+            <span className="landing-worked-tag">Worked example</span>
+            <div className="landing-worked-step">
+              <h3>
+                <span aria-hidden="true">1</span> Notice the change
+              </h3>
+              <p className="landing-worked-pair">
+                <span>
+                  <span className="landing-worked-word">
+                    abund<mark>ance</mark>
+                  </span>
+                  <small>Noun</small>
+                </span>
+                <ArrowRight size={22} aria-label="becomes" />
+                <span>
+                  <span className="landing-worked-word">
+                    abund<mark>ant</mark>
+                  </span>
+                  <small>Adjective</small>
+                </span>
+              </p>
+              <p className="landing-worked-rule">
+                <b>-ance → -ant</b> Same family. Different job.
+              </p>
+            </div>
+            <div className="landing-worked-step">
+              <h3>
+                <span aria-hidden="true">2</span> Use the sentence clue
+              </h3>
+              <p className="landing-worked-sentence">
+                Coral reefs support an{" "}
+                <span className="landing-worked-clue" data-role="adjective">
+                  abundant
+                </span>{" "}
+                <span className="landing-worked-clue" data-role="noun">
+                  variety
+                </span>{" "}
+                of marine life.
+              </p>
+              <p className="landing-worked-why">
+                Here, <b>abundant</b> describes the noun “variety”.
+              </p>
+            </div>
+          </figure>
+          <div className="landing-explore">
+            <h3>Explore more word-form patterns</h3>
+            <p>Open a pattern to see examples.</p>
+            <ul className="landing-rule-list">
+              {formRules.map((rule) => (
+                <li key={rule.endings}>
+                  <details>
+                    <summary>
+                      <span className="landing-rule-kind">{rule.kind}</span>
+                      <span className="landing-rule-endings">
+                        {rule.endings}
+                      </span>
+                      <i aria-hidden="true" />
+                    </summary>
+                    <p className="landing-rule-examples">{rule.examples}</p>
+                    <p className="landing-rule-note">{rule.note}</p>
+                  </details>
+                </li>
+              ))}
+            </ul>
+            <p className="landing-rule-footnote">
+              There are exceptions, but these rules work most of the time.
+              If you can’t recall a word’s other form, try the rule first.
             </p>
           </div>
-          <ol className="landing-rule-list">
-            {formRules.map((rule) => (
-              <li key={rule.from}>
-                <p className="landing-rule">
-                  <span>{rule.from}</span>
-                  <ArrowRight size={16} aria-hidden="true" />
-                  <span>{rule.to}</span>
-                </p>
-                <p className="landing-rule-examples">{rule.examples}</p>
-                <p className="landing-rule-note">{rule.note}</p>
-              </li>
-            ))}
-          </ol>
-          <p className="landing-rule-tip">
-            <b>Sentence signal</b> The words around the blank tell you which
-            form you need: <em>a / the ___ + noun</em> needs an adjective,
-            and a word that describes a verb usually ends in <em>-ly</em>.
-          </p>
         </section>
 
         <section
@@ -580,8 +642,8 @@ export function LandingPage() {
                 "See your answers in the passage, with a short explanation for each word.",
               ],
               [
-                "Practice what repeats",
-                "Repeated misses become a pattern to work on with five focused sentences.",
+                "Practise your pattern",
+                "When the same kind of miss repeats, work on it with five focused sentences.",
               ],
             ].map(([title, copy], index) => (
               <article key={title}>
@@ -678,7 +740,7 @@ export function LandingPage() {
       </main>
 
       <footer className="landing-footer">
-        Pattern Study · Independent practice material · Not affiliated with ETS.
+        Pattern Study · Independent TOEFL Complete the Words practice
       </footer>
     </div>
   );

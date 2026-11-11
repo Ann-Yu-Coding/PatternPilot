@@ -35,50 +35,51 @@ export function PatternCard({
       aria-labelledby={`pattern-${key}`}
     >
       <div className="learner-pattern-copy">
-        <span className="learner-pattern-badge">
-          {pattern.possible ? "Possible pattern" : "Pattern"}
-        </span>
+        <div className="learner-pattern-top">
+          <span className="learner-pattern-badge">
+            {pattern.possible
+              ? "Possible pattern"
+              : "Pattern across recent passages"}
+          </span>
+          <span
+            className="pattern-seen"
+            aria-label={`Seen ${pattern.count} ${pattern.count === 1 ? "time" : "times"}`}
+          >
+            <span aria-hidden="true">
+              {Array.from({ length: pattern.count }, (_, i) => (
+                <i key={i} />
+              ))}
+              {pattern.possible && <i className="is-needed" />}
+            </span>
+          </span>
+        </div>
         <h2 id={`pattern-${key}`}>
           {words.slice(0, -1).join(" ")} <mark>{words.at(-1)}</mark>
         </h2>
+        <p className="pattern-evidence">{pattern.evidence}.</p>
         <p>
           {pattern.possible
             ? "Just one slip here, but it looks like the kind that tends to repeat."
             : feedbackForCategory[pattern.category] ||
               "Use the sentence to narrow down the missing word."}
         </p>
-        <p className="pattern-evidence">{pattern.evidence}</p>
-        <div className="learner-pattern-action">
-          <Link
-            className="learner-button"
-            data-testid="link-result-training"
-            href={`/training?category=${encodeURIComponent(key)}&pattern=${encodeURIComponent(pattern.category)}&session=${encodeURIComponent(sessionId)}`}
-          >
-            {pattern.possible
-              ? `Check with ${count || 5} sentences`
-              : `Practice ${pattern.category.toLowerCase()}`}{" "}
-            <ArrowRight size={18} />
-          </Link>
-          <span>
-            {pattern.possible
-              ? "If you get them all, we drop it."
-              : `${count || 5} sentences · 2 min`}
-          </span>
-        </div>
       </div>
-      <div
-        className="pattern-seen"
-        aria-label={`Seen ${pattern.count} ${pattern.count === 1 ? "time" : "times"}`}
-      >
-        <div aria-hidden="true">
-          {Array.from({ length: pattern.count }, (_, i) => (
-            <i key={i} />
-          ))}
-          {pattern.possible && <i className="is-needed" />}
-        </div>
-        <small>
-          seen {pattern.count === 1 ? "once" : `${pattern.count} times`}
-        </small>
+      <div className="learner-pattern-action">
+        <Link
+          className="learner-button"
+          data-testid="link-result-training"
+          href={`/training?category=${encodeURIComponent(key)}&pattern=${encodeURIComponent(pattern.category)}&session=${encodeURIComponent(sessionId)}`}
+        >
+          {pattern.possible
+            ? `Check with ${count || 5} sentences`
+            : `Practise ${pattern.category.toLowerCase()}`}{" "}
+          <ArrowRight size={18} />
+        </Link>
+        <span>
+          {pattern.possible
+            ? "If you get them all, we drop it."
+            : `${count || 5} focused sentences · 2 min`}
+        </span>
       </div>
     </section>
   );

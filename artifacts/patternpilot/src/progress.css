@@ -43,7 +43,7 @@
   color: var(--learner-muted);
 }
 .progress-section-heading p {
-  font-size: 13px;
+  font-size: 14px;
 }
 .progress-patterns {
   margin-top: 36px;
@@ -57,23 +57,28 @@
 }
 .progress-pattern-table thead th {
   color: var(--learner-muted);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 0 10px 12px 0;
+  font-family: var(--font-type);
 }
 .progress-pattern-table thead th:nth-child(1) {
   width: 19%;
+  font-family: var(--font-type);
 }
 .progress-pattern-table thead th:nth-child(2) {
   width: 21%;
+  font-family: var(--font-type);
 }
 .progress-pattern-table thead th:nth-child(3) {
   width: 23%;
+  font-family: var(--font-type);
 }
 .progress-pattern-table thead th:nth-child(4) {
   width: 18%;
+  font-family: var(--font-type);
 }
 .progress-pattern-table tr {
   border-bottom: 1px solid var(--learner-line);
@@ -91,7 +96,7 @@
 .progress-pattern-table small {
   display: block;
   color: var(--learner-muted);
-  font-family: "Source Sans 3", sans-serif;
+  font-family: var(--font-hand);
   font-size: 15px;
   margin-top: 4px;
 }
@@ -140,7 +145,7 @@
 .progress-footnote {
   margin-top: 14px;
   font-size: 14px;
-  font-family: "Source Sans 3", sans-serif;
+  font-family: var(--font-hand);
 }
 .progress-chart {
   margin-top: 36px;
@@ -167,7 +172,7 @@
   gap: 16px;
   list-style: none;
   padding: 0;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--learner-secondary);
 }
 .chart-legend li {
@@ -190,8 +195,8 @@
   max-width: none;
 }
 .chart-scroll text {
-  font-family: "Source Sans 3", sans-serif;
-  font-size: 13px;
+  font-family: var(--font-hand);
+  font-size: 14px;
   fill: #55605b;
 }
 .progress-passages {
@@ -219,7 +224,7 @@
   font-weight: 500;
 }
 .passage-description p {
-  font-family: "Source Sans 3", sans-serif;
+  font-family: var(--font-hand);
   font-size: 14px;
   color: var(--learner-muted);
   margin-top: 3px;
@@ -241,7 +246,7 @@
   white-space: nowrap;
 }
 .legacy-review {
-  font-size: 12px;
+  font-size: 14px;
   max-width: 72px;
 }
 .progress-empty p {
@@ -268,7 +273,8 @@
   }
   .progress-pattern-table thead {
     display: none;
-  }
+  font-family: var(--font-type);
+}
   .progress-pattern-table tbody th {
     padding: 20px 0 12px;
     font-size: 18px;
@@ -284,7 +290,7 @@
   .progress-pattern-table td[data-label]::before {
     content: attr(data-label);
     color: var(--learner-muted);
-    font-size: 12px;
+    font-size: 14px;
     padding-top: 2px;
   }
   .progress-pattern-table td small {
@@ -319,12 +325,11 @@
   background: var(--learner-mint);
   color: var(--learner-secondary);
   font:
-    16px/1.5 "Source Sans 3",
-    sans-serif;
+    16px/1.5 var(--font-hand);
 }
 .progress-next > span {
   color: var(--learner-green-dark);
-  font: 600 12px "Geist", Arial, sans-serif;
+  font: 600 13px var(--font-type);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -356,9 +361,10 @@
   border-radius: 4px;
   background: var(--learner-surface);
   color: var(--learner-muted);
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  font-family: var(--font-type);
 }
 .progress-preview .progress-totals {
   padding-bottom: 22px;
@@ -379,5 +385,99 @@
 @media (max-width: 680px) {
   .progress-preview {
     padding: 26px 18px 6px;
+  }
+}
+
+/* Pattern table: name with evidence underneath, an explicit next step per
+   row, the active pattern highlighted and cleared rows quieter. */
+.progress-subtitle {
+  margin: 6px 0 0;
+  color: var(--learner-secondary);
+  font: 18px/1.5 var(--font-hand);
+}
+.progress-pattern-table thead th:nth-child(1) {
+  width: 34%;
+  font-family: var(--font-type);
+}
+.progress-pattern-table thead th:nth-child(2) {
+  width: 21%;
+  font-family: var(--font-type);
+}
+.progress-pattern-table thead th:nth-child(3) {
+  width: 27%;
+  font-family: var(--font-type);
+}
+.progress-pattern-table thead th:nth-child(4) {
+  width: 18%;
+  font-family: var(--font-type);
+}
+.progress-pattern-table thead th:first-child,
+.progress-pattern-table tbody th {
+  padding-left: 16px;
+  font-family: var(--font-type);
+}
+.progress-pattern-table tbody th {
+  font-family: var(--font-script);
+  font-size: 19px;
+  font-weight: 400;
+}
+.progress-pattern-table tbody th small,
+.progress-pattern-table td small {
+  font-family: var(--font-hand);
+  font-size: 15px;
+}
+.progress-pattern-table td strong {
+  font-size: 20px;
+}
+.progress-pattern-table tr.is-pattern {
+  background: var(--learner-mint, #eaf4ee);
+}
+.progress-pattern-table tr.is-pattern > :first-child {
+  border-radius: 10px 0 0 10px;
+}
+.progress-pattern-table tr.is-pattern > :last-child {
+  border-radius: 0 10px 10px 0;
+}
+.progress-pattern-table .progress-link {
+  font-size: 16px;
+}
+.progress-link.is-quiet {
+  color: var(--learner-muted);
+}
+.progress-footnote {
+  font-family: var(--font-hand);
+  font-style: italic;
+}
+.progress-chart header p {
+  margin: 4px 0 0;
+  color: var(--learner-secondary);
+  font: 15px/1.4 var(--font-hand);
+}
+.chart-legend li.chart-clear-key {
+  color: #2e6b55;
+  font-family: var(--font-hand);
+  font-style: italic;
+}
+.chart-legend li.chart-clear-key i {
+  height: 0;
+  border-top: 2px dotted #7f948a;
+  background: none;
+}
+@media (max-width: 680px) {
+  .progress-pattern-table tbody th {
+    padding: 18px 12px 10px;
+  }
+  .progress-pattern-table td {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .progress-pattern-table tr.is-pattern > * {
+    border-radius: 0;
+  }
+  .progress-pattern-table tr.is-pattern {
+    border-radius: 10px;
+  }
+  .progress-pattern-table td[data-label] {
+    grid-template-columns: 84px minmax(0, 1fr);
   }
 }

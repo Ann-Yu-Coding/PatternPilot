@@ -10,25 +10,28 @@ const rows = [
     pattern: "Word form",
     status: "Pattern",
     dot: "status-pattern",
-    evidence: "3 misses · 2 passages",
+    evidence: "3 misses across 2 passages",
     practice: "80%",
-    change: "+20% since last",
+    change: "4/5 correct · +20 points",
+    next: "Practise",
   },
   {
     pattern: "Grammar ending",
     status: "Possible pattern",
     dot: "status-possible",
-    evidence: "1 miss · 1 passage",
+    evidence: "1 miss in 1 passage",
     practice: null,
     change: null,
+    next: "Start drill",
   },
   {
     pattern: "Spelling",
     status: "Cleared",
     dot: "status-cleared",
-    evidence: "2 misses · 2 passages",
+    evidence: "Previously: 2 misses across 2 passages",
     practice: "100%",
-    change: "cleared by a 100% drill",
+    change: "5/5 correct",
+    next: "Review",
   },
 ] as const;
 
@@ -52,19 +55,28 @@ export function ProgressPreview() {
       <table className="progress-pattern-table progress-preview-table">
         <thead>
           <tr>
-            <th>Pattern</th>
+            <th>Pattern &amp; evidence</th>
             <th>Status</th>
-            <th>Evidence</th>
-            <th>Practice</th>
+            <th>Latest drill</th>
+            <th>Next step</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((row) => (
             <tr
               key={row.pattern}
-              className={row.status === "Cleared" ? "is-cleared" : ""}
+              className={
+                row.status === "Cleared"
+                  ? "is-cleared"
+                  : row.status === "Pattern"
+                    ? "is-pattern"
+                    : ""
+              }
             >
-              <th scope="row">{row.pattern}</th>
+              <th scope="row">
+                {row.pattern}
+                <small>{row.evidence}</small>
+              </th>
               <td data-label="Status">
                 <span className="progress-status">
                   <i aria-hidden="true" className={row.dot}>
@@ -73,16 +85,22 @@ export function ProgressPreview() {
                   {row.status}
                 </span>
               </td>
-              <td data-label="Evidence">{row.evidence}</td>
-              <td data-label="Practice">
+              <td data-label="Latest drill">
                 {row.practice ? (
                   <>
                     <strong>{row.practice}</strong>
                     <small>{row.change}</small>
                   </>
                 ) : (
-                  <span className="progress-muted">Not practiced</span>
+                  <span className="progress-muted">Not practised yet</span>
                 )}
+              </td>
+              <td>
+                <span
+                  className={`progress-link${row.status === "Cleared" ? " is-quiet" : ""}`}
+                >
+                  {row.next} →
+                </span>
               </td>
             </tr>
           ))}
