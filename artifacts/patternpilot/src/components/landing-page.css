@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Short+Stack&display=swap");
 .landing-page {
   overflow-x: clip;
 }
@@ -1177,7 +1178,7 @@
   white-space: nowrap;
 }
 .landing-try-word input {
-  width: 4.6ch;
+  width: 6.8ch;
   padding: 0 2px;
   border: 0;
   border-bottom: 2px solid var(--learner-green-line);
@@ -1301,5 +1302,237 @@
   }
   .landing-page .landing-try-actions .learner-button {
     width: 100%;
+  }
+}
+
+/* Why you lose points */
+.landing-trap-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+}
+.landing-trap-grid article {
+  position: relative;
+  padding: 30px 30px 26px;
+  border: 1.5px solid #aeb9b3;
+  border-radius: 4px 10px 6px 3px;
+  background: var(--paper);
+  box-shadow: 6px 7px 0 rgba(46, 107, 85, 0.08);
+}
+.landing-trap-number {
+  display: inline-block;
+  padding: 3px 9px;
+  border: 1px solid var(--learner-line);
+  border-radius: 4px;
+  color: var(--learner-muted);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.landing-trap-grid h3 {
+  margin: 16px 0 10px;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+.landing-trap-grid article > p {
+  margin: 0;
+  color: var(--learner-secondary);
+  font:
+    17px/1.6 "Source Sans 3",
+    sans-serif;
+}
+.landing-trap-example {
+  margin: 22px 0 18px;
+  padding: 16px 18px;
+  border-left: 3px solid var(--learner-mint-edge);
+  background: var(--paper-warm);
+}
+.landing-trap-example > span {
+  color: var(--learner-muted);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.landing-trap-example p {
+  margin: 6px 0 0;
+  font:
+    20px/1.7 "Source Serif 4",
+    Georgia,
+    serif;
+}
+.landing-trap-blank b {
+  font-weight: 400;
+  color: var(--learner-green-dark);
+  border-bottom: 2px solid var(--learner-green-line);
+  background: var(--learner-tint);
+  border-radius: 4px 4px 0 0;
+  padding: 0 1px;
+}
+.landing-trap-grid .landing-trap-label {
+  font-size: 14px;
+}
+.landing-trap-label strong {
+  margin-left: 4px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--learner-tint);
+  color: var(--learner-green-dark);
+  font: 600 13px "Geist", Arial, sans-serif;
+}
+
+/* Word-form rules */
+.landing-rule-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 48px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.landing-rule-list li {
+  padding: 22px 0;
+  border-top: 1px solid var(--rule);
+}
+.landing-rule {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.landing-rule svg {
+  color: var(--learner-green);
+  flex-shrink: 0;
+}
+.landing-rule-examples {
+  margin: 10px 0 6px;
+  color: var(--learner-ink);
+  font:
+    18px/1.6 "Source Serif 4",
+    Georgia,
+    serif;
+}
+.landing-rule-note {
+  margin: 0;
+  color: var(--learner-muted);
+  font:
+    15px/1.5 "Source Sans 3",
+    sans-serif;
+}
+.landing-rule-tip {
+  margin: 12px 0 0;
+  padding: 16px 20px;
+  border: 1px solid var(--learner-mint-border);
+  border-radius: 10px;
+  background: var(--learner-mint);
+  color: var(--learner-secondary);
+  font:
+    16px/1.6 "Source Sans 3",
+    sans-serif;
+}
+.landing-rule-tip b {
+  margin-right: 8px;
+  color: var(--learner-green-dark);
+  font: 600 12px "Geist", Arial, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .landing-trap-grid,
+  .landing-rule-list {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .landing-trap-grid article {
+    padding: 24px 20px 20px;
+  }
+  .landing-trap-grid h3 {
+    font-size: 23px;
+  }
+  .landing-trap-example p {
+    font-size: 18px;
+  }
+}
+@media (max-width: 640px) {
+  .landing-hero h1 {
+    text-wrap: balance;
+  }
+  .landing-hero h1 .landing-scribble {
+    display: inline;
+    white-space: normal;
+    text-decoration: underline;
+    text-decoration-color: var(--learner-green-line);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 8px;
+  }
+  .landing-hero h1 .landing-scribble::after {
+    display: none;
+  }
+}
+
+.landing-hero h1 {
+  text-wrap: balance;
+}
+
+/* Handmade paper: embossed fibre texture. Original SVG (noise + lighting),
+   no third-party image. Applies to the homepage background only. */
+.landing-page {
+  background-color: #f6f5f1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='p' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.05' numOctaves='5' seed='4' stitchTiles='stitch' result='n'/%3E%3CfeDiffuseLighting in='n' lighting-color='%23fff' surfaceScale='2.6' result='l'%3E%3CfeDistantLight azimuth='235' elevation='52'/%3E%3C/feDiffuseLighting%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='.3' intercept='.735'/%3E%3CfeFuncG type='linear' slope='.3' intercept='.73'/%3E%3CfeFuncB type='linear' slope='.3' intercept='.715'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='420' height='420' filter='url%28%23p%29'/%3E%3Cg fill='none' stroke='%237d725f' stroke-opacity='.32' stroke-width='.55' stroke-linecap='round'%3E%3Cpath d='M136.0 63.4Q141.2 57.7 145.9 53.7'/%3E%3Cpath d='M24.4 213.1Q25.0 210.3 30.8 212.4'/%3E%3Cpath d='M178.3 347.3Q182.4 348.2 184.9 343.7'/%3E%3Cpath d='M242.4 166.6Q250.6 158.9 254.5 153.7'/%3E%3Cpath d='M60.6 49.5Q62.8 52.6 68.8 54.7'/%3E%3Cpath d='M268.3 156.4Q270.1 150.2 277.2 147.5'/%3E%3Cpath d='M285.8 179.6Q290.3 179.1 295.4 181.1'/%3E%3Cpath d='M333.6 293.6Q338.2 296.4 342.5 294.8'/%3E%3Cpath d='M306.4 120.9Q312.7 116.8 320.1 109.7'/%3E%3Cpath d='M63.8 205.4Q68.5 206.8 70.0 207.3'/%3E%3Cpath d='M367.7 131.8Q375.2 132.7 381.8 134.2'/%3E%3Cpath d='M352.8 396.8Q355.7 399.7 364.0 400.2'/%3E%3Cpath d='M271.8 417.1Q278.5 415.1 286.5 411.1'/%3E%3Cpath d='M9.5 193.9Q9.9 193.0 15.7 188.8'/%3E%3Cpath d='M54.3 104.0Q56.0 107.0 62.7 110.6'/%3E%3Cpath d='M230.8 371.0Q235.7 375.3 243.3 380.7'/%3E%3Cpath d='M150.7 371.4Q155.8 364.6 164.8 361.1'/%3E%3Cpath d='M98.0 203.7Q101.0 200.5 109.9 198.3'/%3E%3Cpath d='M155.1 237.9Q163.4 241.5 171.5 243.7'/%3E%3Cpath d='M284.0 22.7Q293.6 28.5 298.7 30.8'/%3E%3Cpath d='M164.8 167.6Q165.7 165.8 171.8 169.3'/%3E%3Cpath d='M87.7 68.2Q88.2 62.4 94.7 60.9'/%3E%3Cpath d='M42.6 152.7Q45.8 152.6 47.5 156.7'/%3E%3Cpath d='M105.9 145.9Q112.1 145.6 114.0 139.4'/%3E%3Cpath d='M195.7 203.2Q197.4 199.5 201.0 198.6'/%3E%3Cpath d='M348.1 67.8Q350.4 68.0 352.4 72.4'/%3E%3C/g%3E%3Cg fill='%238a8070' fill-opacity='.28'%3E%3Ccircle cx='228.1' cy='11.4' r='0.8'/%3E%3Ccircle cx='411.0' cy='362.6' r='0.9'/%3E%3Ccircle cx='109.7' cy='154.0' r='0.5'/%3E%3Ccircle cx='324.2' cy='223.7' r='0.9'/%3E%3Ccircle cx='138.5' cy='93.7' r='1.0'/%3E%3Ccircle cx='413.7' cy='358.1' r='1.0'/%3E%3Ccircle cx='343.7' cy='310.7' r='0.6'/%3E%3Ccircle cx='217.4' cy='149.3' r='0.4'/%3E%3Ccircle cx='11.7' cy='117.4' r='0.6'/%3E%3Ccircle cx='290.9' cy='401.7' r='0.7'/%3E%3Ccircle cx='393.5' cy='415.0' r='1.1'/%3E%3Ccircle cx='153.1' cy='92.6' r='0.6'/%3E%3Ccircle cx='82.6' cy='85.8' r='0.8'/%3E%3Ccircle cx='378.1' cy='353.0' r='0.7'/%3E%3Ccircle cx='274.3' cy='335.9' r='0.5'/%3E%3Ccircle cx='277.4' cy='382.1' r='0.9'/%3E%3Ccircle cx='315.1' cy='200.8' r='0.5'/%3E%3Ccircle cx='331.4' cy='139.7' r='1.0'/%3E%3Ccircle cx='408.1' cy='166.3' r='0.7'/%3E%3Ccircle cx='397.7' cy='304.4' r='0.5'/%3E%3Ccircle cx='53.4' cy='63.5' r='1.0'/%3E%3Ccircle cx='338.7' cy='61.4' r='1.0'/%3E%3Ccircle cx='411.7' cy='276.1' r='0.6'/%3E%3Ccircle cx='230.4' cy='55.0' r='0.4'/%3E%3Ccircle cx='407.8' cy='272.9' r='0.8'/%3E%3Ccircle cx='392.1' cy='182.2' r='1.0'/%3E%3Ccircle cx='347.0' cy='88.6' r='0.6'/%3E%3Ccircle cx='123.0' cy='101.0' r='0.8'/%3E%3Ccircle cx='108.9' cy='176.0' r='0.5'/%3E%3Ccircle cx='382.2' cy='148.6' r='0.7'/%3E%3Ccircle cx='245.0' cy='379.8' r='0.7'/%3E%3Ccircle cx='385.4' cy='210.7' r='0.8'/%3E%3Ccircle cx='219.9' cy='7.9' r='0.7'/%3E%3Ccircle cx='76.9' cy='1.7' r='1.0'/%3E%3Ccircle cx='72.4' cy='198.9' r='0.9'/%3E%3Ccircle cx='233.7' cy='136.9' r='0.8'/%3E%3Ccircle cx='233.3' cy='329.4' r='0.5'/%3E%3Ccircle cx='235.3' cy='104.4' r='0.6'/%3E%3Ccircle cx='324.3' cy='213.2' r='0.8'/%3E%3Ccircle cx='319.2' cy='383.2' r='0.7'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 420px 420px;
+}
+.landing-nav {
+  background-color: rgba(250, 249, 246, 0.9);
+}
+
+/* Hand-drawn headings: Short Stack (Google Fonts, OFL). Reading text keeps
+   Source Sans 3 and Source Serif 4. */
+.landing-nav .learner-brand,
+.landing-hero h1,
+.landing-section-heading h2,
+.landing-free h2,
+.landing-closing h2,
+.landing-trap-grid h3,
+.landing-learner-grid h3,
+.landing-steps h3 {
+  font-family: "Short Stack", "Geist", Arial, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.landing-hero h1 {
+  max-width: 700px;
+  font-size: clamp(32px, 3.3vw, 46px);
+  line-height: 1.18;
+}
+.landing-section-heading h2,
+.landing-free h2,
+.landing-closing h2 {
+  font-size: clamp(28px, 3.3vw, 40px);
+  line-height: 1.25;
+}
+.landing-trap-grid h3 {
+  font-size: 23px;
+}
+.landing-learner-grid h3,
+.landing-steps h3 {
+  font-size: 18px;
+}
+.landing-nav .learner-brand {
+  letter-spacing: -0.02em;
+}
+@media (max-width: 640px) {
+  .landing-hero h1 {
+    font-size: 34px;
+  }
+  .landing-section-heading h2,
+  .landing-free h2,
+  .landing-closing h2 {
+    font-size: 27px;
   }
 }

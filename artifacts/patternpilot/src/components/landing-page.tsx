@@ -28,24 +28,73 @@ function SeenDots({ compact = false }: { compact?: boolean }) {
   );
 }
 
+// A real blank from the first seeded passage (set-ecology b4). Learners who
+// know "resilient" often write the adjective where the sentence needs a noun.
+const DEMO_PREFIX = "resi";
+const DEMO_ANSWER = "lience";
+const DEMO_WORD = DEMO_PREFIX + DEMO_ANSWER;
+const DEMO_WHY = "“Increases the” needs a noun here: resilience.";
+
 function MarkedSentence() {
   return (
     <p className="landing-demo-sentence">
-      Scientists are now{" "}
+      This hidden system increases the{" "}
       <span className="landing-mistake">
-        <del>studyed</del> <ins>studying</ins>
+        <del>resilient</del> <ins>{DEMO_WORD}</ins>
       </span>{" "}
-      how these connections influence the growth and survival of entire forests.
+      of an ecosystem and may help it recover after drought.
     </p>
   );
 }
 
-// Other endings of "study" that fit the stem but not the sentence. Only
-// these are labelled Grammar ending; anything else gets the answer without a
-// label, so the demo never claims a diagnosis it can't support.
-const studyEndings = new Set(["y", "ys", "yed", "ied", "ies", "yes", "yd"]);
+function editDistance(a: string, b: string) {
+  const row = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    let previous = row[0];
+    row[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const current = row[j];
+      row[j] = Math.min(
+        row[j] + 1,
+        row[j - 1] + 1,
+        previous + (a[i - 1] === b[j - 1] ? 0 : 1),
+      );
+      previous = current;
+    }
+  }
+  return row[b.length];
+}
 
-type TryResult = "correct" | "ending" | "other";
+// Same word family, wrong part of speech → Word form. Close but not a word →
+// Spelling (the §5 rule allows 2 edits when 5+ letters are missing). Anything
+// else gets the answer without a label, so the demo never claims a diagnosis
+// it can't support.
+const wordFormEndings = new Set(["lient", "liently"]);
+
+type TryResult = "correct" | "form" | "spelling" | "other";
+
+function classifyDemo(typed: string): TryResult {
+  if (typed === DEMO_ANSWER) return "correct";
+  if (wordFormEndings.has(typed)) return "form";
+  if (editDistance(typed, DEMO_ANSWER) <= 2) return "spelling";
+  return "other";
+}
+
+const demoCards: Record<
+  "form" | "spelling",
+  { first: string; second: string; copy: string }
+> = {
+  form: {
+    first: "Word",
+    second: "form",
+    copy: "Right word family, wrong job in the sentence.",
+  },
+  spelling: {
+    first: "",
+    second: "Spelling",
+    copy: "You found the word. A letter or two is off.",
+  },
+};
 
 function TryOneWord() {
   const [value, setValue] = useState("");
@@ -59,9 +108,7 @@ function TryOneWord() {
       inputRef.current?.focus();
       return;
     }
-    setResult(
-      typed === "ying" ? "correct" : studyEndings.has(typed) ? "ending" : "other",
-    );
+    setResult(classifyDemo(typed));
   }
 
   function reset() {
@@ -71,43 +118,48 @@ function TryOneWord() {
   }
 
   const typed = value.trim().toLowerCase();
+  const card = result === "form" || result === "spelling" ? demoCards[result] : null;
 
   return (
     <aside className="landing-hero-preview landing-try" aria-label="Try one word">
       <div className="landing-preview-bar">
         <span>Try one word</span>
-        <span>Type the missing letters</span>
+        <span>Ecology · harder than it looks</span>
       </div>
       <form className="landing-try-form" onSubmit={check}>
         <p className="landing-try-sentence">
-          Scientists are now{" "}
+          This hidden system increases the{" "}
           {result === null ? (
             <span className="landing-try-word">
-              stud
+              {DEMO_PREFIX}
               <input
                 ref={inputRef}
                 value={value}
                 onChange={(event) => setValue(event.target.value)}
-                maxLength={6}
+                maxLength={9}
                 autoComplete="off"
                 autoCapitalize="off"
                 spellCheck={false}
-                aria-label="Missing letters after stud"
-                placeholder="_ _ _ _"
+                aria-label={`Missing letters after ${DEMO_PREFIX}`}
+                placeholder="_ _ _ _ _ _"
               />
             </span>
           ) : result === "correct" ? (
-            <span className="landing-try-correct">studying</span>
+            <span className="landing-try-correct">{DEMO_WORD}</span>
           ) : (
             <span className="landing-mistake">
-              <del>stud{typed}</del> <ins>studying</ins>
+              <del>
+                {DEMO_PREFIX}
+                {typed}
+              </del>{" "}
+              <ins>{DEMO_WORD}</ins>
             </span>
           )}{" "}
-          how these connections influence the growth of entire forests.
+          of an ecosystem and may help it recover after drought.
         </p>
         {result === null && (
           <div className="landing-try-actions">
-            <small>A real blank from our first passage</small>
+            <small>A real blank from our first passage · 6 letters</small>
             <button type="submit" className="learner-button">
               Check
             </button>
@@ -117,15 +169,16 @@ function TryOneWord() {
 
       {result !== null && (
         <div className="landing-preview-card landing-try-result" aria-live="polite">
-          {result === "ending" ? (
+          {card ? (
             <>
               <span className="learner-pattern-badge is-possible">
                 Possible pattern
               </span>
               <h2>
-                Grammar <mark>ending</mark>
+                {card.first && `${card.first} `}
+                <mark>{card.second}</mark>
               </h2>
-              <p>Right word, wrong ending for this sentence.</p>
+              <p>{card.copy}</p>
             </>
           ) : (
             <h2 className="landing-try-heading">
@@ -133,7 +186,10 @@ function TryOneWord() {
             </h2>
           )}
           <p className="landing-try-why">
-            <b>Why</b> “Are now studying” describes an action in progress.
+            <b>Why</b> {DEMO_WHY}
+          </p>
+          <p className="landing-try-why">
+            <b>Rule</b> -ent adjective → -ence noun: resilient → resilience.
           </p>
           <div className="landing-try-next">
             <button type="button" className="learner-button retry" onClick={reset}>
@@ -163,31 +219,31 @@ function DiagnosisPreview({ compact = false }: { compact?: boolean }) {
         <MarkedSentence />
         <div className="landing-why">
           <span>Why</span>
-          <p>“Are now studying” describes an action in progress.</p>
+          <p>{DEMO_WHY}</p>
         </div>
       </div>
 
       <section
         className="learner-pattern landing-pattern-card"
-        aria-label="Example Grammar ending pattern card"
+        aria-label="Example Word form pattern card"
       >
         <div className="learner-pattern-copy">
           <span className="learner-pattern-badge">Pattern</span>
           <h2>
-            Grammar <mark>ending</mark>
+            Word <mark>form</mark>
           </h2>
-          <p>Check who does the action and when it happens.</p>
+          <p>Right word family, wrong job in the sentence.</p>
           <p className="pattern-evidence">
             Pattern rule · 2 similar misses in recent passages
           </p>
           <div className="landing-drill-preview">
             <span>First drill sentence</span>
             <p>
-              The evidence suggest
-              <span className="landing-slots" aria-label="one missing letter">
-                _
-              </span>{" "}
-              a shift.
+              The finding was highly signif
+              <span className="landing-slots" aria-label="four missing letters">
+                _ _ _ _
+              </span>
+              .
             </p>
           </div>
         </div>
@@ -196,6 +252,45 @@ function DiagnosisPreview({ compact = false }: { compact?: boolean }) {
     </div>
   );
 }
+
+const formRules = [
+  {
+    from: "noun in -ance / -ence",
+    to: "adjective in -ant / -ent",
+    examples: "significance → significant · independence → independent · abundance → abundant",
+    note: "Most -ance/-ence nouns have a matching -ant/-ent adjective.",
+  },
+  {
+    from: "noun in -ity",
+    to: "adjective without -ity",
+    examples: "scarcity → scarce · complexity → complex · curiosity → curious",
+    note: "The adjective sometimes adds -e or -ous back.",
+  },
+  {
+    from: "noun in -tion / -sion",
+    to: "verb in -ate / -e, adjective in -tive / -sive",
+    examples: "consolidation → consolidate · production → produce, productive · expansion → expand, expansive",
+    note: "Check the sentence: does it need an action or a description?",
+  },
+  {
+    from: "field in -ology",
+    to: "person in -ologist, adjective in -ological",
+    examples: "biology → biologist → biological · geology → geologist → geological",
+    note: "“Biolo___ have shown…” needs a person: biologists.",
+  },
+  {
+    from: "noun in -ment",
+    to: "adjective in -mental",
+    examples: "environment → environmental · development → developmental",
+    note: "The verb is usually the noun without -ment: develop.",
+  },
+  {
+    from: "adjective",
+    to: "adverb in -ly (-al → -ally, -ic → -ically)",
+    examples: "rapid → rapidly · environmental → environmentally · dramatic → dramatically",
+    note: "Use the adverb when the word describes a verb or another adjective.",
+  },
+];
 
 const learnerExamples = [
   {
@@ -227,9 +322,9 @@ function HowVisual({ step }: { step: number }) {
   if (step === 1) {
     return (
       <div className="landing-how-visual landing-how-read" aria-hidden="true">
-        <span>Scientists are study</span>
-        <b>_ _ _</b>
-        <span> the sample.</span>
+        <span>It increases the resi</span>
+        <b>_ _ _ _ _ _</b>
+        <span> of an ecosystem.</span>
       </div>
     );
   }
@@ -237,15 +332,15 @@ function HowVisual({ step }: { step: number }) {
     return (
       <div className="landing-how-visual landing-how-review" aria-hidden="true">
         <span>
-          <del>studyed</del> <ins>studying</ins>
+          <del>resilient</del> <ins>resilience</ins>
         </span>
-        <small>Why · “Are now studying” describes an action in progress.</small>
+        <small>Why · “Increases the” needs a noun here: resilience.</small>
       </div>
     );
   }
   return (
     <div className="landing-how-visual landing-how-pattern" aria-hidden="true">
-      <span>Grammar ending</span>
+      <span>Word form</span>
       <i />
       <i />
       <small>5 focused sentences</small>
@@ -289,14 +384,19 @@ export function LandingPage() {
       <main>
         <section className="landing-hero">
           <div className="landing-hero-copy">
-            <p className="learner-eyebrow">TOEFL · COMPLETE THE WORDS</p>
+            <p className="learner-eyebrow">
+              TOEFL Reading · Complete the Words
+            </p>
             <h1>
-              Find out why you miss words, not just{" "}
-              <span className="landing-scribble">how many.</span>
+              Still losing points on{" "}
+              <span className="landing-scribble">Complete the Words?</span>
             </h1>
             <p className="landing-lede">
-              Complete a short academic passage, see the pattern behind your
-              mistakes, then practise it in context.
+              You’ve memorised word lists and read hard articles, yet the blanks
+              still cost you points. Usually it’s one of two traps: a topic
+              you rarely read about, or a word you know in one form but not
+              another. Pattern Study shows which trap is yours, and how to fix
+              it.
             </p>
             <PracticeLink />
             <p className="landing-note landing-margin-note">
@@ -304,6 +404,106 @@ export function LandingPage() {
             </p>
           </div>
           <DiagnosisPreview compact />
+        </section>
+
+        <section
+          className="landing-section landing-traps"
+          aria-labelledby="traps-heading"
+        >
+          <div className="landing-section-heading">
+            <p className="learner-eyebrow">Why you lose points</p>
+            <h2 id="traps-heading">
+              Knowing many words isn’t the same as finding them in a blank.
+            </h2>
+            <p>
+              Complete the Words gives you only the first letters. You have
+              to recall the rest quickly, in the right form, inside a topic
+              that may be new to you.
+            </p>
+          </div>
+          <div className="landing-trap-grid">
+            <article>
+              <span className="landing-trap-number">Trap 1</span>
+              <h3>An unfamiliar topic</h3>
+              <p>
+                Passages jump between subjects such as oceanography, geology,
+                archaeology and psychology. In a field you rarely read about,
+                even a word you know can refuse to come to mind.
+              </p>
+              <div className="landing-trap-example">
+                <span>Example · oceanography</span>
+                <p>
+                  Warmer water holds less dissolved{" "}
+                  <span className="landing-trap-blank">
+                    oxy<b>gen</b>
+                  </span>
+                  , so deep-sea fish move toward cooler layers.
+                </p>
+              </div>
+              <p className="landing-trap-label">
+                Shows up as <strong>Word retrieval</strong>
+              </p>
+            </article>
+            <article>
+              <span className="landing-trap-number">Trap 2</span>
+              <h3>The right word, the wrong form</h3>
+              <p>
+                You know <em>significance</em> from your word list, but the
+                sentence needs the adjective. If you’ve never practised how the
+                word changes, you can’t complete it.
+              </p>
+              <div className="landing-trap-example">
+                <span>Example · word family</span>
+                <p>
+                  The study found a{" "}
+                  <span className="landing-trap-blank">
+                    signific<b>ant</b>
+                  </span>{" "}
+                  rise in ocean temperature.
+                </p>
+              </div>
+              <p className="landing-trap-label">
+                Shows up as <strong>Word form</strong>
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section
+          className="landing-section landing-rules"
+          id="rules"
+          aria-labelledby="rules-heading"
+        >
+          <div className="landing-section-heading">
+            <p className="learner-eyebrow">Word-form rules</p>
+            <h2 id="rules-heading">
+              Learn one word, unlock its whole family.
+            </h2>
+            <p>
+              English word endings follow patterns. Learn these and one noun
+              from your word list gives you its adjective, verb and adverb
+              too. They describe what usually happens, so watch for
+              exceptions.
+            </p>
+          </div>
+          <ol className="landing-rule-list">
+            {formRules.map((rule) => (
+              <li key={rule.from}>
+                <p className="landing-rule">
+                  <span>{rule.from}</span>
+                  <ArrowRight size={16} aria-hidden="true" />
+                  <span>{rule.to}</span>
+                </p>
+                <p className="landing-rule-examples">{rule.examples}</p>
+                <p className="landing-rule-note">{rule.note}</p>
+              </li>
+            ))}
+          </ol>
+          <p className="landing-rule-tip">
+            <b>Sentence signal</b> The words around the blank tell you which
+            form you need: <em>a / the ___ + noun</em> needs an adjective,
+            and a word that describes a verb usually ends in <em>-ly</em>.
+          </p>
         </section>
 
         <section
