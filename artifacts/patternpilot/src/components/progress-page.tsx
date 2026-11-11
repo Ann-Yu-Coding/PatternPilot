@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { useListPracticeSets } from "@workspace/api-client-react";
 import { LearnerShell } from "./learner-shell";
-import { ProgressPreview } from "./progress-preview";
+import { ProgressPreview, ProgressTotals, NextStep } from "./progress-preview";
 import { readHistory } from "../lib/history-storage";
 import { drillForCategory, type DrillLog } from "../lib/practice-history";
 import {
@@ -17,6 +17,9 @@ const date = (timestamp: number) =>
     day: "numeric",
   });
 
+const evidenceText = (p: { count: number; passages: number }) =>
+  `${p.count} ${p.count === 1 ? "miss" : "misses"} ${p.passages === 1 ? "in" : "across"} ${p.passages} ${p.passages === 1 ? "passage" : "passages"}`;
+
 function DrillChart({ drills, main }: { drills: DrillLog[]; main?: string }) {
   const [width, setWidth] = useState(720);
   const [element, setElement] = useState<HTMLDivElement | null>(null);
@@ -30,6 +33,9 @@ function DrillChart({ drills, main }: { drills: DrillLog[]; main?: string }) {
   }, [element]);
   const ordered = [...drills].sort((a, b) => a.timestamp - b.timestamp);
   const categories = [...new Set(ordered.map((d) => d.category))];
+  // The main pattern gets the solid green line. If it has no drills yet, the
+  // first drilled pattern takes that role so the lines stay distinguishable.
+  const lead = main && categories.includes(main) ? main : categories[0];
   // Enough space per event keeps date/value labels legible for a long history.
   // Only the chart scrolls; the page and table never overflow on phones.
   const chartWidth = Math.max(width, ordered.length * 60 + 50);
@@ -37,7 +43,7 @@ function DrillChart({ drills, main }: { drills: DrillLog[]; main?: string }) {
     46 + ((i + 0.5) * (chartWidth - 62)) / ordered.length;
   const y = (d: DrillLog) => 66 + (100 - drillPercent(d)) * 1.6;
   const color = (category: string) =>
-    category === (main || categories[0]) ? "#2E6B55" : "#7F948A";
+    category === lead ? "#2E6B55" : "#7F948A";
   const segments = categories.flatMap((category) => {
     const points = ordered.flatMap((d, i) =>
       d.category === category ? [{ x: x(i), y: y(d) }] : [],
@@ -89,7 +95,14 @@ function DrillChart({ drills, main }: { drills: DrillLog[]; main?: string }) {
         <ul className="chart-legend">
           {categories.map((category) => (
             <li key={category}>
-              <i style={{ background: color(category) }} />
+              <i
+                className={category === lead ? "" : "is-dashed"}
+                style={
+                  category === lead
+                    ? { background: color(category) }
+                    : { borderColor: color(category) }
+                }
+              />
               {category}
             </li>
           ))}
@@ -142,7 +155,7 @@ function DrillChart({ drills, main }: { drills: DrillLog[]; main?: string }) {
               stroke={color(category)}
               strokeWidth={2.5}
               strokeDasharray={
-                category === (main || categories[0]) ? undefined : "6 5"
+                category === lead ? undefined : "6 5"
               }
             />
           ))}
@@ -225,49 +238,32 @@ export function ProgressPage() {
           </section>
         ) : (
           <>
-            <div className="progress-totals">
-              <span>
-                <strong>{summary.passages.length}</strong>{" "}
-                {summary.passages.length === 1 ? "passage" : "passages"}
-              </span>
-              <b aria-hidden="true">·</b>
-              <span>
-                <strong>{summary.accuracy}%</strong> accuracy
-              </span>
-              <b aria-hidden="true">·</b>
-              <span>
-                <strong>{summary.drills}</strong> targeted{" "}
-                {summary.drills === 1 ? "drill" : "drills"}
-              </span>
-            </div>
-            <p className="progress-next">
-              <span>Next step</span>
-              {nextPattern ? (
-                <>
-                  {nextPattern.status === "Pattern"
-                    ? `${nextPattern.category} keeps coming back.`
-                    : `${nextPattern.category} showed up once.`}{" "}
-                  <Link
-                    className="progress-link"
-                    href={drillHref(nextPattern.category)}
-                  >
-                    Practise {nextPattern.category.toLowerCase()} · 5
-                    sentences →
-                  </Link>
-                </>
-              ) : (
-                <>
-                  No active patterns right now.{" "}
-                  <Link className="progress-link" href="/practice">
-                    Try another passage →
-                  </Link>
-                </>
-              )}
-            </p>
+            <ProgressTotals
+              passages={summary.passages.length}
+              accuracy={summary.accuracy}
+              drills={summary.drills}
+            />
+            {nextPattern ? (
+              <NextStep
+                title={`Focus on ${nextPattern.category.toLowerCase()}`}
+                evidence={evidenceText(nextPattern)}
+                action={`Practise ${nextPattern.category.toLowerCase()}`}
+                href={drillHref(nextPattern.category)}
+                detail="5 focused sentences"
+              />
+            ) : (
+              <NextStep
+                title="No active patterns right now"
+                evidence="Every pattern you had is cleared."
+                action="Try another passage"
+                href="/practice"
+                detail="About 3 minutes"
+              />
+            )}
             <section className="progress-patterns">
               <header className="progress-section-heading">
                 <h2>Patterns &amp; practice</h2>
-                <p>From your last 5 passages</p>
+                <p>Evidence from up to your last 5 passages.</p>
               </header>
               {patterns.length ? (
                 <table className="progress-pattern-table">
@@ -275,9 +271,9 @@ export function ProgressPage() {
                     <tr>
                       {[
                         "Pattern & evidence",
-                        "Status",
+                        "Current status",
                         "Latest drill",
-                        "Next step",
+                        "Action",
                       ].map((h) => (
                         <th key={h}>{h}</th>
                       ))}
@@ -292,17 +288,13 @@ export function ProgressPage() {
                           ? drillPercent(latest) - drillPercent(previous)
                           : null;
                       const cleared = p.status === "Cleared";
-                      const evidence = `${p.count} ${p.count === 1 ? "miss" : "misses"} ${p.passages === 1 ? "in" : "across"} ${p.passages} ${p.passages === 1 ? "passage" : "passages"}`;
+                      const evidence = evidenceText(p);
+                      const returned =
+                        !cleared && latest && drillPercent(latest) === 100;
                       return (
                         <tr
                           key={p.category}
-                          className={
-                            cleared
-                              ? "is-cleared"
-                              : p.status === "Pattern"
-                                ? "is-pattern"
-                                : ""
-                          }
+                          className={cleared ? "is-cleared" : ""}
                         >
                           <th scope="row">
                             {p.category}
@@ -326,6 +318,11 @@ export function ProgressPage() {
                               </i>
                               {p.status}
                             </span>
+                            {returned && (
+                              <small className="progress-status-note">
+                                New miss since the last perfect drill
+                              </small>
+                            )}
                           </td>
                           <td data-label="Latest drill">
                             {latest ? (
@@ -365,7 +362,7 @@ export function ProgressPage() {
                 <p className="progress-muted">No patterns to show yet.</p>
               )}
               <p className="progress-footnote">
-                A 100% drill clears a pattern until the same kind of miss comes
+                A perfect drill clears a pattern. A later miss can bring it
                 back.
               </p>
             </section>

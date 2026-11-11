@@ -43,7 +43,7 @@ it("finds a repeated category within one passage", () => {
     totalMisses: 2,
     passages: 1,
     possible: false,
-    evidence: "2 similar misses · across 1 passage",
+    evidence: "2 similar misses across 1 passage",
   });
 });
 it("finds a pattern across passages", () => {

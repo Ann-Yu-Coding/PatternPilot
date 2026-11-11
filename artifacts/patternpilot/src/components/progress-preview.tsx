@@ -1,4 +1,67 @@
+import { Link } from "wouter";
 import "../progress.css";
+
+export function ProgressTotals({
+  passages,
+  accuracy,
+  drills,
+}: {
+  passages: number;
+  accuracy: number;
+  drills: number;
+}) {
+  return (
+    <dl className="progress-totals">
+      <div>
+        <dt>{passages === 1 ? "Passage" : "Passages"} completed</dt>
+        <dd>{passages}</dd>
+      </div>
+      <div>
+        <dt>Passage accuracy</dt>
+        <dd>{accuracy}%</dd>
+      </div>
+      <div>
+        <dt>Targeted {drills === 1 ? "drill" : "drills"}</dt>
+        <dd>{drills}</dd>
+      </div>
+    </dl>
+  );
+}
+
+/** Mint banner: what to do next, why, and the one action that does it. */
+export function NextStep({
+  title,
+  evidence,
+  action,
+  href,
+  detail,
+}: {
+  title: string;
+  evidence: string;
+  action: string;
+  href?: string;
+  detail: string;
+}) {
+  return (
+    <section className="progress-next" aria-label="Next step">
+      <span className="progress-next-label">Next step</span>
+      <div className="progress-next-copy">
+        <strong>{title}</strong>
+        <span>{evidence}</span>
+      </div>
+      <div className="progress-next-action">
+        {href ? (
+          <Link className="progress-link" href={href}>
+            {action} →
+          </Link>
+        ) : (
+          <span className="progress-link">{action} →</span>
+        )}
+        <span>{detail}</span>
+      </div>
+    </section>
+  );
+}
 
 /**
  * A static, clearly labelled example of the Progress page. Used on the
@@ -7,83 +70,77 @@ import "../progress.css";
  */
 const rows = [
   {
-    pattern: "Word form",
+    pattern: "Spelling",
     status: "Pattern",
     dot: "status-pattern",
-    evidence: "3 misses across 2 passages",
-    practice: "80%",
-    change: "4/5 correct · +20 points",
+    evidence: "2 misses across 2 passages",
+    practice: "60%",
+    change: "3/5 correct",
+    note: null,
     next: "Practise",
   },
   {
-    pattern: "Grammar ending",
+    pattern: "Context / meaning",
+    status: "Possible pattern",
+    dot: "status-possible",
+    evidence: "1 miss in 1 passage",
+    practice: "100%",
+    change: "5/5 correct",
+    note: "New miss since the last perfect drill",
+    next: "Practise",
+  },
+  {
+    pattern: "Word retrieval",
     status: "Possible pattern",
     dot: "status-possible",
     evidence: "1 miss in 1 passage",
     practice: null,
     change: null,
+    note: null,
     next: "Start drill",
-  },
-  {
-    pattern: "Spelling",
-    status: "Cleared",
-    dot: "status-cleared",
-    evidence: "Previously: 2 misses across 2 passages",
-    practice: "100%",
-    change: "5/5 correct",
-    next: "Review",
   },
 ] as const;
 
 export function ProgressPreview() {
   return (
-    <figure className="progress-preview" aria-label="Example progress, not real learner data">
-      <span className="progress-preview-tag">Example progress</span>
-      <div className="progress-totals">
-        <span>
-          <strong>3</strong> passages
-        </span>
-        <b aria-hidden="true">·</b>
-        <span>
-          <strong>75%</strong> accuracy
-        </span>
-        <b aria-hidden="true">·</b>
-        <span>
-          <strong>4</strong> targeted drills
-        </span>
-      </div>
+    <figure
+      className="progress-preview"
+      aria-label="Example progress, not real learner data"
+    >
+      <span className="progress-preview-tag">
+        Design preview · illustrative data
+      </span>
+      <ProgressTotals passages={2} accuracy={69} drills={3} />
+      <NextStep
+        title="Focus on spelling"
+        evidence="2 misses across 2 passages"
+        action="Practise spelling"
+        detail="5 focused sentences"
+      />
       <table className="progress-pattern-table progress-preview-table">
         <thead>
           <tr>
             <th>Pattern &amp; evidence</th>
-            <th>Status</th>
+            <th>Current status</th>
             <th>Latest drill</th>
-            <th>Next step</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((row) => (
-            <tr
-              key={row.pattern}
-              className={
-                row.status === "Cleared"
-                  ? "is-cleared"
-                  : row.status === "Pattern"
-                    ? "is-pattern"
-                    : ""
-              }
-            >
+            <tr key={row.pattern}>
               <th scope="row">
                 {row.pattern}
                 <small>{row.evidence}</small>
               </th>
               <td data-label="Status">
                 <span className="progress-status">
-                  <i aria-hidden="true" className={row.dot}>
-                    {row.status === "Cleared" ? "✓" : ""}
-                  </i>
+                  <i aria-hidden="true" className={row.dot} />
                   {row.status}
                 </span>
+                {row.note && (
+                  <small className="progress-status-note">{row.note}</small>
+                )}
               </td>
               <td data-label="Latest drill">
                 {row.practice ? (
@@ -96,16 +153,15 @@ export function ProgressPreview() {
                 )}
               </td>
               <td>
-                <span
-                  className={`progress-link${row.status === "Cleared" ? " is-quiet" : ""}`}
-                >
-                  {row.next} →
-                </span>
+                <span className="progress-link">{row.next} →</span>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <p className="progress-footnote">
+        A perfect drill clears a pattern. A later miss can bring it back.
+      </p>
     </figure>
   );
 }

@@ -581,13 +581,6 @@ export function LearnerFlow() {
                   </section>
                 )}
                 <AnswerReview result={result} set={current} />
-                <nav className="learner-results-links" aria-label="After this passage">
-                  <a href="#passage-title">Review passage</a>
-                  <Link href="/dashboard">
-                    View progress <ArrowRight size={16} aria-hidden="true" />
-                  </Link>
-                </nav>
-                <NextPassage allCorrect={mistakes === 0} history={history} next={sets.find(s=>s.id===nextPassageId(history,sets.map(s=>s.id)))} onRetry={()=>reset()} onNext={()=>{const id=nextPassageId(readHistory(),sets.map(s=>s.id)); if(id)reset(id);}}/>
               </section>
             )}
             <section
@@ -663,6 +656,9 @@ export function LearnerFlow() {
                   We couldn’t check your answers. Your entries are still here.
                   Please try again.
                 </p>
+              )}
+              {result && (
+                  <NextPassage allCorrect={mistakes === 0} history={history} next={sets.find(s=>s.id===nextPassageId(history,sets.map(s=>s.id)))} onRetry={()=>reset()} onNext={()=>{const id=nextPassageId(readHistory(),sets.map(s=>s.id)); if(id)reset(id);}}/>
               )}
             </section>
           </>

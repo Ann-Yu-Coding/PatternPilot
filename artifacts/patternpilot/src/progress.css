@@ -481,3 +481,126 @@
     grid-template-columns: 84px minmax(0, 1fr);
   }
 }
+
+/* Totals as three labelled stats; next step as a three-part mint banner. */
+.progress-totals {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin: 0;
+  padding: 4px 0 28px;
+  border-bottom: 0;
+  font-size: 16px;
+}
+.progress-totals > div {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+.progress-totals > div + div {
+  border-left: 1.5px solid var(--learner-line);
+}
+.progress-totals dd {
+  margin: 0;
+  color: var(--learner-ink);
+  font: 400 44px/1.1 var(--font-script);
+}
+.progress-totals dt {
+  color: var(--learner-secondary);
+  font: 17px/1.4 var(--font-hand);
+}
+.progress-preview .progress-totals dd {
+  font-size: 38px;
+}
+.progress-next {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0;
+  margin-top: 0;
+  padding: 18px 0;
+  border-radius: 12px;
+}
+.progress-next > * {
+  padding: 0 32px;
+}
+.progress-next > * + * {
+  border-left: 1.5px solid var(--learner-mint-border);
+}
+.progress-next-label {
+  color: var(--learner-green-dark);
+  font: 700 15px var(--font-type);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.progress-next-copy,
+.progress-next-action {
+  display: grid;
+  gap: 2px;
+}
+.progress-next-copy strong {
+  color: var(--learner-ink);
+  font: 400 24px/1.3 var(--font-script);
+}
+.progress-next-copy span,
+.progress-next-action span:last-child {
+  color: var(--learner-secondary);
+  font: 17px/1.4 var(--font-hand);
+}
+.progress-next-action .progress-link {
+  font: italic 600 21px/1.3 var(--font-hand);
+  white-space: nowrap;
+}
+.progress-patterns .progress-section-heading {
+  display: block;
+}
+.progress-patterns .progress-section-heading h2 {
+  font: 400 30px/1.2 var(--font-script);
+}
+.progress-patterns .progress-section-heading p {
+  margin-top: 4px;
+  color: var(--learner-secondary);
+  font: 17px/1.4 var(--font-hand);
+}
+.progress-status-note {
+  display: block;
+  margin-top: 8px;
+  color: var(--learner-secondary);
+  font: italic 14px/1.4 var(--font-hand);
+}
+.progress-preview .progress-next {
+  margin-bottom: 8px;
+}
+.progress-preview .progress-footnote {
+  margin: 16px 0 10px;
+}
+@media (max-width: 760px) {
+  .progress-totals dd {
+    font-size: 32px;
+  }
+  .progress-totals dt {
+    font-size: 14px;
+  }
+  .progress-next {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 16px 20px;
+  }
+  .progress-next > * {
+    padding: 0;
+  }
+  .progress-next > * + * {
+    border-left: 0;
+  }
+}
+.chart-legend i {
+  width: 22px;
+}
+.chart-legend i.is-dashed {
+  height: 0;
+  border-top: 2.5px dashed;
+  border-radius: 0;
+  background: none;
+}

@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { ArrowRight, Check, RotateCcw } from "lucide-react";
 import { ProgressPreview } from "./progress-preview";
 import { FREE_PASSAGE_LIMIT, MONTHLY_PRICE_USD } from "../lib/product-config";
+import { InlineBlank } from "./inline-blank";
 import "../practice.css";
 import "./landing-page.css";
 
@@ -28,19 +29,24 @@ function SeenDots({ compact = false }: { compact?: boolean }) {
   );
 }
 
-// A real blank from the first seeded passage (set-ecology b4). Learners who
-// know "resilient" often write the adjective where the sentence needs a noun.
-const DEMO_PREFIX = "resi";
-const DEMO_ANSWER = "lience";
+// The hero demo blank. Learners often write the base verb ("emit", "emits")
+// where the sentence needs a past participle, or forget to double the t.
+const DEMO_PREFIX = "emi";
+const DEMO_ANSWER = "tted";
 const DEMO_WORD = DEMO_PREFIX + DEMO_ANSWER;
-const DEMO_WHY = "“Increases the” needs a noun here: resilience.";
+const DEMO_WHY =
+  "The light is given off by stars, so this sentence needs a past participle.";
+const DEMO_FAMILY = [
+  ["emit", "emission", "emitted"],
+  ["admit", "admission", "admitted"],
+] as const;
 
 function MarkedSentence() {
   return (
     <p className="landing-demo-sentence">
       This hidden system increases the{" "}
       <span className="landing-mistake">
-        <del>resilient</del> <ins>{DEMO_WORD}</ins>
+        <del>resilient</del> <ins>resilience</ins>
       </span>{" "}
       of an ecosystem and may help it recover after drought.
     </p>
@@ -69,14 +75,15 @@ function editDistance(a: string, b: string) {
 // Spelling (the §5 rule allows 2 edits when 5+ letters are missing). Anything
 // else gets the answer without a label, so the demo never claims a diagnosis
 // it can't support.
-const wordFormEndings = new Set(["lient", "liently"]);
+const wordFormEndings = new Set(["t", "ts", "tter", "tting"]);
 
 type TryResult = "correct" | "form" | "spelling" | "other";
 
 function classifyDemo(typed: string): TryResult {
   if (typed === DEMO_ANSWER) return "correct";
   if (wordFormEndings.has(typed)) return "form";
-  if (editDistance(typed, DEMO_ANSWER) <= 2) return "spelling";
+  if (editDistance(typed, DEMO_ANSWER) <= (DEMO_ANSWER.length >= 5 ? 2 : 1))
+    return "spelling";
   return "other";
 }
 
@@ -99,7 +106,7 @@ const demoCards: Record<
 function TryOneWord() {
   const [value, setValue] = useState("");
   const [result, setResult] = useState<TryResult | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   // On computers (mouse or trackpad), put the cursor in the blank on load so
   // visitors can type straight away. Skipped on touch screens, where it would
@@ -137,30 +144,26 @@ function TryOneWord() {
     >
       <div className="landing-preview-bar">
         <span>Try one word</span>
-        <span>Ecology · harder than it looks</span>
+        <span>Astronomy · harder than it looks</span>
       </div>
       <form className="landing-try-form" onSubmit={check}>
         <p className="landing-try-sentence">
-          This hidden system increases the{" "}
+          By analyzing the light{" "}
           {result === null ? (
             <span className="landing-try-word">
-              {DEMO_PREFIX}
-              <span className="landing-try-slot">
-                <input
-                  ref={inputRef}
-                  value={value}
-                  onChange={(event) => setValue(event.target.value)}
-                  maxLength={9}
-                  autoComplete="off"
-                  autoCapitalize="off"
-                  spellCheck={false}
-                  aria-label={`Missing letters after ${DEMO_PREFIX}`}
-                  placeholder="_ _ _ _ _ _"
-                />
-                {!value && (
-                  <span className="landing-try-caret" aria-hidden="true" />
-                )}
-              </span>
+              <InlineBlank
+                id="demo"
+                prefix={DEMO_PREFIX}
+                length={DEMO_ANSWER.length}
+                value={value}
+                disabled={false}
+                inputRef={(node) => {
+                  inputRef.current = node;
+                }}
+                onChange={(next) => setValue(next)}
+                onNext={() => inputRef.current?.form?.requestSubmit()}
+                onPrevious={() => {}}
+              />
             </span>
           ) : result === "correct" ? (
             <span className="landing-try-correct">{DEMO_WORD}</span>
@@ -173,11 +176,12 @@ function TryOneWord() {
               <ins>{DEMO_WORD}</ins>
             </span>
           )}{" "}
-          of an ecosystem and may help it recover after drought.
+          from celestial bodies like stars, astronomers can infer their
+          distance from Earth.
         </p>
         {result === null && (
           <div className="landing-try-actions">
-            <small>A real blank from our first passage · 6 letters</small>
+            <small>A TOEFL-style blank · {DEMO_ANSWER.length} letters</small>
             <button type="submit" className="learner-button">
               Check
             </button>
@@ -206,12 +210,49 @@ function TryOneWord() {
               {result === "correct" ? "✓ Correct" : "Not quite"}
             </h2>
           )}
-          <p className="landing-try-why">
-            <b>Why</b> {DEMO_WHY}
-          </p>
-          <p className="landing-try-why">
-            <b>Rule</b> -ent adjective → -ence noun: resilient → resilience.
-          </p>
+          <section className="landing-try-block">
+            <h3>Why {DEMO_WORD}?</h3>
+            <p>{DEMO_WHY}</p>
+            <p className="landing-try-shift">
+              the light that is <u>{DEMO_WORD}</u> → the light {DEMO_WORD}
+            </p>
+          </section>
+          <section className="landing-try-block">
+            <h3 className="landing-try-kicker">Word family</h3>
+            <table className="landing-try-family">
+              <thead>
+                <tr>
+                  <th>Verb</th>
+                  <th>Noun</th>
+                  <th>Past participle</th>
+                </tr>
+              </thead>
+              <tbody>
+                {DEMO_FAMILY.map(([verb, noun, participle]) => (
+                  <tr key={verb}>
+                    <td>{verb}</td>
+                    <td>{noun}</td>
+                    <td>
+                      {participle === DEMO_WORD ? (
+                        <mark>
+                          {participle} <span aria-hidden="true">✓</span>
+                        </mark>
+                      ) : (
+                        participle
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+          <section className="landing-try-block">
+            <h3>Spelling tip</h3>
+            <p className="landing-try-shift">
+              emit → emi<b>tt</b>ed
+            </p>
+            <p>For emit, double the t before adding -ed.</p>
+          </section>
           <div className="landing-try-next">
             <button
               type="button"
@@ -225,8 +266,8 @@ function TryOneWord() {
             </Link>
           </div>
           <small className="landing-try-note">
-            A full passage has 8 blanks. Misses that repeat become a pattern
-            with a 5-sentence drill.
+            Repeated misses become a pattern to practise with five focused
+            sentences.
           </small>
         </div>
       )}
@@ -244,7 +285,7 @@ function DiagnosisPreview({ compact = false }: { compact?: boolean }) {
         <MarkedSentence />
         <div className="landing-why">
           <span>Why</span>
-          <p>{DEMO_WHY}</p>
+          <p>“Increases the” needs a noun here: resilience.</p>
         </div>
       </div>
 
@@ -449,9 +490,6 @@ export function LandingPage() {
             <a className="landing-hero-next" href="#traps-heading">
               Why the blanks cost you points ↓
             </a>
-            <p className="landing-note landing-margin-note">
-              No account needed. Your practice history stays in this browser.
-            </p>
           </div>
           <DiagnosisPreview compact />
         </section>
@@ -473,7 +511,7 @@ export function LandingPage() {
           </div>
           <div className="landing-trap-grid">
             <article>
-              <span className="landing-trap-number">Trap 1</span>
+              <span className="landing-trap-number">Problem 1</span>
               <h3>An unfamiliar topic</h3>
               <p>
                 Passages jump between subjects such as oceanography, geology,
@@ -495,7 +533,7 @@ export function LandingPage() {
               </p>
             </article>
             <article>
-              <span className="landing-trap-number">Trap 2</span>
+              <span className="landing-trap-number">Problem 2</span>
               <h3>The right word, the wrong form</h3>
               <p>
                 You know <em>significance</em> from your word list, but the

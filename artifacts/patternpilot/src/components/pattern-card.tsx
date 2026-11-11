@@ -6,7 +6,6 @@ import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import {
   drillForCategory,
-  feedbackForCategory,
   type Pattern,
 } from "../lib/practice-history";
 export function PatternCard({
@@ -18,7 +17,6 @@ export function PatternCard({
   sessionId: string;
   drillCount?: number;
 }) {
-  const words = pattern.category.split(" ");
   const key = drillForCategory[pattern.category] || "academic-vocabulary";
   const categoryKey = Object.values(GetTargetedTrainingCategoryKey).find(
     (value) => value === key,
@@ -35,34 +33,13 @@ export function PatternCard({
       aria-labelledby={`pattern-${key}`}
     >
       <div className="learner-pattern-copy">
-        <div className="learner-pattern-top">
-          <span className="learner-pattern-badge">
-            {pattern.possible
-              ? "Possible pattern"
-              : "Pattern across recent passages"}
-          </span>
-          <span
-            className="pattern-seen"
-            aria-label={`Seen ${pattern.count} ${pattern.count === 1 ? "time" : "times"}`}
-          >
-            <span aria-hidden="true">
-              {Array.from({ length: pattern.count }, (_, i) => (
-                <i key={i} />
-              ))}
-              {pattern.possible && <i className="is-needed" />}
-            </span>
-          </span>
-        </div>
-        <h2 id={`pattern-${key}`}>
-          {words.slice(0, -1).join(" ")} <mark>{words.at(-1)}</mark>
-        </h2>
-        <p className="pattern-evidence">{pattern.evidence}.</p>
-        <p>
+        <p className="learner-pattern-kicker">
           {pattern.possible
-            ? "Just one slip here, but it looks like the kind that tends to repeat."
-            : feedbackForCategory[pattern.category] ||
-              "Use the sentence to narrow down the missing word."}
+            ? "Possible pattern"
+            : "Pattern across recent passages"}
         </p>
+        <h2 id={`pattern-${key}`}>{pattern.category}</h2>
+        <p className="pattern-evidence">{pattern.evidence}.</p>
       </div>
       <div className="learner-pattern-action">
         <Link
@@ -78,7 +55,7 @@ export function PatternCard({
         <span>
           {pattern.possible
             ? "If you get them all, we drop it."
-            : `${count || 5} focused sentences · 2 min`}
+            : `${count || 5} focused sentences`}
         </span>
       </div>
     </section>

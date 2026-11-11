@@ -127,7 +127,7 @@ export function findPatterns(history: History, currentId?: string): Pattern[] {
     totalMisses,
     passages: g.passages.size,
     possible: !qualifying.length,
-    evidence: `${g.count} similar ${g.count === 1 ? "miss" : "misses"} · across ${g.passages.size} ${g.passages.size === 1 ? "passage" : "passages"}`,
+    evidence: `${g.count} similar ${g.count === 1 ? "miss" : "misses"} across ${g.passages.size} ${g.passages.size === 1 ? "passage" : "passages"}`,
   }));
 }
 // Compatibility helper for summaries that have room for only the first pattern.
