@@ -60,7 +60,7 @@ export function AdminAccess({
     <div className="learner-page">
       <main className="learner-main" style={{ maxWidth: 420 }}>
         <Link href="/practice" className="learner-brand">
-          patternpilot
+          pattern study
         </Link>
         <h1 style={{ fontSize: 34, marginTop: 48 }}>Admin access</h1>
         <p>Enter the admin secret to open Question studio.</p>
