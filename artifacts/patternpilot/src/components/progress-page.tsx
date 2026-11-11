@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { useListPracticeSets } from "@workspace/api-client-react";
 import { LearnerShell } from "./learner-shell";
+import { ProgressPreview } from "./progress-preview";
 import { readHistory } from "../lib/history-storage";
 import { drillForCategory, type DrillLog } from "../lib/practice-history";
 import {
@@ -187,6 +188,9 @@ export function ProgressPage() {
   }, []);
   const summary = progressSummary(history);
   const patterns = progressPatterns(history);
+  const nextPattern = patterns.find((p) => p.status !== "Cleared");
+  const drillHref = (category: string) =>
+    `/training?category=${drillForCategory[category]}&passage=${encodeURIComponent(summary.passages[0]?.passageId ?? "")}`;
   return (
     <LearnerShell progress>
       <div className="progress-view">
@@ -200,6 +204,11 @@ export function ProgressPage() {
             <Link className="learner-button" href="/practice">
               Start practice
             </Link>
+            <p className="progress-empty-hint">
+              Here is what this page looks like after a few passages and
+              drills:
+            </p>
+            <ProgressPreview />
           </section>
         ) : (
           <>
@@ -218,6 +227,30 @@ export function ProgressPage() {
                 {summary.drills === 1 ? "drill" : "drills"}
               </span>
             </div>
+            <p className="progress-next">
+              <span>Next step</span>
+              {nextPattern ? (
+                <>
+                  {nextPattern.status === "Pattern"
+                    ? `${nextPattern.category} keeps coming back.`
+                    : `${nextPattern.category} showed up once.`}{" "}
+                  <Link
+                    className="progress-link"
+                    href={drillHref(nextPattern.category)}
+                  >
+                    Practice {nextPattern.category.toLowerCase()} · 5
+                    sentences →
+                  </Link>
+                </>
+              ) : (
+                <>
+                  No active patterns right now.{" "}
+                  <Link className="progress-link" href="/practice">
+                    Try another passage →
+                  </Link>
+                </>
+              )}
+            </p>
             <section className="progress-patterns">
               <header className="progress-section-heading">
                 <h2>Patterns &amp; practice</h2>
@@ -246,7 +279,7 @@ export function ProgressPage() {
                         latest && previous
                           ? drillPercent(latest) - drillPercent(previous)
                           : null;
-                      const href = `/training?category=${drillForCategory[p.category]}&passage=${encodeURIComponent(summary.passages[0].passageId)}`;
+                      const href = drillHref(p.category);
                       return (
                         <tr
                           key={p.category}

@@ -2,7 +2,7 @@
 
 This is the single source of truth for product decisions. Every tool (Codex, ChatGPT, Claude) and every contributor reads this before working. **Whenever a decision is made anywhere, update this file.**
 
-Last updated: 2026-11-09 (Replit removal pulled into v0.2)
+Last updated: 2026-11-11 (homepage demo and Progress next step)
 
 ---
 
@@ -210,7 +210,8 @@ Order: summary → Patterns & practice (table, then one drill-accuracy chart) �
   - Footnote: *"A 100% drill clears a pattern until the same kind of miss comes back."*
 - **Drill accuracy over time:** one white card under the table (12px radius, 3px bottom edge, 36px above it). Title plus a legend; one line per pattern that has been drilled (main pattern in green `#2E6B55`, others in gray-green `#7F948A`); x = drill date in order, y = accuracy 0–100% with a dashed line at 100%; each dot labelled with its %, e.g. `80%`, placed so labels never sit on a line (the change from the previous drill is shown in the table). Hidden until at least one drill exists. This is the only skill-accuracy view on the page; the separate "Skills tested" section was dropped (see §10).
 - **Passages:** newest first; title, `topic · date` (plus `tried twice` when retried), a small score bar, `7 / 8`, and a **Review** link to that passage's results.
-- **Empty state** (no passages yet): one line, *"Finish a passage to see your patterns here."*, and a **Start practice** button.
+- **Empty state** (no passages yet): one line, *"Finish a passage to see your patterns here."*, and a **Start practice** button, followed by a labelled *Example progress* preview (summary and pattern table, static data).
+- **Next step line** (under the summary): the top active pattern with a quiet link to its drill (*Practice word form · 5 sentences →*), or *Try another passage →* when nothing is active.
 - **Data needed (browser storage, v0.2):** a drill log `{category, score, total, timestamp}` (for drill counts, the chart, latest result and Cleared).
 
 ## 8. Payments (after v0.2)
@@ -257,6 +258,7 @@ Order: summary → Patterns & practice (table, then one drill-accuracy chart) �
 | 2026-10-10 | Homepage redesigned for engagement: real diagnosis demo plus labelled example learners; no testimonials or numbers until real learners give permission. | Show who PatternPilot is for while keeping the pre-test landing page honest |
 | 2026-11-09 | Replit removal pulled forward from v0.3 into v0.2: delete the Replit config, plugins, platform overrides, mockup sandbox and unused template UI kit | The owner asked for it; Render is now the host, so the Replit pieces are unused and the platform overrides blocked native Apple Silicon builds |
 | 2026-11-10 | Homepage adopts an original academic-workbook visual layer: paper texture, pen-like borders and teacher annotations, without Looseleaf code or assets | Add warmth and personality while preserving PatternPilot’s green editorial system, readability and honest claims |
+| 2026-11-11 | Homepage hero becomes a one-blank "Try one word" demo; homepage and the Progress empty state show a labelled example of Progress; Progress gets a Next step line | Visitors feel the diagnosis in seconds and see the loop over time; every Progress visit ends with one clear next step |
 
 ### Learner UI implementation notes (2026-09-28)
 

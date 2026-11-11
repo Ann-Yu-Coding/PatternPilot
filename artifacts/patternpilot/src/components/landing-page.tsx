@@ -1,5 +1,7 @@
+import { useRef, useState, type FormEvent } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, RotateCcw } from "lucide-react";
+import { ProgressPreview } from "./progress-preview";
 import { FREE_PASSAGE_LIMIT, MONTHLY_PRICE_USD } from "../lib/product-config";
 import "../practice.css";
 import "./landing-page.css";
@@ -38,30 +40,121 @@ function MarkedSentence() {
   );
 }
 
-function DiagnosisPreview({ compact = false }: { compact?: boolean }) {
-  if (compact) {
-    return (
-      <aside
-        className="landing-hero-preview"
-        aria-label="A preview of Pattern Study feedback"
-      >
-        <div className="landing-preview-bar">
-          <span>After checking</span>
-          <span>
-            <b>studyed</b> → studying
-          </span>
-        </div>
-        <div className="landing-preview-card">
-          <span className="learner-pattern-badge">Pattern</span>
-          <h2>
-            Grammar <mark>ending</mark>
-          </h2>
-          <p>Check who does the action and when it happens.</p>
-          <SeenDots compact />
-        </div>
-      </aside>
+// Other endings of "study" that fit the stem but not the sentence. Only
+// these are labelled Grammar ending; anything else gets the answer without a
+// label, so the demo never claims a diagnosis it can't support.
+const studyEndings = new Set(["y", "ys", "yed", "ied", "ies", "yes", "yd"]);
+
+type TryResult = "correct" | "ending" | "other";
+
+function TryOneWord() {
+  const [value, setValue] = useState("");
+  const [result, setResult] = useState<TryResult | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  function check(event: FormEvent) {
+    event.preventDefault();
+    const typed = value.trim().toLowerCase();
+    if (!typed) {
+      inputRef.current?.focus();
+      return;
+    }
+    setResult(
+      typed === "ying" ? "correct" : studyEndings.has(typed) ? "ending" : "other",
     );
   }
+
+  function reset() {
+    setValue("");
+    setResult(null);
+    requestAnimationFrame(() => inputRef.current?.focus());
+  }
+
+  const typed = value.trim().toLowerCase();
+
+  return (
+    <aside className="landing-hero-preview landing-try" aria-label="Try one word">
+      <div className="landing-preview-bar">
+        <span>Try one word</span>
+        <span>Type the missing letters</span>
+      </div>
+      <form className="landing-try-form" onSubmit={check}>
+        <p className="landing-try-sentence">
+          Scientists are now{" "}
+          {result === null ? (
+            <span className="landing-try-word">
+              stud
+              <input
+                ref={inputRef}
+                value={value}
+                onChange={(event) => setValue(event.target.value)}
+                maxLength={6}
+                autoComplete="off"
+                autoCapitalize="off"
+                spellCheck={false}
+                aria-label="Missing letters after stud"
+                placeholder="_ _ _ _"
+              />
+            </span>
+          ) : result === "correct" ? (
+            <span className="landing-try-correct">studying</span>
+          ) : (
+            <span className="landing-mistake">
+              <del>stud{typed}</del> <ins>studying</ins>
+            </span>
+          )}{" "}
+          how these connections influence the growth of entire forests.
+        </p>
+        {result === null && (
+          <div className="landing-try-actions">
+            <small>A real blank from our first passage</small>
+            <button type="submit" className="learner-button">
+              Check
+            </button>
+          </div>
+        )}
+      </form>
+
+      {result !== null && (
+        <div className="landing-preview-card landing-try-result" aria-live="polite">
+          {result === "ending" ? (
+            <>
+              <span className="learner-pattern-badge is-possible">
+                Possible pattern
+              </span>
+              <h2>
+                Grammar <mark>ending</mark>
+              </h2>
+              <p>Right word, wrong ending for this sentence.</p>
+            </>
+          ) : (
+            <h2 className="landing-try-heading">
+              {result === "correct" ? "✓ Correct" : "Not quite"}
+            </h2>
+          )}
+          <p className="landing-try-why">
+            <b>Why</b> “Are now studying” describes an action in progress.
+          </p>
+          <div className="landing-try-next">
+            <button type="button" className="learner-button retry" onClick={reset}>
+              <RotateCcw size={15} aria-hidden="true" /> Try again
+            </button>
+            <Link href="/practice" className="landing-try-link">
+              Do a full passage →
+            </Link>
+          </div>
+          <small className="landing-try-note">
+            A full passage has 8 blanks. Misses that repeat become a pattern
+            with a 5-sentence drill.
+          </small>
+        </div>
+      )}
+    </aside>
+  );
+}
+
+function DiagnosisPreview({ compact = false }: { compact?: boolean }) {
+  if (compact) return <TryOneWord />;
 
   return (
     <div className="landing-diagnosis-demo">
@@ -294,6 +387,25 @@ export function LandingPage() {
               </article>
             ))}
           </div>
+        </section>
+
+        <section
+          className="landing-section landing-progress"
+          aria-labelledby="progress-heading"
+        >
+          <div className="landing-section-heading">
+            <p className="learner-eyebrow">Progress</p>
+            <h2 id="progress-heading">
+              See what repeats, and what you’ve cleared.
+            </h2>
+            <p>
+              Every passage and drill adds to one view: which patterns are
+              still active, how your drills are going, and what to practise
+              next. A 100% drill clears a pattern until the same kind of miss
+              comes back.
+            </p>
+          </div>
+          <ProgressPreview />
         </section>
 
         <section
