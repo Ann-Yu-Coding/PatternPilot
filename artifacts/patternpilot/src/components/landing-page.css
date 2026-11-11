@@ -1536,3 +1536,22 @@
     font-size: 27px;
   }
 }
+
+/* Card headings use the same hand-drawn face as the section headings. */
+.landing-pattern-card.learner-pattern h2,
+.landing-preview-card h2,
+.landing-try-result h2,
+.landing-how-pattern span {
+  font-family: "Short Stack", "Geist", Arial, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.landing-pattern-card.learner-pattern h2 {
+  font-size: 40px;
+}
+.landing-try-result h2 {
+  font-size: 26px;
+}
+.landing-nowrap {
+  white-space: nowrap;
+}

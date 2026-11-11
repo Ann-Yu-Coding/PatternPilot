@@ -239,11 +239,14 @@ function DiagnosisPreview({ compact = false }: { compact?: boolean }) {
           <div className="landing-drill-preview">
             <span>First drill sentence</span>
             <p>
-              The finding was highly signif
-              <span className="landing-slots" aria-label="four missing letters">
-                _ _ _ _
+              The finding was highly{" "}
+              <span className="landing-nowrap">
+                signif
+                <span className="landing-slots" aria-label="four missing letters">
+                  ____
+                </span>
+                .
               </span>
-              .
             </p>
           </div>
         </div>
